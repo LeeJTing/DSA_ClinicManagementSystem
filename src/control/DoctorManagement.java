@@ -7,8 +7,8 @@ package control;
 
 /**
  *
- * @author Lee Jun Ting
+ * @author Wong Wei Xin
  */
-public class medicalTreatment {
+public class DoctorManagement {
     
 }
