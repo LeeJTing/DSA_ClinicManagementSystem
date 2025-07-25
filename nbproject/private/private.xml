@@ -3,18 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/control/PatientManagement.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/control/DoctorManagement.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/control/ConsultationManagement.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/control/MedicalTreatmentManagement.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/control/PharmacyManagementModule.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Patient.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Consultation.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Prescription.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Treatment.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Payment.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Medicine.java</file>
-            <file>file:/C:/Users/User/Documents/GitHub/DSA_ClinicManagementSystem/src/entity/Staff.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Medicine.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Payment.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Prescription.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Treatment.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/utility/IDGenerator.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/control/CRUD.java</file>
+            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/adt/testing.java</file>
         </group>
     </open-files>
 </project-private>
