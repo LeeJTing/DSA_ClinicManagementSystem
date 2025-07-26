@@ -80,8 +80,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             tail = newEntry;
         }
     }
-
-    @Override
+    
     private int hashing(K key) {
         return Math.abs(key.hashCode()) % capacity; // return a positive integer to indicate the index
     }
