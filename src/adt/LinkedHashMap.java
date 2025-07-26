@@ -139,16 +139,29 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
     
     @Override
-    public boolean containsKey(K key){
-    
-        return true;
+    public boolean containsKey(K key) {
+        int index = hashing(key);
+        Entry<K, V> current = entries[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
     }
     
     @Override
-    public boolean containsValue(V value){
-    
-        return true;
-    } 
+     public boolean containsValue(V value) {
+        Entry<K, V> current = head;
+        while (current != null) {
+            if (current.value.equals(value)) {
+                return true;
+            }
+            current = current.after;
+        }
+        return false;
+    }
     
     @Override
     public int size() {
