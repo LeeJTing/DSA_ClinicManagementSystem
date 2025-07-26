@@ -5,10 +5,7 @@
         <group>
             <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Medicine.java</file>
             <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Payment.java</file>
-            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Prescription.java</file>
-            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/entity/Treatment.java</file>
             <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/utility/IDGenerator.java</file>
-            <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/control/CRUD.java</file>
             <file>file:/C:/Users/tehzq/GitHub/DSA_ClinicManagementSystem/src/adt/testing.java</file>
         </group>
     </open-files>

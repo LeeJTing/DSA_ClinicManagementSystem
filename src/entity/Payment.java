@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Teh Zhi Qin
@@ -15,21 +17,23 @@ public class Payment {
     private Prescription prescription;
     private double consultation_cost;
     private double total_cost;
+    private Date payment_time;
 
     public Payment() {
         this.payment_id = "";
         this.student_id = "";
         this.consultation_cost = 0.0;
         this.total_cost = 0.0;
-
+        this.payment_time = null;
     }
 
-    public Payment(String paymentID, String studentID, Prescription prescription, double consultationCost, double totalCost) {
+    public Payment(String paymentID, String studentID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime) {
         this.payment_id = paymentID;
         this.student_id = studentID;
         this.prescription = prescription;
         this.consultation_cost = consultationCost;
         this.total_cost = totalCost;
+        this.payment_time = paymentTime;
     }
 
     public String getPaymentID() {
@@ -55,6 +59,10 @@ public class Payment {
     public double getTotalCost() {
         return total_cost;
     }
+    
+    public Date getPaymentTime() {
+        return payment_time;
+    }
 
     public void setPaymentID(String paymentID) {
         this.payment_id = paymentID;
@@ -76,6 +84,10 @@ public class Payment {
         this.total_cost = totalCost;
     }
     
+    public void setPaymentTime(Date paymentTime) {
+        this.payment_time = paymentTime;
+    }
+    
     public double calTotalCost(int consultationDuration) {
         return calConsultationCost(consultationDuration) + getMedicineCost();
     }
@@ -86,6 +98,6 @@ public class Payment {
 
     @Override
     public String toString() {
-        return String.format("%-8s %-8s %-8s %-6.2f %-6.2f %-6.2f\n", payment_id, student_id, prescription.getPrescription_id(), consultation_cost, prescription.getMedicine_total_cost(), total_cost);
+        return String.format("%-8s %-8s %-8s %-6.2f %-6.2f %-6.2f %-25s\n", payment_id, student_id, prescription.getPrescription_id(), consultation_cost, prescription.getMedicine_total_cost(), total_cost, payment_time);
     }
 }

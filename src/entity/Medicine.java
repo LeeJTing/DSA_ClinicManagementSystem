@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Teh Zhi Qin
@@ -13,7 +15,7 @@ public class Medicine {
     private String medicine_id = "M0001";
     private String medicine_name;
     private String medicine_category;
-    private String medicine_expiryDate;
+    private Date medicine_expiryDate;
     private int medicine_stock;
     private double unit_price;
 
@@ -21,12 +23,12 @@ public class Medicine {
         this.medicine_id = "";
         this.medicine_name = "";
         this.medicine_category = "";
-        this.medicine_expiryDate = "";
+        this.medicine_expiryDate = null;
         this.medicine_stock = 0;
         this.unit_price = 0.0;
     }
 
-    public Medicine(String medicineID, String medicineName, String medicineCategory, String expiryDate, int medicineStock, double medicineUnitPrice) {
+    public Medicine(String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice) {
         this.medicine_id = medicineID;
         this.medicine_name = medicineName;
         this.medicine_category = medicineCategory;
@@ -47,7 +49,7 @@ public class Medicine {
         return medicine_category;
     }
 
-    public String getMedicineExpiryDate() {
+    public Date getMedicineExpiryDate() {
         return medicine_expiryDate;
     }
 
@@ -71,7 +73,7 @@ public class Medicine {
         this.medicine_category = medicineCategory;
     }
 
-    public void setMedicineExpiryDate(String expiryDate) {
+    public void setMedicineExpiryDate(Date expiryDate) {
         this.medicine_expiryDate = expiryDate;
     }
 
