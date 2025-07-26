@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package adt;
+
 import java.util.Iterator;
 
 /**
@@ -10,13 +11,13 @@ import java.util.Iterator;
  * @author User
  */
 public class LinkedHashMap<K, V> implements MapInterface<K, V> {
-    
+
     private Entry<K, V>[] entries;
     private int size;
     private int capacity = 16;
     private Entry<K, V> head, tail;
-    
-      private static class Entry<K, V> {
+
+    private static class Entry<K, V> {
 
         private K key;
         private V value;
@@ -56,11 +57,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         } else {
             Entry<K, V> prev = null;
             while (current != null) { // if current bucket has values
-                if (current.key.equals(key)) { 
+                if (current.key.equals(key)) {
                     current.value = value; // replace current value
                     return;
                 }
-                prev = current; 
+                prev = current;
                 current = current.next; // move to the next entry in the entries chain
             }
             prev.next = newEntry; // append new entry at end of the chain
@@ -69,7 +70,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         updateHeadAndTail(newEntry);
         size++;
     }
-    
+
     private void updateHeadAndTail(Entry<K, V> newEntry) {
         // Insert into linked list (order tracking)
         if (head == null) {
@@ -80,13 +81,13 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             tail = newEntry;
         }
     }
-    
+
     private int hashing(K key) {
         return Math.abs(key.hashCode()) % capacity; // return a positive integer to indicate the index
     }
-    
+
     @Override
-    public K getKey(V value){
+    public K getKey(V value) {
         //linear searching from beginning is there have any values match
         Entry<K, V> current = head;
         while (current != null) {
@@ -97,29 +98,29 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return null;
     }
-    
+
     @Override
-    public V getValue(K key){
+    public V getValue(K key) {
         //directly point to the value in the entries based on the hash value (key -> index) and keep looping
-        int index  = hashing(key);
-        Entry <K, V> current = entries[index];
-        
-        while(current != null){
-            if(current.key == key){
+        int index = hashing(key);
+        Entry<K, V> current = entries[index];
+
+        while (current != null) {
+            if (current.key == key) {
                 return current.value;
             }
             current = current.next;
         }
-   
+
         return null;
     }
-    
+
     @Override
-    public V[] getAllValues(){
+    public V[] getAllValues() {
         //search from beginning and store one value by one value become a generic type to return 
         V[] values = (V[]) new Object[size];
         Entry<K, V> current = head;
-        
+
         int i = 0;
         if (!isEmpty()) {
             while (current != null) {
@@ -131,13 +132,42 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return null;
     }
-    
+
     @Override
-    public void remove(K key){
-    
-        
+    public void remove(K key) {
+        int index = hashing(key);
+        Entry<K, V> current = entries[index];
+        Entry<K, V> previous = null;
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (head == current) {
+                    head = current.after;
+                    if (head != null) {
+                        head.before = null;
+                    }
+                } else if (tail == current) {
+                    tail = current.before;
+                    if (tail != null) {
+                        tail.after = null;
+                    }
+                } else {
+                    current.before.after = current.after;
+                    current.after.before = current.before;
+                }
+
+                if (previous != null) {
+                    previous.next = current.next;
+                } else {
+                    entries[index] = current.next;
+                }
+                size--;
+            }
+            previous = current;
+            current = current.next;
+        }
     }
-    
+
     @Override
     public boolean containsKey(K key) {
         int index = hashing(key);
@@ -150,9 +180,9 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return false;
     }
-    
+
     @Override
-     public boolean containsValue(V value) {
+    public boolean containsValue(V value) {
         Entry<K, V> current = head;
         while (current != null) {
             if (current.value.equals(value)) {
@@ -162,7 +192,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return false;
     }
-    
+
     @Override
     public int size() {
         return size;
