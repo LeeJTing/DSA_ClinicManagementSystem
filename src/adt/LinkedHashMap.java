@@ -44,6 +44,44 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             this.hash = hash;
         }
     }
+    
+    private class LinkedHashMapValueIterator implements Iterator<V> {
+
+        private Entry<K, V> currentHead = head;
+        private Entry<K, V> currentTail = tail;
+
+        @Override
+        public boolean hasNext() {
+            return currentHead != null;
+        }
+
+        @Override
+        public V next() {
+            V next = null;
+            if (hasNext()) {
+                next = currentHead.value;
+                currentHead = currentHead.after;
+            }
+            return next;
+        }
+
+        public boolean hasPrev() {
+            return currentTail != null;
+        }
+
+        public V prev() {
+            V prev = null;
+            if (hasPrev()) {
+                prev = currentTail.value;
+                currentTail = currentHead.before;
+            }
+            return prev;
+        }
+    }
+
+    public Iterator<V> getIterator() {
+        return new LinkedHashMapValueIterator();
+    }
 
     @Override
     public void put(K key, V value) {
