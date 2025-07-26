@@ -138,6 +138,10 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         int index = hashing(key);
         Entry<K, V> current = entries[index];
         Entry<K, V> previous = null;
+        
+        if(key == null){
+            return; // null safety
+        }
 
         while (current != null) {
             if (current.key.equals(key)) {
@@ -156,12 +160,14 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
                     current.after.before = current.before;
                 }
 
+                // Remove from hash table chain
                 if (previous != null) {
                     previous.next = current.next;
                 } else {
                     entries[index] = current.next;
                 }
                 size--;
+                return;  // Stop after removal
             }
             previous = current;
             current = current.next;
