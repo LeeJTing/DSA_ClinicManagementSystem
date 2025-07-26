@@ -1,33 +1,36 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package entity;
+
+import java.util.*;
+
+/**
+ *
+ * @author Tan Kok Hong
+ */
 public class Consultation {
-    
 
     private String consultation_Id = "C0001";
-    private String consultation_duration;
-    private String consultation_start_time;
-    private String consultation_end_time;
-    private String consultation_start_date;
-    private String consultation_end_date;
+    private Date consultation_duration;
+    private Date consultation_start_date_time;
+    private Date consultation_end_date_time;
     private String appointmentStatus;
     private String type;
 
     public Consultation() {
-        this.consultation_Id = "";
-        this.consultation_duration = "";
-        this.consultation_start_time = "";
-        this.consultation_end_time = "";
-        this.consultation_start_date = "";
-        this.consultation_end_date = "";
+        this.consultation_duration = null;
+        this.consultation_start_date_time = null;
+        this.consultation_end_date_time = null;
         this.appointmentStatus = "";
         this.type = "";
     }
 
-    public Consultation(String consultation_Id, String consultation_duration, String consultation_start_time, String consultation_end_time, String consultation_start_date, String consulation_end_date, String appointmentStatus, String type) {
-        this.consultation_Id = consultation_Id;
+    public Consultation(Date consultation_duration, Date consultation_start_date_time, Date consultation_end_date_time, String appointmentStatus, String type) {
         this.consultation_duration = consultation_duration;
-        this.consultation_start_time = consultation_start_time;
-        this.consultation_end_time = consultation_end_time;
-        this.consultation_start_date = consultation_start_date;
-        this.consultation_end_date = consulation_end_date;
+        this.consultation_start_date_time = consultation_start_date_time;
+        this.consultation_end_date_time = consultation_end_date_time;
         this.appointmentStatus = appointmentStatus;
         this.type = type;
     }
@@ -36,24 +39,16 @@ public class Consultation {
         return consultation_Id;
     }
 
-    public String getConsultation_duration() {
+    public Date getConsultation_duration() {
         return consultation_duration;
     }
 
-    public String getConsultation_start_time() {
-        return consultation_start_time;
+    public Date getConsultation_start_date_time() {
+        return consultation_start_date_time;
     }
 
-    public String getConsultation_end_time() {
-        return consultation_end_time;
-    }
-
-    public String getConsultation_start_date() {
-        return consultation_start_date;
-    }
-
-    public String getConsultation_end_date() {
-        return consultation_end_date;
+    public Date getConsultation_end_date_time() {
+        return consultation_end_date_time;
     }
 
     public String getAppointmentStatus() {
@@ -68,24 +63,16 @@ public class Consultation {
         this.consultation_Id = consultation_Id;
     }
 
-    public void setConsultation_duration(String consultation_duration) {
+    public void setConsultation_duration(Date consultation_duration) {
         this.consultation_duration = consultation_duration;
     }
 
-    public void setConsultation_start_time(String consultation_start_time) {
-        this.consultation_start_time = consultation_start_time;
+    public void setConsultation_start_date_time(Date consultation_start_date_time) {
+        this.consultation_start_date_time = consultation_start_date_time;
     }
 
-    public void setConsultation_end_time(String consultation_end_time) {
-        this.consultation_end_time = consultation_end_time;
-    }
-
-    public void setConsultation_start_date(String consultation_start_date) {
-        this.consultation_start_date = consultation_start_date;
-    }
-
-    public void setConsultation_end_date(String consultation_end_date) {
-        this.consultation_end_date = consultation_end_date;
+    public void setConsultation_end_date_time(Date consultation_end_date_time) {
+        this.consultation_end_date_time = consultation_end_date_time;
     }
 
     public void setAppointmentStatus(String appointmentStatus) {
@@ -98,7 +85,7 @@ public class Consultation {
 
     @Override
     public String toString() {
-        return "Consultation{" + "consultation_Id=" + consultation_Id + ", consultation_duration=" + consultation_duration + ", consultation_start_time=" + consultation_start_time + ", consultation_end_time=" + consultation_end_time + ", consultation_start_date=" + consultation_start_date + ", consultation_end_date=" + consultation_end_date + ", appointmentStatus=" + appointmentStatus + ", type=" + type + '}';
+        return "Consultation{" + "consultation_Id=" + consultation_Id + ", consultation_duration=" + consultation_duration + ", consultation_start_date_time=" + consultation_start_date_time + ", consultation_end_date_time=" + consultation_end_date_time + ", appointmentStatus=" + appointmentStatus + ", type=" + type + '}';
     }
 
 }
