@@ -12,8 +12,8 @@ import java.util.Date;
  */
 public class Payment {
 
-    private String payment_id = "P0001";
-    private String student_id;
+    private String payment_id = "PM0001";
+    private String patient_id;
     private Prescription prescription;
     private double consultation_cost;
     private double total_cost;
@@ -21,15 +21,15 @@ public class Payment {
 
     public Payment() {
         this.payment_id = "";
-        this.student_id = "";
+        this.patient_id = "";
         this.consultation_cost = 0.0;
         this.total_cost = 0.0;
         this.payment_time = null;
     }
 
-    public Payment(String paymentID, String studentID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime) {
+    public Payment(String paymentID, String patientID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime) {
         this.payment_id = paymentID;
-        this.student_id = studentID;
+        this.patient_id = patientID;
         this.prescription = prescription;
         this.consultation_cost = consultationCost;
         this.total_cost = totalCost;
@@ -40,8 +40,8 @@ public class Payment {
         return payment_id;
     }
 
-    public String getStudentID() {
-        return student_id;
+    public String getPatientID() {
+        return patient_id;
     }
 
     public String getPrescriptionID() {
@@ -68,8 +68,8 @@ public class Payment {
         this.payment_id = paymentID;
     }
 
-    public void setStudentID(String studentID) {
-        this.student_id = studentID;
+    public void setPatientID(String patientID) {
+        this.patient_id = patientID;
     }
 
     public void setPrescription(Prescription prescription) {
@@ -98,6 +98,6 @@ public class Payment {
 
     @Override
     public String toString() {
-        return String.format("%-8s %-8s %-8s %-6.2f %-6.2f %-6.2f %-25s\n", payment_id, student_id, prescription.getPrescription_id(), consultation_cost, prescription.getMedicine_total_cost(), total_cost, payment_time);
+        return String.format("%-8s %-8s %-8s %-6.2f %-6.2f %-6.2f %-25s\n", payment_id, patient_id, prescription.getPrescription_id(), consultation_cost, prescription.getMedicine_total_cost(), total_cost, payment_time);
     }
 }
