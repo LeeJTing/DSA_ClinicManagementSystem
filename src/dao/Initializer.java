@@ -93,24 +93,4 @@ public class Initializer {
 
         return patientMap;
     }
-
-    //initialize the Consultation dummy data
-    public MapInterface<String, Consultation> consultationInitializer() {
-        LinkedHashMap<String, Consultation> consultMap = new LinkedHashMap<>();
-        consultMap.put("C0001", new Consultation("C0001", null, "25/07/2025", "26/07/2025", "09:00", "10:00", "Completed", "Walk-In"));
-        consultMap.put("C0002", new Consultation("C0002", null, "25/07/2025", "26/07/2025", "10:00", "11:00", "Pending", "Online"));
-        consultMap.put("C0003", new Consultation("C0003", null, "26/07/2025", "27/07/2025", "11:00", "11:30", "Pending", "Walk-In"));
-        consultMap.put("C0004", new Consultation("C0004", null, "26/07/2025", "27/07/2025", "14:00", "15:00", "Cancelled", "Online"));
-        consultMap.put("C0005", new Consultation("C0005", null, "26/07/2025", "27/07/2025", "15:30", "16:00", "Completed", "Online"));
-        consultMap.put("C0006", new Consultation("C0006", null, "27/07/2025", "28/07/2025", "08:30", "09:15", "Pending", "Walk-In"));
-        consultMap.put("C0007", new Consultation("C0007", null, "27/07/2025", "28/07/2025", "09:30", "10:00", "Completed", "Online"));
-        consultMap.put("C0008", new Consultation("C0008", null, "27/07/2025", "28/07/2025", "10:15", "11:00", "Pending", "Walk-In"));
-        consultMap.put("C0009", new Consultation("C0009", null, "28/07/2025", "29/07/2025", "11:00", "11:45", "Pending", "Online"));
-        consultMap.put("C0010", new Consultation("C0010", null, "28/07/2025", "29/07/2025", "12:00", "12:30", "Cancelled", "Walk-In"));
-
-        for (Consultation c : consultMap.getAllValues()) {
-            c.setConsultation_duration(c.calculationDurationTime());
-        }
-        return consultMap;
-    }
 }
