@@ -16,7 +16,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     private int size;
     private int capacity = 16;
     private Entry<K, V> head, tail;
-    
+
     public LinkedHashMap() {
         entries = new Entry[capacity];
         size = 0;
@@ -51,7 +51,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             this.hash = hash;
         }
     }
-    
+
     private class LinkedHashMapValueIterator implements Iterator<V> {
 
         private Entry<K, V> currentHead = head;
@@ -145,13 +145,18 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     @Override
+    public K getLastKey() {
+        return (tail != null) ? tail.key : null;
+    }
+
+    @Override
     public V getValue(K key) {
         //directly point to the value in the entries based on the hash value (key -> index) and keep looping
         int index = hashing(key);
         Entry<K, V> current = entries[index];
 
         while (current != null) {
-            if (current.key .equals(key)) {
+            if (current.key.equals(key)) {
                 return current.value;
             }
             current = current.next;
@@ -183,8 +188,8 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         int index = hashing(key);
         Entry<K, V> current = entries[index];
         Entry<K, V> previous = null;
-        
-        if(key == null){
+
+        if (key == null) {
             return; // null safety
         }
 

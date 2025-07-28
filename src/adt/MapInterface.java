@@ -36,5 +36,8 @@ public interface MapInterface<K, V> {
         
     // Find out the size of the ADT
     public int size();
+    
+    // Return the last key from the ADT
+    public K getLastKey();
         
 }
