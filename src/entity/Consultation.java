@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -12,25 +14,40 @@ import java.util.*;
  */
 public class Consultation {
 
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
     private String consultation_Id = "C0001";
     private Date consultation_duration;
-    private Date consultation_start_date_time;
-    private Date consultation_end_date_time;
+    private Date appointment_date;
+    private Date consultation_date;
+    private Date consultation_start_time;
+    private Date consultation_end_time;
     private String appointmentStatus;
     private String type;
 
     public Consultation() {
+        this.consultation_Id = "";
         this.consultation_duration = null;
-        this.consultation_start_date_time = null;
-        this.consultation_end_date_time = null;
+        this.appointment_date = null;
+        this.consultation_date = null;
+        this.consultation_start_time = null;
+        this.consultation_end_time = null;
         this.appointmentStatus = "";
         this.type = "";
     }
 
-    public Consultation(Date consultation_duration, Date consultation_start_date_time, Date consultation_end_date_time, String appointmentStatus, String type) {
+    public Consultation(String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type) {
+        this.consultation_Id = consultation_Id;
         this.consultation_duration = consultation_duration;
-        this.consultation_start_date_time = consultation_start_date_time;
-        this.consultation_end_date_time = consultation_end_date_time;
+        try {
+            this.appointment_date = dateFormat.parse(appointmentDate);
+            this.consultation_date = dateFormat.parse(consultationDate);
+            this.consultation_start_time = timeFormat.parse(consultationStartTime);
+            this.consultation_end_time = timeFormat.parse(consultationEndTime);
+        } catch (ParseException e) {
+            System.out.println("Error parsing date/time strings: " + e.getMessage());
+        }
         this.appointmentStatus = appointmentStatus;
         this.type = type;
     }
@@ -43,12 +60,20 @@ public class Consultation {
         return consultation_duration;
     }
 
-    public Date getConsultation_start_date_time() {
-        return consultation_start_date_time;
+    public Date getAppointment_date() {
+        return appointment_date;
     }
 
-    public Date getConsultation_end_date_time() {
-        return consultation_end_date_time;
+    public Date getConsultation_date() {
+        return consultation_date;
+    }
+
+    public Date getConsultation_start_time() {
+        return consultation_start_time;
+    }
+
+    public Date getConsultation_end_time() {
+        return consultation_end_time;
     }
 
     public String getAppointmentStatus() {
@@ -67,12 +92,20 @@ public class Consultation {
         this.consultation_duration = consultation_duration;
     }
 
-    public void setConsultation_start_date_time(Date consultation_start_date_time) {
-        this.consultation_start_date_time = consultation_start_date_time;
+    public void setAppointment_date(Date appointment_date) {
+        this.appointment_date = appointment_date;
     }
 
-    public void setConsultation_end_date_time(Date consultation_end_date_time) {
-        this.consultation_end_date_time = consultation_end_date_time;
+    public void setConsultation_date(Date consultation_date) {
+        this.consultation_date = consultation_date;
+    }
+
+    public void setConsultation_start_time(Date consultation_start_time) {
+        this.consultation_start_time = consultation_start_time;
+    }
+
+    public void setConsultation_end_time(Date consultation_end_time) {
+        this.consultation_end_time = consultation_end_time;
     }
 
     public void setAppointmentStatus(String appointmentStatus) {
@@ -83,9 +116,18 @@ public class Consultation {
         this.type = type;
     }
 
+    public Date calculationDurationTime() {
+        if (consultation_start_time != null && consultation_end_time != null) {
+            long durationInMillis = consultation_end_time.getTime() - consultation_start_time.getTime();
+            // represents duration as time from epoch
+            return new Date(durationInMillis);
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
-        return "Consultation{" + "consultation_Id=" + consultation_Id + ", consultation_duration=" + consultation_duration + ", consultation_start_date_time=" + consultation_start_date_time + ", consultation_end_date_time=" + consultation_end_date_time + ", appointmentStatus=" + appointmentStatus + ", type=" + type + '}';
+        return "Consultation{" + "dateFormat=" + dateFormat + ", timeFormat=" + timeFormat + ", consultation_Id=" + consultation_Id + ", consultation_duration=" + consultation_duration + ", appointment_date=" + appointment_date + ", consultation_date=" + consultation_date + ", consultation_start_time=" + consultation_start_time + ", consultation_end_time=" + consultation_end_time + ", appointmentStatus=" + appointmentStatus + ", type=" + type + '}';
     }
 
 }
