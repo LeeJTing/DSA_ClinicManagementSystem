@@ -151,7 +151,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         Entry<K, V> current = entries[index];
 
         while (current != null) {
-            if (current.key == key) {
+            if (current.key .equals(key)) {
                 return current.value;
             }
             current = current.next;
