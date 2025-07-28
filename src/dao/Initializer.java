@@ -59,4 +59,39 @@ public class Initializer {
         return medicineMap;
     }
 
+    //initialize the patient dummy data
+    public MapInterface<String, Patient> patientInitializer() {
+        LinkedHashMap<String, Patient> patientMap = new LinkedHashMap<>();
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+            patientMap.put("P000001", new Patient("P000001", "Ali bin Ahmad", "0123456789", "ali@example.com", "Male", 30,
+                    dateFormat.parse("20/07/2025"), timeFormat.parse("08:30"), timeFormat.parse("08:50"),
+                    dateFormat.parse("20/07/2025"), dateFormat.parse("20/07/2025")));
+
+            patientMap.put("P000002", new Patient("P000002", "Lim Mei Ling", "0198765432", "lim@example.com", "Female", 25,
+                    dateFormat.parse("18/07/2025"), timeFormat.parse("09:00"), timeFormat.parse("09:25"),
+                    dateFormat.parse("18/07/2025"), dateFormat.parse("18/07/2025")));
+
+            patientMap.put("P000003", new Patient("P000003", "Ravi a/l Kumar", "0172233445", "ravi@example.com", "Male", 40,
+                    dateFormat.parse("15/07/2025"), timeFormat.parse("10:15"), timeFormat.parse("10:45"),
+                    dateFormat.parse("15/07/2025"), dateFormat.parse("15/07/2025")));
+
+            patientMap.put("P000004", new Patient("P000004", "Tan Siew Ling", "0135566778", "tan@example.com", "Female", 35,
+                    dateFormat.parse("22/07/2025"), timeFormat.parse("11:00"), timeFormat.parse("11:20"),
+                    dateFormat.parse("22/07/2025"), dateFormat.parse("22/07/2025")));
+
+            patientMap.put("P000005", new Patient("P000005", "Muhammad Zaki", "0169988776", "zaki@example.com", "Male", 28,
+                    dateFormat.parse("25/07/2025"), timeFormat.parse("08:45"), timeFormat.parse("09:10"),
+                    dateFormat.parse("25/07/2025"), dateFormat.parse("25/07/2025")));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return patientMap;
+    }
+
 }
