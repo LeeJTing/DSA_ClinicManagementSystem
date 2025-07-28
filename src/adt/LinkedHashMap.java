@@ -16,6 +16,13 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     private int size;
     private int capacity = 16;
     private Entry<K, V> head, tail;
+    
+    public LinkedHashMap() {
+        entries = new Entry[capacity];
+        size = 0;
+        head = null;
+        tail = null;
+    }
 
     private static class Entry<K, V> {
 
