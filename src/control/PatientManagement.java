@@ -4,16 +4,26 @@
  */
 package control;
 
+import adt.LinkedHashMap;
+import adt.MapInterface;
 import entity.Patient;
 import utility.IDGenerator;
 import java.io.*;
 import java.util.*;
+import utility.Input;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 /**
  *
  * @author Elwin Koh Soon Yit
  */
 public class PatientManagement {
+
+    private MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     private static final String PATIENT_FILE = "patients.txt";
     private static final String DELIMITER = ",";
@@ -81,14 +91,17 @@ public class PatientManagement {
                         patient.setPatient_name(parts[1].trim());
                         patient.setPatient_contact(parts[2].trim());
                         patient.setPatient_email(parts[3].trim());
-                        patient.setPatient_gender(Boolean.parseBoolean(parts[4].trim()));
+                        patient.setPatient_gender(parts[4].trim());
                         patient.setAge(Integer.parseInt(parts[5].trim()));
-                        patient.setRegistration_date(parts[6].trim());
-                        patient.setQueue_start_time(parts[7].trim());
-                        patient.setQueue_end_time(parts[8].trim());
-                        patient.setQueue_start_date(parts[9].trim());
-                        patient.setQueue_end_date(parts[10].trim());
-
+                        try {
+                            patient.setRegistration_date(dateFormat.parse(parts[6].trim()));
+                            patient.setQueue_start_time(timeFormat.parse(parts[7].trim()));
+                            patient.setQueue_end_time(timeFormat.parse(parts[8].trim()));
+                            patient.setQueue_start_date(dateFormat.parse(parts[9].trim()));
+                            patient.setQueue_end_date(dateFormat.parse(parts[10].trim()));
+                        } catch (ParseException e) {
+                            System.out.println("Invalid date/time format: " + e.getMessage());
+                        }
                         patients.add(patient);
                     }
                 }
@@ -197,4 +210,29 @@ public class PatientManagement {
         }
         System.out.println(String.format("Total patients: %d", patients.size()));
     }
-} 
+
+    public void registerPatient() {
+        String id = Input.getStringInput("Enter Patient ID: ");
+        String name = Input.getStringInput("Enter Patient Name: ");
+        String contact = Input.getStringInput("Enter Contact Number: ");
+        String email = Input.getStringInput("Enter Email: ");
+        String gender = Input.getStringInput("Enter Gender (Male/Female): ");
+        int age = Input.getIntegerInput("Enter Age: ");
+
+        Patient patient = new Patient();
+        patient.setPatient_id(id);
+        patient.setPatient_name(name);
+        patient.setPatient_contact(contact);
+        patient.setPatient_email(email);
+        patient.setPatient_gender(gender); // Gender is String, not boolean
+        patient.setAge(age);
+
+        patientMap.put(id, patient);
+        System.out.println("\n✅ Patient registered successfully.\n");
+    }
+
+    public MapInterface<String, Patient> getPatientMap() {
+        return patientMap;
+    }
+
+}
