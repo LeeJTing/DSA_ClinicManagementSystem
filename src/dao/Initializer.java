@@ -47,21 +47,21 @@ public class Initializer {
 
         return treatmentMap;
     }
-    
+
     public MapInterface<String, Prescription> prescriptionInitializer() {
         LinkedHashMap<String, Prescription> prescriptionMap = new LinkedHashMap<>();
-        
+
         LinkedHashMap<String, Medicine> medicineMap1 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap2 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap3 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap4 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap5 = new LinkedHashMap<>();
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date expiryDate;
+        Date expiryDate;
         try {
             expiryDate = sdf.parse("2030-10-10");
-            
+
             //String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice
             medicineMap1.put("M0001", new Medicine("M0001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
             medicineMap2.put("M0002", new Medicine("M0002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 2, 5.2));
@@ -73,8 +73,8 @@ public class Initializer {
             medicineMap3.put("M0008", new Medicine("M0008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 1, 13.0));
             medicineMap4.put("M0009", new Medicine("M0009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 3, 7.0));
             medicineMap5.put("M0010", new Medicine("M0010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 1, 9.7));
-            
-             //String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList, String staff_id, String patient_id, String treatment_id
+
+            //String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList, String staff_id, String patient_id, String treatment_id
             prescriptionMap.put("PH000001", new Prescription("PH000000", medicineMap1, "S000001", "P000005", "T000001"));
             prescriptionMap.put("PH000002", new Prescription("PH000001", medicineMap2, "S000002", "P000004", "T000002"));
             prescriptionMap.put("PH000003", new Prescription("PH000002", medicineMap3, "S000001", "P000003", "T000003"));
@@ -163,9 +163,12 @@ public class Initializer {
         consultMap.put("C0009", new Consultation("C0009", null, "28/07/2025", "29/07/2025", "11:00", "11:45", "Pending", "Online"));
         consultMap.put("C0010", new Consultation("C0010", null, "28/07/2025", "29/07/2025", "12:00", "12:30", "Cancelled", "Walk-In"));
 
-        for (Consultation c : consultMap.getAllValues()) {
+        Object[] values = consultMap.getAllValues();
+        for (Object obj : values) {
+            Consultation c = (Consultation) obj;
             c.setConsultation_duration(c.calculationDurationTime());
         }
+
         return consultMap;
     }
 
@@ -184,5 +187,5 @@ public class Initializer {
 
         return staffMap;
     }
-    
+
 }
