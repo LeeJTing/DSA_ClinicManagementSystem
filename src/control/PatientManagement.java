@@ -28,17 +28,15 @@ public class PatientManagement {
 
     public static String generateNextPatientId() {
         String lastId = "P000000";
-
         if (!patientMap.isEmpty()) {
             String lastKey = patientMap.getLastKey();
             if (lastKey != null && lastKey.startsWith("P")) {
                 lastId = lastKey;
             }
         }
-
         return IDGenerator.generateNextID(lastId);
     }
-
+    
     public static void registerPatient() {
         String id = generateNextPatientId();
         System.out.println("Your ID is:" + id);
@@ -67,10 +65,10 @@ public class PatientManagement {
         System.out.println("\n Patient registered successfully.\n");
     }
 
-    private static void editPatient(String id) {
+    public static void editPatient(String id) {
         Patient patient = patientMap.getValue(id);
         if (patient == null) {
-            System.out.println("❌ Patient not found.");
+            System.out.println("Patient not found.");
             return;
         }
 
