@@ -95,23 +95,47 @@ public class Initializer {
     public MapInterface<String, Medicine> medicineInitializer() {
         LinkedHashMap<String, Medicine> medicineMap = new LinkedHashMap<>();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date expiryDate = sdf.parse("2030-10-10");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Date expiryDate = sdf.parse("10-10-2030");
 
-            medicineMap.put("M0001", new Medicine("M0001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 100, 5.0));
-            medicineMap.put("M0002", new Medicine("M0002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 100, 5.2));
-            medicineMap.put("M0003", new Medicine("M0003", "Amoxicillin", "Antibiotics", expiryDate, 80, 13.5));
-            medicineMap.put("M0004", new Medicine("M0004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 200, 5.0));
-            medicineMap.put("M0005", new Medicine("M0005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 110, 18.3));
-            medicineMap.put("M0006", new Medicine("M0006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 90, 4.0));
-            medicineMap.put("M0007", new Medicine("M0007", "Larotadine", "Antihistamines (Allergy Relief)", expiryDate, 220, 15.0));
-            medicineMap.put("M0008", new Medicine("M0008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 190, 13.0));
-            medicineMap.put("M0009", new Medicine("M0009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 300, 7.0));
-            medicineMap.put("M0010", new Medicine("M0010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 100, 9.7));
+            medicineMap.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 100, 5.0));
+            medicineMap.put("M000002", new Medicine("M000002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 100, 5.2));
+            medicineMap.put("M000003", new Medicine("M000003", "Amoxicillin", "Antibiotics", expiryDate, 80, 13.5));
+            medicineMap.put("M000004", new Medicine("M000004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 200, 5.0));
+            medicineMap.put("M000005", new Medicine("M000005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 110, 18.3));
+            medicineMap.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 90, 4.0));
+            medicineMap.put("M000007", new Medicine("M000007", "Larotadine", "Antihistamines (Allergy Relief)", expiryDate, 220, 15.0));
+            medicineMap.put("M000008", new Medicine("M000008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 190, 13.0));
+            medicineMap.put("M000009", new Medicine("M000009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 300, 7.0));
+            medicineMap.put("M000010", new Medicine("M000010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 100, 9.7));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return medicineMap;
+    }
+
+    // initialize the payment dummy data
+    public MapInterface<String, Payment> paymentInitializer() {
+        LinkedHashMap<String, Payment> paymentMap = new LinkedHashMap<>();
+        MapInterface<String, Prescription> prescriptionMap = prescriptionInitializer();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+            paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000000"), 20.0, 40.0, sdf.parse("01-07-2025 12:00:06")));
+            paymentMap.put("PM000001", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000001"), 20.0, 40.0, sdf.parse("02-07-2025 17:10:10")));
+            paymentMap.put("PM000001", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000002"), 20.0, 40.0, sdf.parse("03-07-2025 14:25:03")));
+            paymentMap.put("PM000001", new Payment("PM000004", "P000004", prescriptionMap.getValue("PH000003"), 20.0, 40.0, sdf.parse("04-07-2025 15:56:30")));
+            paymentMap.put("PM000001", new Payment("PM000005", "P000005", prescriptionMap.getValue("PH000004"), 20.0, 40.0, sdf.parse("05-07-2025 10:04:45")));
+            paymentMap.put("PM000001", new Payment("PM000006", "P000006", prescriptionMap.getValue("PH000005"), 20.0, 40.0, sdf.parse("05-07-2025 11:19:22")));
+            paymentMap.put("PM000001", new Payment("PM000007", "P000007", prescriptionMap.getValue("PH000006"), 20.0, 40.0, sdf.parse("07-07-2025 13:05:14")));
+            paymentMap.put("PM000001", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000007"), 20.0, 40.0, sdf.parse("08-07-2025 14:30:31")));
+            paymentMap.put("PM000001", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000008"), 20.0, 40.0, sdf.parse("09-07-2025 16:29:44")));
+            paymentMap.put("PM000001", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000009"), 20.0, 40.0, sdf.parse("10-07-2025 14:40:02")));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return paymentMap;
     }
 
     //initialize the patient dummy data
