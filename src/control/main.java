@@ -39,6 +39,8 @@ public class main {
     }
 
     public static void main(String[] args) {
+        final Master MASTER = new Master();
+        
         menu.mainMenu();
     }
 }
