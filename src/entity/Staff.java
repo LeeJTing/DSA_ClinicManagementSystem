@@ -51,11 +51,11 @@ public class Staff {
         this.dutyStatus = dutyStatus;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         this.joined_date = LocalDate.parse(joined_dateStr, formatter);
-        if (!pendingLeaveDate.equals("null")) {
-                this.pendingLeaveDate = LocalDate.parse(pendingLeaveDate, formatter);
-            } else {
-                this.pendingLeaveDate = null;
-            }    
+        if (pendingLeaveDate != null) {
+            this.pendingLeaveDate = LocalDate.parse(pendingLeaveDate, formatter);
+        } else {
+            this.pendingLeaveDate = null;
+        }    
     }
     
     //getter
