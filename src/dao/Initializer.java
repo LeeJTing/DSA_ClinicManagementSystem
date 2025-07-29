@@ -10,6 +10,8 @@ import adt.LinkedHashMap;
 import adt.MapInterface;
 import entity.*;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utility.IDGenerator;
 
 /**
@@ -32,8 +34,61 @@ public class Initializer {
                 new Date(2025, 7, 12), "S000003", "P000001", false, "Follow-up in 2 weeks"));
         treatmentMap.put("T000005", new Treatment("T000004", "COVID-19", "Isolation advised, paracetamol for fever, hydration",
                 new Date(2025, 7, 20), "S000002", "P000002", true, "CT scan shows mild lung infection"));
+        treatmentMap.put("T000006", new Treatment("T000005", "Migraine", "Painkillers prescribed, advised to reduce screen time",
+                new Date(2025, 7, 22), "S000004", "P000006", false, "Referred to neurologist if pain persists"));
+        treatmentMap.put("T000007", new Treatment("T000006", "Anemia", "Iron supplements prescribed, increase iron-rich foods",
+                new Date(2025, 7, 23), "S000006", "P000007", false, "Patient advised to return for blood test"));
+        treatmentMap.put("T000008", new Treatment("T000007", "Fracture", "Arm cast applied, x-ray review in 3 weeks",
+                new Date(2025, 7, 24), "S000005", "P000008", true, "X-ray confirmed non-displaced fracture"));
+        treatmentMap.put("T000009", new Treatment("T000008", "Tonsillitis", "Antibiotics prescribed for 7 days, warm saline gargle",
+                new Date(2025, 7, 25), "S000003", "P000009", false, "Mild swelling observed, no scan needed"));
+        treatmentMap.put("T000010", new Treatment("T000009", "High Cholesterol", "Start statins, low-fat diet advised",
+                new Date(2025, 7, 26), "S000007", "P000010", true, "Lipid profile test results attached"));
 
         return treatmentMap;
+    }
+    
+    public MapInterface<String, Prescription> prescriptionInitializer() {
+        LinkedHashMap<String, Prescription> prescriptionMap = new LinkedHashMap<>();
+        
+        LinkedHashMap<String, Medicine> medicineMap1 = new LinkedHashMap<>();
+        LinkedHashMap<String, Medicine> medicineMap2 = new LinkedHashMap<>();
+        LinkedHashMap<String, Medicine> medicineMap3 = new LinkedHashMap<>();
+        LinkedHashMap<String, Medicine> medicineMap4 = new LinkedHashMap<>();
+        LinkedHashMap<String, Medicine> medicineMap5 = new LinkedHashMap<>();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date expiryDate;
+        try {
+            expiryDate = sdf.parse("2030-10-10");
+            
+            //String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice
+            medicineMap1.put("M0001", new Medicine("M0001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
+            medicineMap2.put("M0002", new Medicine("M0002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 2, 5.2));
+            medicineMap3.put("M0003", new Medicine("M0003", "Amoxicillin", "Antibiotics", expiryDate, 2, 13.5));
+            medicineMap4.put("M0004", new Medicine("M0004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 2, 5.0));
+            medicineMap5.put("M0005", new Medicine("M0005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 1, 18.3));
+            medicineMap1.put("M0006", new Medicine("M0006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
+            medicineMap2.put("M0007", new Medicine("M0007", "Larotadine", "Antihistamines (Allergy Relief)", expiryDate, 2, 15.0));
+            medicineMap3.put("M0008", new Medicine("M0008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 1, 13.0));
+            medicineMap4.put("M0009", new Medicine("M0009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 3, 7.0));
+            medicineMap5.put("M0010", new Medicine("M0010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 1, 9.7));
+            
+             //String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList, String staff_id, String patient_id, String treatment_id
+            prescriptionMap.put("PH000001", new Prescription("PH000000", medicineMap1, "S000001", "P000005", "T000001"));
+            prescriptionMap.put("PH000002", new Prescription("PH000001", medicineMap2, "S000002", "P000004", "T000002"));
+            prescriptionMap.put("PH000003", new Prescription("PH000002", medicineMap3, "S000001", "P000003", "T000003"));
+            prescriptionMap.put("PH000004", new Prescription("PH000003", medicineMap4, "S000003", "P000001", "T000004"));
+            prescriptionMap.put("PH000005", new Prescription("PH000004", medicineMap5, "S000002", "P000002", "T000005"));
+            prescriptionMap.put("PH000006", new Prescription("PH000005", medicineMap1, "S000004", "P000006", "T000006"));
+            prescriptionMap.put("PH000007", new Prescription("PH000006", medicineMap2, "S000006", "P000007", "T000007"));
+            prescriptionMap.put("PH000008", new Prescription("PH000007", medicineMap3, "S000005", "P000008", "T000008"));
+            prescriptionMap.put("PH000009", new Prescription("PH000008", medicineMap4, "S000003", "P000009", "T000009"));
+            prescriptionMap.put("PH000010", new Prescription("PH000009", medicineMap5, "S000007", "P000010", "T000010"));
+        } catch (ParseException ex) {
+            Logger.getLogger(Initializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return prescriptionMap;
     }
 
     // initialize the medicine dummy data
@@ -129,4 +184,5 @@ public class Initializer {
 
         return staffMap;
     }
+    
 }

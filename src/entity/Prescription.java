@@ -1,6 +1,8 @@
 package entity;
 import utility.IDGenerator;
-import java.util.LinkedHashMap;
+
+import adt.LinkedHashMap;
+import utility.IDGenerator;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,24 +14,38 @@ import java.util.LinkedHashMap;
  * @author Lee Jun Ting
  */
 public class Prescription {
-    private String prescription_id = "Ph000001"; //Start from Ph000001
+    private String prescription_id; //Start from PH000001
     private double medicine_total_cost;
-    private LinkedHashMap<Integer, Medicine> medicineLIst;
+    private LinkedHashMap<String, Medicine> medicineList;
     private String staff_id;
     private String patient_id;
     private String treatment_id;
     
      public Prescription() {
+        this.prescription_id = "PH000001";
+        this.medicine_total_cost = 0.0;
+        this.medicineList = null;
+        this.staff_id = "";
+        this.patient_id = "";
+        this.treatment_id = "";
     }
     
-    public Prescription(String prescription_id, double medicine_total_cost, LinkedHashMap<Integer, Medicine> medicineLIst,
+    public Prescription(String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList,
             String staff_id, String patient_id, String treatment_id) {
-        this.prescription_id = prescription_id;
-        this.medicine_total_cost = medicine_total_cost;
-        this.medicineLIst = medicineLIst;
+        this.prescription_id = IDGenerator.generateNextID(previous_prescription_id);
+        this.medicineList = medicineList;
+        this.medicine_total_cost = this.calculateTotalCost();
         this.staff_id = staff_id;
         this.patient_id = patient_id;
         this.treatment_id = treatment_id;
+    }
+    
+    public double calculateTotalCost(){
+        double total = 0.0;
+        for(Medicine medicine: medicineList.getAllValues()){
+            total += medicine.getMedicineStock() * medicine.getMedicineUnitPrice();
+        }
+        return total;
     }
 
     public void setPrescription_id(String prescription_id) {
@@ -40,8 +56,8 @@ public class Prescription {
         this.medicine_total_cost = medicine_total_cost;
     }
 
-    public void setMedicineLIst(LinkedHashMap<Integer, Medicine> medicineLIst) {
-        this.medicineLIst = medicineLIst;
+    public void setMedicineLIst(LinkedHashMap<String, Medicine> medicineLIst) {
+        this.medicineList = medicineLIst;
     }
 
     public void setStaff_id(String staff_id) {
@@ -64,8 +80,8 @@ public class Prescription {
         return medicine_total_cost;
     }
 
-    public LinkedHashMap<Integer, Medicine> getMedicineLIst() {
-        return medicineLIst;
+    public LinkedHashMap<String, Medicine> getMedicineLIst() {
+        return medicineList;
     }
 
     public String getStaff_id() {
@@ -79,5 +95,16 @@ public class Prescription {
     public String getTreatment_id() {
         return treatment_id;
     }    
+
+    @Override
+    public String toString() {
+        return "\nrescription ID:" + prescription_id + 
+               "\nMedicine total cost:" + medicine_total_cost +
+                "\nMedicineList:" + medicineList +
+                "\nStaff ID:" + staff_id +
+                "\nPatient ID:" + patient_id +
+                "\nTreatment ID:" + treatment_id;
+    }
+    
     
 }

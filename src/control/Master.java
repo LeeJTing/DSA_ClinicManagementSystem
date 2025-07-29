@@ -21,8 +21,17 @@ public class Master {
     private static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
     private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
     private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
+    private static MapInterface<String, Prescription> perscriptionMap = new LinkedHashMap<>();
     
     private static final Initializer INITIALIZER = new Initializer();
+    
+    public static void main(String[] args) {
+        treatmentMap = INITIALIZER.medicalTreatmentInitializer();
+        perscriptionMap = INITIALIZER.prescriptionInitializer();
+        System.out.println(perscriptionMap.getValue(perscriptionMap.getLastKey()).toString());
+        
+        
+    }
     
     public Master(){
         
@@ -31,7 +40,7 @@ public class Master {
         patientMap = INITIALIZER.patientInitializer();
         consultationMap = INITIALIZER.consultationInitializer();
         staffMap = INITIALIZER.staffInitializer();
-    
+        perscriptionMap = INITIALIZER.prescriptionInitializer();
     }
 
     public static MapInterface<String, Treatment> getTreatmentMap() {
