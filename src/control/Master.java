@@ -63,6 +63,10 @@ public class Master {
     public static MapInterface<String, Medicine> getMedicineMap() {
         return medicineMap;
     }
+    
+    public static MapInterface<String, Payment> getPaymentMap() {
+        return paymentMap;
+    }
 
     public static void setTreatmentMap(MapInterface<String, Treatment> treatmentMap) {
         Master.treatmentMap = treatmentMap;
@@ -82,6 +86,10 @@ public class Master {
 
     public static void setMedicineMap(MapInterface<String, Medicine> medicineMap) {
         Master.medicineMap = medicineMap;
+    }
+    
+    public static void setPaymentMap(MapInterface<String, Payment> paymentMap){
+        Master.paymentMap = paymentMap;
     }
     
     
