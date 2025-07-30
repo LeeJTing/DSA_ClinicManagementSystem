@@ -24,25 +24,25 @@ public class Initializer {
 
         LinkedHashMap<String, Treatment> treatmentMap = new LinkedHashMap<>();
         // String previousTreatmentID,String disease, String treatment_advice, Date treatment_date, String staff_id, boolean isScan, String remark
-        treatmentMap.put("T000001", new Treatment("T000000", "Hypertension", "Reduce salt intake, daily morning walk, medication prescribed",
+        treatmentMap.put("T000001", new Treatment("T000000", "C000001", "Hypertension", "Reduce salt intake, daily morning walk, medication prescribed",
                 new Date(2025, 6, 14), "S000001", "P000005", true, "Patient brought previous scan reports"));
-        treatmentMap.put("T000002", new Treatment("T000001", "Diabetes Type 2", "Start insulin therapy, monitor blood sugar twice daily",
+        treatmentMap.put("T000002", new Treatment("T000001", "C000002", "Diabetes Type 2", "Start insulin therapy, monitor blood sugar twice daily",
                 new Date(2025, 6, 25), "S000002", "P000004", false, "Blood sugar fluctuating – advised strict diet"));
-        treatmentMap.put("T000003", new Treatment("T000002", "Asthma", "Inhaler prescribed, avoid allergens",
+        treatmentMap.put("T000003", new Treatment("T000002", "C000003", "Asthma", "Inhaler prescribed, avoid allergens",
                 new Date(2025, 7, 5), "S000001", "P000003", true, "Chest X-ray scan done"));
-        treatmentMap.put("T000004", new Treatment("T000003", "Gastritis", "Antacid medication for 2 weeks, avoid spicy food",
+        treatmentMap.put("T000004", new Treatment("T000003", "C000004", "Gastritis", "Antacid medication for 2 weeks, avoid spicy food",
                 new Date(2025, 7, 12), "S000003", "P000001", false, "Follow-up in 2 weeks"));
-        treatmentMap.put("T000005", new Treatment("T000004", "COVID-19", "Isolation advised, paracetamol for fever, hydration",
+        treatmentMap.put("T000005", new Treatment("T000004", "C000005", "COVID-19", "Isolation advised, paracetamol for fever, hydration",
                 new Date(2025, 7, 20), "S000002", "P000002", true, "CT scan shows mild lung infection"));
-        treatmentMap.put("T000006", new Treatment("T000005", "Migraine", "Painkillers prescribed, advised to reduce screen time",
+        treatmentMap.put("T000006", new Treatment("T000005", "C000006", "Migraine", "Painkillers prescribed, advised to reduce screen time",
                 new Date(2025, 7, 22), "S000004", "P000006", false, "Referred to neurologist if pain persists"));
-        treatmentMap.put("T000007", new Treatment("T000006", "Anemia", "Iron supplements prescribed, increase iron-rich foods",
+        treatmentMap.put("T000007", new Treatment("T000006", "C000007", "Anemia", "Iron supplements prescribed, increase iron-rich foods",
                 new Date(2025, 7, 23), "S000006", "P000007", false, "Patient advised to return for blood test"));
-        treatmentMap.put("T000008", new Treatment("T000007", "Fracture", "Arm cast applied, x-ray review in 3 weeks",
+        treatmentMap.put("T000008", new Treatment("T000007", "C000008", "Fracture", "Arm cast applied, x-ray review in 3 weeks",
                 new Date(2025, 7, 24), "S000005", "P000008", true, "X-ray confirmed non-displaced fracture"));
-        treatmentMap.put("T000009", new Treatment("T000008", "Tonsillitis", "Antibiotics prescribed for 7 days, warm saline gargle",
+        treatmentMap.put("T000009", new Treatment("T000008", "C000009", "Tonsillitis", "Antibiotics prescribed for 7 days, warm saline gargle",
                 new Date(2025, 7, 25), "S000003", "P000009", false, "Mild swelling observed, no scan needed"));
-        treatmentMap.put("T000010", new Treatment("T000009", "High Cholesterol", "Start statins, low-fat diet advised",
+        treatmentMap.put("T000010", new Treatment("T000009", "C000010", "High Cholesterol", "Start statins, low-fat diet advised",
                 new Date(2025, 7, 26), "S000007", "P000010", true, "Lipid profile test results attached"));
 
         return treatmentMap;
@@ -56,23 +56,22 @@ public class Initializer {
         LinkedHashMap<String, Medicine> medicineMap3 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap4 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap5 = new LinkedHashMap<>();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date expiryDate;
+        
         try {
-            expiryDate = sdf.parse("2030-10-10");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Date expiryDate = sdf.parse("10-10-2030");
 
             //String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice
-            medicineMap1.put("M0001", new Medicine("M0001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
-            medicineMap2.put("M0002", new Medicine("M0002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 2, 5.2));
-            medicineMap3.put("M0003", new Medicine("M0003", "Amoxicillin", "Antibiotics", expiryDate, 2, 13.5));
-            medicineMap4.put("M0004", new Medicine("M0004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 2, 5.0));
-            medicineMap5.put("M0005", new Medicine("M0005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 1, 18.3));
-            medicineMap1.put("M0006", new Medicine("M0006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
-            medicineMap2.put("M0007", new Medicine("M0007", "Larotadine", "Antihistamines (Allergy Relief)", expiryDate, 2, 15.0));
-            medicineMap3.put("M0008", new Medicine("M0008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 1, 13.0));
-            medicineMap4.put("M0009", new Medicine("M0009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 3, 7.0));
-            medicineMap5.put("M0010", new Medicine("M0010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 1, 9.7));
+            medicineMap1.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
+            medicineMap2.put("M000002", new Medicine("M000002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 2, 5.2));
+            medicineMap3.put("M000003", new Medicine("M000003", "Amoxicillin", "Antibiotics", expiryDate, 2, 13.5));
+            medicineMap4.put("M000004", new Medicine("M000004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 2, 5.0));
+            medicineMap5.put("M000005", new Medicine("M000005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 1, 18.3));
+            medicineMap1.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
+            medicineMap2.put("M000007", new Medicine("M000007", "Larotadine", "Antihistamines (Allergy Relief)", expiryDate, 2, 15.0));
+            medicineMap3.put("M000008", new Medicine("M000008", "Cetirizine", "Antihistamines (Allergy Relief)", expiryDate, 1, 13.0));
+            medicineMap4.put("M000009", new Medicine("M000009", "Dextromethorphan", "Cough & Cold Remedies", expiryDate, 3, 7.0));
+            medicineMap5.put("M000010", new Medicine("M000010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 1, 9.7));
 
             //String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList, String staff_id, String patient_id, String treatment_id
             prescriptionMap.put("PH000001", new Prescription("PH000000", medicineMap1, "S000001", "P000005", "T000001"));
@@ -176,6 +175,8 @@ public class Initializer {
     //initialize the Consultation dummy data 
     public MapInterface<String, Consultation> consultationInitializer() {
         LinkedHashMap<String, Consultation> consultMap = new LinkedHashMap<>();
+//        String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime,
+//        String consultationEndTime, String appointmentStatus, String type
         consultMap.put("C0001", new Consultation("C0001", null, "25/07/2025", "26/07/2025", "09:00", "10:00", "Completed", "Walk-In"));
         consultMap.put("C0002", new Consultation("C0002", null, "25/07/2025", "26/07/2025", "10:00", "11:00", "Pending", "Online"));
         consultMap.put("C0003", new Consultation("C0003", null, "26/07/2025", "27/07/2025", "11:00", "11:30", "Pending", "Walk-In"));

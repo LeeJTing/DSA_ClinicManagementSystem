@@ -17,6 +17,7 @@ public class Treatment {
     private SimpleDateFormat dateForm = new SimpleDateFormat("dd-MM-yyyy");
     
     private String treatment_id; // start from T000001
+    private String consultation_id;
     private String disease;
     private String treatment_advice;
     private Date treatment_date;
@@ -27,6 +28,7 @@ public class Treatment {
 
     public Treatment() {
         this.treatment_id = "T000000";
+        this.consultation_id = "";
         this.disease = "";
         this.treatment_advice = "";
         this.treatment_date = new Date();
@@ -36,8 +38,9 @@ public class Treatment {
         this.remark = "";
     }
 
-    public Treatment(String previousTreatmentID,String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
+    public Treatment(String previousTreatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
         this.treatment_id = IDGenerator.generateNextID(previousTreatmentID);
+        this.consultation_id = consultation_id;
         this.disease = disease;
         this.treatment_advice = treatment_advice;
         this.treatment_date = treatment_date;
@@ -51,6 +54,10 @@ public class Treatment {
         return treatment_id;
     }
 
+    public String getConsultation_id() {
+        return consultation_id;
+    }
+    
     public String getDisease() {
         return disease;
     }
@@ -83,6 +90,10 @@ public class Treatment {
         this.treatment_id = treatment_id;
     }
 
+    public void setConsultation_id(String consultation_id) {
+        this.consultation_id = consultation_id;
+    }
+    
     public void setDisease(String disease) {
         this.disease = disease;
     }
