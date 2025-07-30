@@ -178,15 +178,15 @@ public class Initializer {
 //        String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime,
 //        String consultationEndTime, String appointmentStatus, String type
         consultMap.put("C000001", new Consultation("C000001", null, "25/07/2025", "26/07/2025", "09:00", "10:00", "Completed", "Walk-In", "P000001", "S000001"));
-        consultMap.put("C000002", new Consultation("C000002", null, "25/07/2025", "26/07/2025", "10:00", "11:00", "Pending", "Online", "P000001", "S000001"));
-        consultMap.put("C000003", new Consultation("C000003", null, "26/07/2025", "27/07/2025", "11:00", "11:30", "Pending", "Walk-In", "P000001", "S000001"));
-        consultMap.put("C000004", new Consultation("C000004", null, "26/07/2025", "27/07/2025", "14:00", "15:00", "Cancelled", "Online", "P000001", "S000001"));
-        consultMap.put("C000005", new Consultation("C000005", null, "26/07/2025", "27/07/2025", "15:30", "16:00", "Completed", "Online", "P000001", "S000001"));
-        consultMap.put("C000006", new Consultation("C000006", null, "27/07/2025", "28/07/2025", "08:30", "09:15", "Pending", "Walk-In", "P000001", "S000001"));
-        consultMap.put("C000007", new Consultation("C000007", null, "27/07/2025", "28/07/2025", "09:30", "10:00", "Completed", "Online", "P000001", "S000001"));
-        consultMap.put("C000008", new Consultation("C000008", null, "27/07/2025", "28/07/2025", "10:15", "11:00", "Pending", "Walk-In", "P000001", "S000001"));
-        consultMap.put("C000009", new Consultation("C000009", null, "28/07/2025", "29/07/2025", "11:00", "11:45", "Pending", "Online", "P000001", "S000001"));
-        consultMap.put("C000010", new Consultation("C000010", null, "28/07/2025", "29/07/2025", "12:00", "12:30", "Cancelled", "Walk-In", "P000001", "S000001"));
+        consultMap.put("C000002", new Consultation("C000002", null, "25/07/2025", "26/07/2025", "10:00", "11:00", "Pending", "Online", "P000002", "S000002"));
+        consultMap.put("C000003", new Consultation("C000003", null, "26/07/2025", "27/07/2025", "11:00", "11:30", "Pending", "Walk-In", "P000003", "S000003"));
+        consultMap.put("C000004", new Consultation("C000004", null, "26/07/2025", "27/07/2025", "14:00", "15:00", "Cancelled", "Online", "P000004", "S000004"));
+        consultMap.put("C000005", new Consultation("C000005", null, "26/07/2025", "27/07/2025", "15:30", "16:00", "Completed", "Online", "P000005", "S000005"));
+        consultMap.put("C000006", new Consultation("C000006", null, "27/07/2025", "28/07/2025", "08:30", "09:15", "Pending", "Walk-In", "P000006", "S000006"));
+        consultMap.put("C000007", new Consultation("C000007", null, "27/07/2025", "28/07/2025", "09:30", "10:00", "Completed", "Online", "P000007", "S000007"));
+        consultMap.put("C000008", new Consultation("C000008", null, "27/07/2025", "28/07/2025", "10:15", "11:00", "Pending", "Walk-In", "P000008", "S000001"));
+        consultMap.put("C000009", new Consultation("C000009", null, "28/07/2025", "29/07/2025", "11:00", "11:45", "Pending", "Online", "P000009", "S000002"));
+        consultMap.put("C000010", new Consultation("C000010", null, "28/07/2025", "29/07/2025", "12:00", "12:30", "Cancelled", "Walk-In", "P000010", "S000003"));
 
         Object[] values = consultMap.getAllValues();
         for (Object obj : values) {
