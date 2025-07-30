@@ -25,6 +25,8 @@ public class Consultation {
     private Date consultation_end_time;
     private String appointmentStatus;
     private String type;
+    private String patient;
+    private String staff;
 
     public Consultation() {
         this.consultation_Id = "";
@@ -35,9 +37,11 @@ public class Consultation {
         this.consultation_end_time = null;
         this.appointmentStatus = "";
         this.type = "";
+        this.patient = "";
+        this.staff = "";
     }
 
-    public Consultation(String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type) {
+    public Consultation(String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type, String patient, String staff) {
         this.consultation_Id = consultation_Id;
         this.consultation_duration = consultation_duration;
         try {
@@ -50,6 +54,8 @@ public class Consultation {
         }
         this.appointmentStatus = appointmentStatus;
         this.type = type;
+        this.patient = patient;
+        this.staff = staff;
     }
 
     public String getConsultation_Id() {
@@ -83,6 +89,7 @@ public class Consultation {
     public String getType() {
         return type;
     }
+
 
     public void setConsultation_Id(String consultation_Id) {
         this.consultation_Id = consultation_Id;
