@@ -6,7 +6,6 @@ package control;
 
 import dao.Initializer;
 import entity.*;
-import boundary.menu;
 import adt.MapInterface;
 import adt.LinkedHashMap;
 
@@ -21,7 +20,7 @@ public class Master {
     private static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
     private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
     private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private static MapInterface<String, Prescription> perscriptionMap = new LinkedHashMap<>();
+    private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
     
     private static final Initializer INITIALIZER = new Initializer();
@@ -37,7 +36,7 @@ public class Master {
         consultationMap = INITIALIZER.consultationInitializer();
         paymentMap = INITIALIZER.paymentInitializer();
         staffMap = INITIALIZER.staffInitializer();
-        perscriptionMap = INITIALIZER.prescriptionInitializer();    
+        prescriptionMap = INITIALIZER.prescriptionInitializer();    
     }
     
     public static MapInterface<String, Treatment> getTreatmentMap() {
@@ -64,6 +63,10 @@ public class Master {
         return paymentMap;
     }
 
+    public static MapInterface<String, Prescription> getPrescriptionMap() {
+        return prescriptionMap;
+    }
+
     public static void setTreatmentMap(MapInterface<String, Treatment> treatmentMap) {
         Master.treatmentMap = treatmentMap;
     }
@@ -87,6 +90,9 @@ public class Master {
     public static void setPaymentMap(MapInterface<String, Payment> paymentMap){
         Master.paymentMap = paymentMap;
     }
-    
+
+    public static void setPrescriptionMap(MapInterface<String, Prescription> prescriptionMap) {
+        Master.prescriptionMap = prescriptionMap;
+    }
     
 }
