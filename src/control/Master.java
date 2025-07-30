@@ -25,14 +25,7 @@ public class Master {
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
     
     private static final Initializer INITIALIZER = new Initializer();
-    
-    public static void main(String[] args) {
-        treatmentMap = INITIALIZER.medicalTreatmentInitializer();
-        perscriptionMap = INITIALIZER.prescriptionInitializer();
-        System.out.println(perscriptionMap.getValue(perscriptionMap.getLastKey()).toString());
-        
-    }
-    
+       
     public Master(){
         
         treatmentMap = INITIALIZER.medicalTreatmentInitializer();
