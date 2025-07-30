@@ -120,16 +120,16 @@ public class Initializer {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
-            paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000000"), 20.0, 40.0, sdf.parse("01-07-2025 12:00:06")));
-            paymentMap.put("PM000002", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000001"), 20.0, 40.0, sdf.parse("02-07-2025 17:10:10")));
-            paymentMap.put("PM000003", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000002"), 20.0, 40.0, sdf.parse("03-07-2025 14:25:03")));
-            paymentMap.put("PM000004", new Payment("PM000004", "P000004", prescriptionMap.getValue("PH000003"), 20.0, 40.0, sdf.parse("04-07-2025 15:56:30")));
-            paymentMap.put("PM000005", new Payment("PM000005", "P000005", prescriptionMap.getValue("PH000004"), 20.0, 40.0, sdf.parse("05-07-2025 10:04:45")));
-            paymentMap.put("PM000006", new Payment("PM000006", "P000006", prescriptionMap.getValue("PH000005"), 20.0, 40.0, sdf.parse("05-07-2025 11:19:22")));
-            paymentMap.put("PM000007", new Payment("PM000007", "P000007", prescriptionMap.getValue("PH000006"), 20.0, 40.0, sdf.parse("07-07-2025 13:05:14")));
-            paymentMap.put("PM000008", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000007"), 20.0, 40.0, sdf.parse("08-07-2025 14:30:31")));
-            paymentMap.put("PM000009", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000008"), 20.0, 40.0, sdf.parse("09-07-2025 16:29:44")));
-            paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000009"), 20.0, 40.0, sdf.parse("10-07-2025 14:40:02")));
+            paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000001"), 20.0, 40.0, sdf.parse("01-07-2025 12:00:06")));
+            paymentMap.put("PM000002", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000002"), 20.0, 40.0, sdf.parse("02-07-2025 17:10:10")));
+            paymentMap.put("PM000003", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000003"), 20.0, 40.0, sdf.parse("03-07-2025 14:25:03")));
+            paymentMap.put("PM000004", new Payment("PM000004", "P000004", prescriptionMap.getValue("PH000004"), 20.0, 40.0, sdf.parse("04-07-2025 15:56:30")));
+            paymentMap.put("PM000005", new Payment("PM000005", "P000005", prescriptionMap.getValue("PH000005"), 20.0, 40.0, sdf.parse("05-07-2025 10:04:45")));
+            paymentMap.put("PM000006", new Payment("PM000006", "P000006", prescriptionMap.getValue("PH000006"), 20.0, 40.0, sdf.parse("05-07-2025 11:19:22")));
+            paymentMap.put("PM000007", new Payment("PM000007", "P000007", prescriptionMap.getValue("PH000007"), 20.0, 40.0, sdf.parse("07-07-2025 13:05:14")));
+            paymentMap.put("PM000008", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000008"), 20.0, 40.0, sdf.parse("08-07-2025 14:30:31")));
+            paymentMap.put("PM000009", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000009"), 20.0, 40.0, sdf.parse("09-07-2025 16:29:44")));
+            paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000010"), 20.0, 40.0, sdf.parse("10-07-2025 14:40:02")));
 
         } catch (ParseException e) {
             e.printStackTrace();
