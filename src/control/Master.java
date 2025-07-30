@@ -27,16 +27,19 @@ public class Master {
     private static final Initializer INITIALIZER = new Initializer();
        
     public Master(){
-        
+
+    }
+
+    public static void initializer(){
         treatmentMap = INITIALIZER.medicalTreatmentInitializer();
         medicineMap = INITIALIZER.medicineInitializer();
         patientMap = INITIALIZER.patientInitializer();
         consultationMap = INITIALIZER.consultationInitializer();
         paymentMap = INITIALIZER.paymentInitializer();
         staffMap = INITIALIZER.staffInitializer();
-        perscriptionMap = INITIALIZER.prescriptionInitializer();
+        perscriptionMap = INITIALIZER.prescriptionInitializer();    
     }
-
+    
     public static MapInterface<String, Treatment> getTreatmentMap() {
         return treatmentMap;
     }
