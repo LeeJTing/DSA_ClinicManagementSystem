@@ -17,8 +17,7 @@ public class Consultation {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-    private String consultation_Id = "C0001";
-    private int consultation_duration;
+    private String consultation_Id = "C000001";
     private Date appointment_date;
     private Date consultation_date;
     private Date consultation_start_time;
