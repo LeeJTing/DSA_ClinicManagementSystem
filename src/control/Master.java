@@ -22,11 +22,14 @@ public class Master {
     private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
     private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
+    private static String currentPatientId = "P000001";
+    private static String currentStaffId = "S000001";
+
     
     private static final Initializer INITIALIZER = new Initializer();
        
     public Master(){
-
+        
     }
 
     public static void initializer(){
@@ -37,6 +40,14 @@ public class Master {
         paymentMap = INITIALIZER.paymentInitializer();
         staffMap = INITIALIZER.staffInitializer();
         prescriptionMap = INITIALIZER.prescriptionInitializer();    
+    }
+
+    public static String getCurrentPatientId() {
+        return currentPatientId;
+    }
+
+    public static String getCurrentStaffId() {
+        return currentStaffId;
     }
     
     public static MapInterface<String, Treatment> getTreatmentMap() {
@@ -67,6 +78,14 @@ public class Master {
         return prescriptionMap;
     }
 
+    public static void setCurrentPatientId(String currentPatientId) {
+        Master.currentPatientId = currentPatientId;
+    }
+
+    public static void setCurrentStaffId(String currentStaffId) {
+        Master.currentStaffId = currentStaffId;
+    }
+    
     public static void setTreatmentMap(MapInterface<String, Treatment> treatmentMap) {
         Master.treatmentMap = treatmentMap;
     }
