@@ -56,7 +56,7 @@ public class Initializer {
         LinkedHashMap<String, Medicine> medicineMap3 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap4 = new LinkedHashMap<>();
         LinkedHashMap<String, Medicine> medicineMap5 = new LinkedHashMap<>();
-        
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             Date expiryDate = sdf.parse("10-10-2030");
@@ -113,13 +113,15 @@ public class Initializer {
         return medicineMap;
     }
 
-    // initialize the payment dummy
+    // initialize the payment dummy data
     public MapInterface<String, Payment> paymentInitializer() {
         LinkedHashMap<String, Payment> paymentMap = new LinkedHashMap<>();
         MapInterface<String, Prescription> prescriptionMap = prescriptionInitializer();
+        MapInterface<String, Consultation> consultationMap = consultationInitializer();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
+//            String paymentID, String patientID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime
             paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000001"), 20.0, 40.0, sdf.parse("01-07-2025 12:00:06")));
             paymentMap.put("PM000002", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000002"), 20.0, 40.0, sdf.parse("02-07-2025 17:10:10")));
             paymentMap.put("PM000003", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000003"), 20.0, 40.0, sdf.parse("03-07-2025 14:25:03")));
@@ -130,6 +132,20 @@ public class Initializer {
             paymentMap.put("PM000008", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000008"), 20.0, 40.0, sdf.parse("08-07-2025 14:30:31")));
             paymentMap.put("PM000009", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000009"), 20.0, 40.0, sdf.parse("09-07-2025 16:29:44")));
             paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000010"), 20.0, 40.0, sdf.parse("10-07-2025 14:40:02")));
+
+            Object[] paymentValues = paymentMap.getAllValues();
+            
+            for (Object obj : paymentValues) {
+                Payment pm = (Payment) obj;
+                String patientID = pm.getPatientID();
+
+                // Consultation retrieval
+                Consultation c = (Consultation) consultationMap.getValue(patientID); // This returns Object
+                if (c != null && "Completed".equals(c.getAppointmentStatus())) {
+                    int duration = c.calculationDurationTimeInMinutes();
+                    pm.calTotalCost(duration);
+                }
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -182,10 +198,10 @@ public class Initializer {
         consultMap.put("C000003", new Consultation("C000003", "26/07/2025", "27/07/2025", "11:00", "11:30", "Pending", "Online", "P000003", "S000003"));
         consultMap.put("C000004", new Consultation("C000004", "26/07/2025", "27/07/2025", "14:00", "15:00", "Pending", "Online", "P000004", "S000004"));
         consultMap.put("C000005", new Consultation("C000005", "26/07/2025", "27/07/2025", "15:30", "16:00", "Cancelled", "Online", "P000005", "S000005"));
-        consultMap.put("C000006", new Consultation("C000006", "27/07/2025", "28/07/2025", "", "", "Pending", "Walk-In", "P000006", "S000006"));
+        consultMap.put("C000006", new Consultation("C000006", "27/07/2025", "28/07/2025", "09:00", "00:00", "On-going", "Walk-In", "P000006", "S000006"));
         consultMap.put("C000007", new Consultation("C000007", "27/07/2025", "28/07/2025", "09:30", "10:00", "Completed", "Walk-In", "P000007", "S000007"));
-        consultMap.put("C000008", new Consultation("C000008", "27/07/2025", "28/07/2025", "", "", "Pending", "Walk-In", "P000008", "S000001"));
-        consultMap.put("C000009", new Consultation("C000009", "28/07/2025", "29/07/2025", "", "", "Pending", "Walk-In", "P000009", "S000002"));
+        consultMap.put("C000008", new Consultation("C000008", "27/07/2025", "28/07/2025", "10:00", "00:00", "On-going", "Walk-In", "P000008", "S000001"));
+        consultMap.put("C000009", new Consultation("C000009", "28/07/2025", "29/07/2025", "11:00", "00:00", "On-going", "Walk-In", "P000009", "S000002"));
         consultMap.put("C000010", new Consultation("C000010", "28/07/2025", "29/07/2025", "12:00", "12:30", "Completed", "Walk-In", "P000010", "S000003"));
 
         return consultMap;
