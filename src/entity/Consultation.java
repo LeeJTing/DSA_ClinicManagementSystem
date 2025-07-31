@@ -18,7 +18,7 @@ public class Consultation {
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     private String consultation_Id = "C0001";
-    private Date consultation_duration;
+    private int consultation_duration;
     private Date appointment_date;
     private Date consultation_date;
     private Date consultation_start_time;
@@ -30,7 +30,6 @@ public class Consultation {
 
     public Consultation() {
         this.consultation_Id = "";
-        this.consultation_duration = null;
         this.appointment_date = null;
         this.consultation_date = null;
         this.consultation_start_time = null;
@@ -41,9 +40,8 @@ public class Consultation {
         this.staff_Id = "";
     }
 
-    public Consultation(String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type, String patient_Id, String staff_Id) {
+    public Consultation(String consultation_Id, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type, String patient_Id, String staff_Id) {
         this.consultation_Id = consultation_Id;
-        this.consultation_duration = consultation_duration;
         try {
             this.appointment_date = dateFormat.parse(appointmentDate);
             this.consultation_date = dateFormat.parse(consultationDate);
@@ -60,10 +58,6 @@ public class Consultation {
 
     public String getConsultation_Id() {
         return consultation_Id;
-    }
-
-    public Date getConsultation_duration() {
-        return consultation_duration;
     }
 
     public Date getAppointment_date() {
@@ -90,13 +84,16 @@ public class Consultation {
         return type;
     }
 
+    public String getPatient_Id() {
+        return patient_Id;
+    }
+
+    public String getStaff_Id() {
+        return staff_Id;
+    }
 
     public void setConsultation_Id(String consultation_Id) {
         this.consultation_Id = consultation_Id;
-    }
-
-    public void setConsultation_duration(Date consultation_duration) {
-        this.consultation_duration = consultation_duration;
     }
 
     public void setAppointment_date(Date appointment_date) {
@@ -123,18 +120,20 @@ public class Consultation {
         this.type = type;
     }
 
-    public Date calculationDurationTime() {
+    public void setPatient_Id(String patient_Id) {
+        this.patient_Id = patient_Id;
+    }
+
+    public void setStaff_Id(String staff_Id) {
+        this.staff_Id = staff_Id;
+    }
+
+    public int calculationDurationTimeInMinutes() {
         if (consultation_start_time != null && consultation_end_time != null) {
             long durationInMillis = consultation_end_time.getTime() - consultation_start_time.getTime();
-            // represents duration as time from epoch
-            return new Date(durationInMillis);
+            long durationInMinutes = durationInMillis / (1000 * 60);
+            return (int) durationInMinutes;
         }
-        return null;
+        return 0;
     }
-
-    @Override
-    public String toString() {
-        return "Consultation{" + "dateFormat=" + dateFormat + ", timeFormat=" + timeFormat + ", consultation_Id=" + consultation_Id + ", consultation_duration=" + consultation_duration + ", appointment_date=" + appointment_date + ", consultation_date=" + consultation_date + ", consultation_start_time=" + consultation_start_time + ", consultation_end_time=" + consultation_end_time + ", appointmentStatus=" + appointmentStatus + ", type=" + type + '}';
-    }
-
 }
