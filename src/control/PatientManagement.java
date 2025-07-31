@@ -19,24 +19,22 @@ import java.text.ParseException;
  * @author Elwin Koh Soon Yit
  */
 public class PatientManagement {
-
-    private static Date currentDate = new Date();
-    private static MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
+ private static Date currentDate = new Date();
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     public static String generateNextPatientId() {
         String lastId = "P000000";
-        if (!patientMap.isEmpty()) {
-            String lastKey = patientMap.getLastKey();
+        if (!Master.getPatientMap().isEmpty()) {
+            String lastKey = Master.getPatientMap().getLastKey();
             if (lastKey != null && lastKey.startsWith("P")) {
                 lastId = lastKey;
             }
         }
         return IDGenerator.generateNextID(lastId);
     }
-    
+
     public static void registerPatient() {
         String id = generateNextPatientId();
         System.out.println("Your ID is:" + id);
@@ -47,8 +45,8 @@ public class PatientManagement {
         int age = Input.getIntegerInput("Enter Age: ");
         Patient patient = new Patient();
         try {
-            String regDateStr = dateFormat.format(currentDate);
-            Date regDate = dateFormat.parse(regDateStr); // parse right away
+            String regDateStr = fullDateFormat.format(currentDate);
+            Date regDate = fullDateFormat.parse(regDateStr);
             patient.setRegistration_date(regDate);
         } catch (ParseException e) {
             System.out.println(" Failed to parse registration date.");
@@ -58,21 +56,20 @@ public class PatientManagement {
         patient.setPatient_name(name);
         patient.setPatient_contact(contact);
         patient.setPatient_email(email);
-        patient.setPatient_gender(gender); // Gender is String, not boolean
+        patient.setPatient_gender(gender);
         patient.setAge(age);
 
-        patientMap.put(id, patient);
+        Master.getPatientMap().put(id, patient);
         System.out.println("\n Patient registered successfully.\n");
     }
 
     public static void editPatient(String id) {
-        Patient patient = patientMap.getValue(id);
+        Patient patient = Master.getPatientMap().getValue(id);
         if (patient == null) {
             System.out.println("Patient not found.");
             return;
         }
 
-        // Temp variables to store edits
         String tempContact = patient.getPatient_contact();
         String tempEmail = patient.getPatient_email();
         int tempAge = patient.getAge();
@@ -103,7 +100,7 @@ public class PatientManagement {
                         patient.setPatient_contact(tempContact);
                         patient.setPatient_email(tempEmail);
                         patient.setAge(tempAge);
-                        patientMap.put(id, patient);
+                        Master.getPatientMap().put(id, patient);
                         System.out.println("Patient information updated.");
                     } else {
                         System.out.println("Changes discarded.");
@@ -121,18 +118,50 @@ public class PatientManagement {
     }
 
     public static MapInterface<String, Patient> getPatientMap() {
-        return patientMap;
+        return Master.getPatientMap();
     }
 
     public static boolean patientExists(String id) {
-        return patientMap.containsKey(id);
+        return Master.getPatientMap().containsKey(id);
     }
 
     public static void displayPatientById(String id) {
-        Patient p = patientMap.getValue(id);
+        Patient p = Master.getPatientMap().getValue(id);
         if (p != null) {
             p.displayProfile();
         }
     }
 
+    public static void deletePatient(String id) {
+        Patient patient = Master.getPatientMap().getValue(id);
+        if (patient == null) {
+            System.out.println("Patient not found.");
+            return;
+        }
+        while (true) {
+            System.out.println("Would you like to delete current patient");
+            patient.displayProfile();
+            System.out.println("1. Delete current Patient");
+            System.out.println("2. Exit");
+            int choice = Input.getIntegerInput("Select an option > ");
+            switch (choice) {
+                case 1 -> {
+                        String confirm = Input.getStringInput("Are you sure you want to Delete Patient:" + id + "? (Y/N): ");
+                        if (confirm.equalsIgnoreCase("Y")) {
+                            Master.getPatientMap().remove(id);
+                            System.out.println("Patient "+id+"deleted succesfully.");
+                        } else {
+                            System.out.println("Patient"+id+"deleted unsuccessful");
+                        }
+                        return;
+                    }
+                case 2 -> {
+                    System.out.println("Edit cancelled.");
+                    return;
+                }
+                default ->
+                    System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
 }

@@ -4,6 +4,7 @@
  */
 package boundary;
 
+import control.Master;
 import utility.Input;
 import control.PatientManagement;
 
@@ -12,11 +13,10 @@ import control.PatientManagement;
  * @author User
  */
 public class menu {
-
-    public static String currentPatientId;
-
     // main Menu (User,Staff,exit)
+    
     public static void mainMenu() {
+        
         while (true) {
             System.out.println("\n====== Main Page ======");
             System.out.println("1. User");
@@ -51,13 +51,13 @@ public class menu {
                 case 1 ->
                     PatientManagement.registerPatient();
                 case 2 -> {
-                    String id = Input.getStringInput("Enter Patient ID: ");
-                    if (PatientManagement.patientExists(id)) {
-                        PatientManagement.displayPatientById(id); // pass ID to next menu
-                        currentPatientId = id;
+                    Master.setCurrentPatientId(Input.getStringInput("Enter Patient ID: "));
+                    if (PatientManagement.patientExists(Master.getCurrentPatientId())) {
+                        PatientManagement.displayPatientById(Master.getCurrentPatientId()); // pass ID to next menu
+                        
                         displayExistingUserMenu();
                     } else {
-                        System.out.println("No patient found with ID: " + id);
+                        System.out.println("No patient found with ID: " + Master.getCurrentPatientId());
                     }
                 }
                 case 3 -> {
@@ -84,13 +84,12 @@ public class menu {
 
             switch (moduleChoice) {
                 case 1 -> {
-//                    System.out.println("...");
-//                }
-                    int patientChoice = PatientManagementUI.displayPatientManagementMenu(currentPatientId);
+                    int patientChoice = PatientManagementUI.displayPatientManagementMenu(Master.getCurrentPatientId());
                     switch (patientChoice) {
-                        case 1 -> PatientManagement.displayPatientById(currentPatientId);
-                        case 2 -> PatientManagement.editPatient(currentPatientId);
-                        case 3 -> System.out.println("Returning to Previous Menu...");
+                        case 1 -> PatientManagement.displayPatientById(Master.getCurrentPatientId());
+                        case 2 -> PatientManagement.editPatient(Master.getCurrentPatientId());
+                        case 3 -> PatientManagement.deletePatient(Master.getCurrentPatientId());
+                        case 4 -> System.out.println("Returning to Previous Menu...");
                         default -> System.out.println("Invalid selection.");
                     }
                 }

@@ -4,6 +4,10 @@
  */
 package utility;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author
@@ -28,5 +32,28 @@ public class MessageUI {
 
     public static void yesNoMessage() {
         System.out.println(RED + "Enter Y or N only." + RESET);
+    }
+    
+    public static void clearScreen() {
+        try {
+            Robot robot = new Robot();
+            robot.setAutoDelay(10);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_L);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyRelease(KeyEvent.VK_L);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void sleep(int ms) {
+        try {
+            // 0.8 Second
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
