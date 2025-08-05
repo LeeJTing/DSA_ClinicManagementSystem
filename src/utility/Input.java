@@ -44,7 +44,7 @@ public class Input {
         do{
             error = false;
             try{
-                System.out.println(question);
+                System.out.print(question);
                 value = input.nextInt();
                 input.nextLine();
             } catch (Exception e) {
@@ -68,7 +68,7 @@ public class Input {
         do{
             error = false;
             try{
-                System.out.println(question);
+                System.out.print(question);
                 value = input.nextDouble();
             }catch (Exception e) {
                 input.nextLine();
