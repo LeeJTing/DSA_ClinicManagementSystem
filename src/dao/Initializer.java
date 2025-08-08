@@ -32,19 +32,19 @@ public class Initializer {
                     sdf.parse("25-06-2025"), "S000002", "P000004", false, "Blood sugar fluctuating – advised strict diet"));
             treatmentMap.put("T000003", new Treatment("T000003", "C000003", "Asthma", "Inhaler prescribed, avoid allergens",
                     sdf.parse("05-07-2025"), "S000001", "P000003", true, "Chest X-ray scan done"));
-            treatmentMap.put("T000004", new Treatment("T000004", "C000004", "Gastritis", "Antacid medication for 2 weeks, avoid spicy food",
+            treatmentMap.put("T000004", new Treatment("T000004", "C000004", "COVID-19", "Antacid medication for 2 weeks, avoid spicy food",
                     sdf.parse("12-07-2025"), "S000003", "P000001", false, "Follow-up in 2 weeks"));
             treatmentMap.put("T000005", new Treatment("T000005", "C000005", "COVID-19", "Isolation advised, paracetamol for fever, hydration",
                     sdf.parse("20-07-2025"), "S000002", "P000002", true, "CT scan shows mild lung infection"));
-            treatmentMap.put("T000006", new Treatment("T000006", "C000006", "Migraine", "Painkillers prescribed, advised to reduce screen time",
+            treatmentMap.put("T000006", new Treatment("T000006", "C000006", "Fracture", "Painkillers prescribed, advised to reduce screen time",
                     sdf.parse("22-07-2025"), "S000004", "P000006", false, "Referred to neurologist if pain persists"));
-            treatmentMap.put("T000007", new Treatment("T000007", "C000007", "Anemia", "Iron supplements prescribed, increase iron-rich foods",
+            treatmentMap.put("T000007", new Treatment("T000007", "C000007", "Asthma", "Iron supplements prescribed, increase iron-rich foods",
                     sdf.parse("23-07-2025"), "S000006", "P000007", false, "Patient advised to return for blood test"));
             treatmentMap.put("T000008", new Treatment("T000008", "C000008", "Fracture", "Arm cast applied, x-ray review in 3 weeks",
                     sdf.parse("24-07-2025"), "S000005", "P000008", true, "X-ray confirmed non-displaced fracture"));
-            treatmentMap.put("T000009", new Treatment("T000009", "C000009", "Tonsillitis", "Antibiotics prescribed for 7 days, warm saline gargle",
+            treatmentMap.put("T000009", new Treatment("T000009", "C000009", "Fracture", "Antibiotics prescribed for 7 days, warm saline gargle",
                     sdf.parse("25-07-2025"), "S000003", "P000009", false, "Mild swelling observed, no scan needed"));
-            treatmentMap.put("T000010", new Treatment("T000010", "C000010", "High Cholesterol", "Start statins, low-fat diet advised",
+            treatmentMap.put("T000010", new Treatment("T000010", "C000010", "Hypertension", "Start statins, low-fat diet advised",
                     sdf.parse("26-07-2025"), "S000007", "P000010", true, "Lipid profile test results attached"));
 
         } catch (ParseException ex) {
