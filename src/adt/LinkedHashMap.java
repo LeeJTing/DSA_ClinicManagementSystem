@@ -14,11 +14,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
     private Entry<K, V>[] entries;
     private int size;
-    private int capacity = 16;
+    private final int CAPACITY = 16;
     private Entry<K, V> head, tail;
 
     public LinkedHashMap() {
-        entries = new Entry[capacity];
+        entries = new Entry[CAPACITY];
         size = 0;
         head = null;
         tail = null;
@@ -128,7 +128,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     private int hashing(K key) {
-        return Math.abs(key.hashCode()) % capacity; // return a positive integer to indicate the index
+        return Math.abs(key.hashCode()) % CAPACITY; // return a positive integer to indicate the index
     }
 
     @Override

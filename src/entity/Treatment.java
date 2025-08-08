@@ -38,8 +38,8 @@ public class Treatment {
         this.remark = "";
     }
 
-    public Treatment(String previousTreatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
-        this.treatment_id = IDGenerator.generateNextID(previousTreatmentID);
+    public Treatment(String treatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
+        this.treatment_id = treatmentID;
         this.consultation_id = consultation_id;
         this.disease = disease;
         this.treatment_advice = treatment_advice;
@@ -78,7 +78,7 @@ public class Treatment {
         return patient_id;
     }
 
-    public boolean isIsScan() {
+    public boolean getIsScan() {
         return isScan;
     }
 
