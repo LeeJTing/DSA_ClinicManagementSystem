@@ -27,6 +27,15 @@ public class Payment {
         this.payment_time = null;
     }
 
+//    public Payment(String paymentID, String patientID, Prescription prescription, Date paymentTime, int duration) {
+//        this.payment_id = paymentID;
+//        this.patient_id = patientID;
+//        this.prescription = prescription;
+//        this.consultation_cost = calConsultationCost(duration);
+//        this.total_cost = calTotalCost();
+//        this.payment_time = paymentTime;
+//    }
+
     public Payment(String paymentID, String patientID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime) {
         this.payment_id = paymentID;
         this.patient_id = patientID;
@@ -48,10 +57,6 @@ public class Payment {
         return prescription.getPrescription_id();
     }
 
-    public double getConsultationCost() {
-        return consultation_cost;
-    }
-
     public double getMedicineCost() {
         return prescription.getMedicine_total_cost();
     }
@@ -59,7 +64,7 @@ public class Payment {
     public double getTotalCost() {
         return total_cost;
     }
-    
+
     public Date getPaymentTime() {
         return payment_time;
     }
@@ -83,17 +88,27 @@ public class Payment {
     public void setTotalCost(double totalCost) {
         this.total_cost = totalCost;
     }
-    
+
     public void setPaymentTime(Date paymentTime) {
         this.payment_time = paymentTime;
     }
-    
-    public double calTotalCost(int consultationDuration) {
-        return calConsultationCost(consultationDuration) + getMedicineCost();
+
+    public void calConsultationCost(int consultationDuration) {
+        int durationInHour;
+
+        if (consultationDuration < 60) {
+            durationInHour = 1;
+        } else if (consultationDuration < 120) {
+            durationInHour = 2;
+        } else {
+            durationInHour = 3;
+        }
+        setConsultationCost(durationInHour * 50.0);
     }
-    
-    public double calConsultationCost(int consultationDuration) {
-        return consultationDuration * 50.0;
+
+    public void calTotalCost(double consultationCost) {
+        setConsultationCost(consultationCost);
+        setTotalCost(consultationCost + getMedicineCost());
     }
 
     @Override

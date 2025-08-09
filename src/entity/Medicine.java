@@ -4,6 +4,7 @@
  */
 package entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -84,9 +85,16 @@ public class Medicine {
     public void setMedicineUnitPrice(double unitPrice) {
         this.unit_price = unitPrice;
     }
+    
+    public void updateMedicineStock(int stock) {
+        this.medicine_stock -= stock;
+    }
 
     @Override
     public String toString() {
-        return String.format("%-8s %-20s %-10s %-10s %-5d %-6.2f\n", medicine_id, medicine_name, medicine_category, medicine_expiryDate, medicine_stock, unit_price);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(medicine_expiryDate);
+        
+        return String.format("\t\t%-14s %-20s %-32s %-14s %-8d %15.2f\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price);
     }
 }
