@@ -135,4 +135,19 @@ public class Consultation {
         }
         return 0;
     }
+    
+    public double calConsultationCost() {
+        int durationInMinutes = calculationDurationTimeInMinutes();
+        int durationInHour;
+        
+        if (durationInMinutes < 60) {
+            durationInHour = 1;
+        } else if (durationInMinutes < 120) {
+            durationInHour = 2;
+        } else {
+            durationInHour = 3;
+        }
+        return durationInHour * 50.0;
+    }
+    
 }

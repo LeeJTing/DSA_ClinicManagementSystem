@@ -123,33 +123,61 @@ public class Initializer {
         LinkedHashMap<String, Payment> paymentMap = new LinkedHashMap<>();
         MapInterface<String, Prescription> prescriptionMap = prescriptionInitializer();
         MapInterface<String, Consultation> consultationMap = consultationInitializer();
+        MapInterface<String, Treatment> treatmentMap = medicalTreatmentInitializer();
+        MapInterface<String, Medicine> medicineMap = medicineInitializer();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
 //            String paymentID, String patientID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime
-            paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000001"), 20.0, 40.0, sdf.parse("01-07-2025 12:00:06")));
-            paymentMap.put("PM000002", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000002"), 20.0, 40.0, sdf.parse("02-07-2025 17:10:10")));
-            paymentMap.put("PM000003", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000003"), 20.0, 40.0, sdf.parse("03-07-2025 14:25:03")));
-            paymentMap.put("PM000004", new Payment("PM000004", "P000004", prescriptionMap.getValue("PH000004"), 20.0, 40.0, sdf.parse("04-07-2025 15:56:30")));
-            paymentMap.put("PM000005", new Payment("PM000005", "P000005", prescriptionMap.getValue("PH000005"), 20.0, 40.0, sdf.parse("05-07-2025 10:04:45")));
-            paymentMap.put("PM000006", new Payment("PM000006", "P000006", prescriptionMap.getValue("PH000006"), 20.0, 40.0, sdf.parse("05-07-2025 11:19:22")));
-            paymentMap.put("PM000007", new Payment("PM000007", "P000007", prescriptionMap.getValue("PH000007"), 20.0, 40.0, sdf.parse("07-07-2025 13:05:14")));
-            paymentMap.put("PM000008", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000008"), 20.0, 40.0, sdf.parse("08-07-2025 14:30:31")));
-            paymentMap.put("PM000009", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000009"), 20.0, 40.0, sdf.parse("09-07-2025 16:29:44")));
-            paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000010"), 20.0, 40.0, sdf.parse("10-07-2025 14:40:02")));
+            paymentMap.put("PM000001", new Payment("PM000001", "P000001", prescriptionMap.getValue("PH000001"), 0.0, 0.0, sdf.parse("01-07-2025 12:00:06")));
+            paymentMap.put("PM000002", new Payment("PM000002", "P000002", prescriptionMap.getValue("PH000002"), 0.0, 0.0, sdf.parse("02-07-2025 17:10:10")));
+            paymentMap.put("PM000003", new Payment("PM000003", "P000003", prescriptionMap.getValue("PH000003"), 0.0, 0.0, sdf.parse("03-07-2025 14:25:03")));
+            paymentMap.put("PM000004", new Payment("PM000004", "P000004", prescriptionMap.getValue("PH000004"), 0.0, 0.0, sdf.parse("04-07-2025 15:56:30")));
+            paymentMap.put("PM000005", new Payment("PM000005", "P000005", prescriptionMap.getValue("PH000005"), 0.0, 0.0, sdf.parse("05-07-2025 10:04:45")));
+            paymentMap.put("PM000006", new Payment("PM000006", "P000006", prescriptionMap.getValue("PH000006"), 0.0, 0.0, sdf.parse("05-07-2025 11:19:22")));
+            paymentMap.put("PM000007", new Payment("PM000007", "P000007", prescriptionMap.getValue("PH000007"), 0.0, 0.0, sdf.parse("07-07-2025 13:05:14")));
+            paymentMap.put("PM000008", new Payment("PM000008", "P000008", prescriptionMap.getValue("PH000008"), 0.0, 0.0, sdf.parse("08-07-2025 14:30:31")));
+            paymentMap.put("PM000009", new Payment("PM000009", "P000009", prescriptionMap.getValue("PH000009"), 0.0, 0.0, sdf.parse("09-07-2025 16:29:44")));
+            paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000010"), 0.0, 0.0, sdf.parse("10-07-2025 14:40:02")));
 
-            Object[] paymentValues = paymentMap.getAllValues();
+            Object[] paymentObjects = paymentMap.getAllValues();
+            LinkedHashMap<String, Medicine> medicineListInPrescription;
+            for (Object paymentObj : paymentObjects) {
+                Payment pm = (Payment) paymentObj;
 
-            for (Object obj : paymentValues) {
-                Payment pm = (Payment) obj;
-                String patientID = pm.getPatientID();
-
-                // Consultation retrieval
-                Consultation c = (Consultation) consultationMap.getValue(patientID); // This returns Object
-                if (c != null && "Completed".equals(c.getAppointmentStatus())) {
-                    int duration = c.calculationDurationTimeInMinutes();
-                    pm.calTotalCost(duration);
+                Prescription p = prescriptionMap.getValue(pm.getPrescriptionID());
+                if (p == null) {
+                    continue;
                 }
+
+                Treatment t = treatmentMap.getValue(p.getTreatment_id());
+                if (t == null) {
+                    continue;
+                }
+
+                Consultation c = consultationMap.getValue(t.getConsultation_id());
+                if (c == null || !"Completed".equals(c.getAppointmentStatus())) {
+                    continue;
+                }
+
+                medicineListInPrescription = p.getMedicineLIst();
+                Object[] prescriptionMedicine = medicineListInPrescription.getAllValues();
+                Object[] medicineMapMedicine = medicineMap.getAllValues();
+
+                for (Object pMedicine : prescriptionMedicine) {
+                    for (Object mMedicine : medicineMapMedicine) {
+                        Medicine m = (Medicine) pMedicine;
+                        Medicine mm = (Medicine) mMedicine;
+                        if (m.getMedicineID().equals(mm.getMedicineID())) {
+                            mm.updateMedicineStock(m.getMedicineStock());
+                        }
+                    }
+
+                }
+
+                double consultationCost = c.calConsultationCost();
+                pm.calTotalCost(consultationCost);
+
             }
 
         } catch (ParseException e) {
