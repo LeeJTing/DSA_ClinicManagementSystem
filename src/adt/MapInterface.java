@@ -92,4 +92,15 @@ public interface MapInterface<K, V> {
      */
     public void clear();
     
+    /**
+     * Return the first key from the ADT
+     * @return return the first key of the ADT
+     */
+    public K getFirstKey();
+    
+    /**
+     * Remove the first key from the ADT
+     */
+    public void removeFirstKey();
+    
 }

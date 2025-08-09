@@ -153,6 +153,22 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     @Override
+    public K getFirstKey() {
+        return (head != null) ? head.key : null;
+    }
+
+    @Override
+    public void removeFirstKey() {
+        if (head != null) {
+            head = head.next;
+            if (head != null) {
+                head.before = null;
+            }
+            size--;
+        }
+    }
+
+    @Override
     public V getValue(K key) {
         //directly point to the value in the entries based on the hash value (key -> index) and keep looping
         int index = hashing(key);
@@ -291,7 +307,6 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 //            }
 //        }
 //    }
-
     @Override
     public void clear() {
         head = null;
