@@ -85,7 +85,7 @@ public interface MapInterface<K, V> {
     /**
      * Sorting value of the ADT
      */
-//    public void sorting();
+    public void sorting();
     
     /**
      * Clear the ADT

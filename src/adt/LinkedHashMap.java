@@ -160,7 +160,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public V removeFirst() {
         V value = null;
-        if(head != null){
+        if (head != null) {
             value = head.value;
             remove(head.key);
         }
@@ -277,35 +277,70 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         return size == 0;
     }
 
-//    @Override
-//    public void sorting() {
-//        Entry<K, V> current, largest;
+    @Override
+    public void sorting() {
+
+//        if (isEmpty() || size == 1) {
+//            return;
+//        }
 //
-//        if (!isEmpty() && size != 1) {
-//            // find the largest one
+//        if (head.value instanceof Comparable) {
 //            Entry<K, V>[] largeToSmall = new Entry[size];
+//            Entry<K, V> current, largest;
+//            current = largest = head;
 //            for (int i = 0; i < size; i++) {
-//                // largest to store the largest value, current is a pointer
-//                current = head;
-//                largest = head;
-//
 //                while (current != null) {
-//                    if (largest.value.compareTo(current.value) < 0) {
-//                        largest = current;
+//                    if (largest.value instanceof Comparable) {
+//                        Comparable largestCmp = (Comparable) largest.value;
+//                        if(largestCmp.compareTo(current.value) < 0){
+//                            largest = current;
+//                        }
 //                    }
-//                    current = current.next;
+//                    current = current.after;
 //                }
-//                // store the largest entry inside the array
 //                largeToSmall[i] = largest;
-//                // remove stored entry
 //                remove(largest.key);
 //            }
-//            // put back the note from largest to smallest
-//            for (Entry<K, V> e : largeToSmall) {
-//                put(e.key, e.value);
+//            for(Entry<K, V> e: largeToSmall){
+//                if(e != null){
+//                    put(e.key, e.value);
+//                }
 //            }
+//
 //        }
-//    }
+
+        if (!isEmpty() && size != 1) {
+            // find the largest one
+            Entry<K, V>[] largeToSmall = new Entry[size];
+            Entry<K, V> current, largest;
+            for (int i = 0; i < size; i++) {
+                // largest to store the largest value, current is a pointer
+                largest = head;
+                current = head;
+
+                while (current != null) {
+                    if (largest.value instanceof Comparable && current.value instanceof Comparable) {
+                        Comparable<V> largestCmp = (Comparable<V>) largest.value;
+                        if (largestCmp.compareTo(current.value) < 0) {
+                            largest = current;
+                        }
+                    }
+                    current = current.after;
+                }
+                // store the largest entry inside the array
+                largeToSmall[i] = largest;
+                // remove stored entry
+                remove(largest.key);
+            }
+            // put back the note from largest to smallest
+            for (Entry<K, V> e : largeToSmall) {
+                if (e != null) {
+                    put(e.key, e.value);
+                }
+            }
+        }
+    }
+
     @Override
     public void clear() {
         head = null;
