@@ -8,6 +8,7 @@ import java.util.Iterator;
  *
  * @author User
  */
+//V extends Comparable<V>
 public interface MapInterface<K, V> {
     
     /**
@@ -75,4 +76,14 @@ public interface MapInterface<K, V> {
      */
     public K getLastKey();
         
+    /**
+     * Sorting value of the ADT
+     */
+//    public void sorting();
+    
+    /**
+     * Clear the ADT
+     */
+    public void clear();
+    
 }

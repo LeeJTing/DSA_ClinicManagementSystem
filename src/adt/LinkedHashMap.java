@@ -10,6 +10,7 @@ import java.util.Iterator;
  *
  * @author User
  */
+//V extends Comparable<V>
 public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
     private Entry<K, V>[] entries;
@@ -24,6 +25,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         tail = null;
     }
 
+//    @Override
+//    public int compareTo(V o) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//extends Comparable<V>
     private static class Entry<K, V> {
 
         private K key;
@@ -31,24 +37,21 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         private Entry<K, V> before;
         private Entry<K, V> after;
         private Entry<K, V> next;
-        private int hash;
 
         public Entry() {
         }
 
-        public Entry(K key, V value, int hash) {
+        public Entry(K key, V value) {
             this.key = key;
             this.value = value;
-            this.hash = hash;
         }
 
-        public Entry(K key, V value, Entry<K, V> before, Entry<K, V> after, Entry<K, V> next, int hash) {
+        public Entry(K key, V value, Entry<K, V> before, Entry<K, V> after, Entry<K, V> next) {
             this.key = key;
             this.value = value;
             this.before = before;
             this.after = after;
             this.next = next;
-            this.hash = hash;
         }
     }
 
@@ -93,7 +96,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public void put(K key, V value) {
         int hashValue = hashing(key); // passing the key to return an integer
-        Entry<K, V> newEntry = new Entry(key, value, hashValue); // create a newEntry
+        Entry<K, V> newEntry = new Entry(key, value); // create a newEntry
         Entry<K, V> current = entries[hashValue]; // pass the hashValue to track the current entries
 
         // Insert into entries
@@ -257,6 +260,76 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public boolean isEmpty() {
         return size == 0;
+    }
+
+//    @Override
+//    public void sorting() {
+//        Entry<K, V> current, largest;
+//
+//        if (!isEmpty() && size != 1) {
+//            // find the largest one
+//            Entry<K, V>[] largeToSmall = new Entry[size];
+//            for (int i = 0; i < size; i++) {
+//                // largest to store the largest value, current is a pointer
+//                current = head;
+//                largest = head;
+//
+//                while (current != null) {
+//                    if (largest.value.compareTo(current.value) < 0) {
+//                        largest = current;
+//                    }
+//                    current = current.next;
+//                }
+//                // store the largest entry inside the array
+//                largeToSmall[i] = largest;
+//                // remove stored entry
+//                remove(largest.key);
+//            }
+//            // put back the note from largest to smallest
+//            for (Entry<K, V> e : largeToSmall) {
+//                put(e.key, e.value);
+//            }
+//        }
+//    }
+
+    @Override
+    public void clear() {
+        head = null;
+        tail = null;
+        entries = (Entry<K, V>[]) new Entry[CAPACITY];
+        size = 0;
+    }
+
+    public void addFirst(K key, V value) {
+        int hashValue = hashing(key);
+        Entry<K, V> newEntry = new Entry<>(key, value);
+
+        // when the ADT is empty set the head and tail as newEntry and set the entries[hashValue] = newEntries
+        if (isEmpty()) {
+            tail = newEntry;
+
+        } else {
+            // if the key already exist, will remove it first and move it to the front
+            if (containsKey(key)) {
+                remove(key);
+            }
+
+            // newEntry will be head and it linked to the previous head and previous head link to head
+            head.before = newEntry;
+            newEntry.after = head;
+
+            // the first note of the bucket
+            Entry<K, V> current = entries[hashValue];
+
+            // have note inside the bucket
+            if (current != null) {
+                newEntry.next = current;
+            }
+            // no any note inside the bucket
+        }
+        head = newEntry;
+        entries[hashValue] = newEntry;
+        size++;
     }
 
 }
