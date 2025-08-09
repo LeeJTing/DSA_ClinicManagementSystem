@@ -99,8 +99,9 @@ public interface MapInterface<K, V> {
     public V getFront();
     
     /**
-     * Remove the first key from the ADT
+     * Remove the first note from the ADT
+     * @return the First note value
      */
-    public void removeFirstKey();
+    public V removeFirst();
     
 }

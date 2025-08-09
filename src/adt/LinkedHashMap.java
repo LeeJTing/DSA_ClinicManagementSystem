@@ -158,14 +158,13 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     @Override
-    public void removeFirstKey() {
-        if (head != null) {
-            head = head.next;
-            if (head != null) {
-                head.before = null;
-            }
-            size--;
+    public V removeFirst() {
+        V value = null;
+        if(head != null){
+            value = head.value;
+            remove(head.key);
         }
+        return value;
     }
 
     @Override
