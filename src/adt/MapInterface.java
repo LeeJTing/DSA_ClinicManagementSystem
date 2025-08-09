@@ -75,6 +75,12 @@ public interface MapInterface<K, V> {
      * @return return the last key of the ADT
      */
     public K getLastKey();
+    
+    /**
+     * Returns an iterator that traverses all values stored in the map
+     * @return an Iterator over the values of type V in this map
+     */
+    public Iterator<V> getIterator();
         
     /**
      * Sorting value of the ADT
