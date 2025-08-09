@@ -135,11 +135,11 @@ public class Consultation {
         }
         return 0;
     }
-    
+
     public double calConsultationCost() {
         int durationInMinutes = calculationDurationTimeInMinutes();
         int durationInHour;
-        
+
         if (durationInMinutes < 60) {
             durationInHour = 1;
         } else if (durationInMinutes < 120) {
@@ -149,5 +149,26 @@ public class Consultation {
         }
         return durationInHour * 50.0;
     }
+
+    @Override
+    public String toString() {
+        String consultationTime = String.format("%s-%s",
+                new SimpleDateFormat("HH:mm").format(consultation_start_time),
+                new SimpleDateFormat("HH:mm").format(consultation_end_time)
+        );
+
+        return String.format("%-14s %-15s %-17s %-17s %-9s %-7s",
+                consultation_Id,
+                new SimpleDateFormat("dd/MM/yyyy").format(appointment_date),
+                new SimpleDateFormat("dd/MM/yyyy").format(consultation_date),
+                consultationTime,
+                appointmentStatus,
+                type
+        );
+    }
     
+    public String toStaffString(){
+        return toString()+ String.format("%7s", staff_Id);
+    }
+
 }
