@@ -153,8 +153,8 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     @Override
-    public K getFirstKey() {
-        return (head != null) ? head.key : null;
+    public V getFront() {
+        return (head != null) ? head.value : null;
     }
 
     @Override

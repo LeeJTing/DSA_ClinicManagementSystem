@@ -93,10 +93,10 @@ public interface MapInterface<K, V> {
     public void clear();
     
     /**
-     * Return the first key from the ADT
-     * @return return the first key of the ADT
+     * Return the value of the first key from the ADT
+     * @return return the value of the first key of the ADT
      */
-    public K getFirstKey();
+    public V getFront();
     
     /**
      * Remove the first key from the ADT
