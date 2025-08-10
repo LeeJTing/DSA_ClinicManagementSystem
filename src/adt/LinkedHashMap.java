@@ -210,6 +210,16 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return value;
     }
+    
+    @Override
+    public V removeLast() {
+        V value = null;
+        if (tail != null) {
+            value = tail.value;
+            remove(tail.key);
+        }
+        return value;
+    }
 
     @Override
     public void remove(K key) {
@@ -394,7 +404,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
         return intersectMap;
     }
-    
+        
 //    public static void main(String[] args) {
 //        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
 //        MapInterface<Integer, String> str2 = new LinkedHashMap<>();

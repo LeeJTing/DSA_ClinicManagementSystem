@@ -112,10 +112,16 @@ public interface MapInterface<K, V> {
     public V getFront();
     
     /**
-     * Remove the first note from the ADT
-     * @return the First note value
+     * Remove the first node from the ADT
+     * @return the First node value
      */
     public V removeFirst();
+    
+    /**
+     * Remove the last node from the ADT
+     * @return the Last node value
+     */
+    public V removeLast();
     
     /**
      * Creates a new map containing only the value pairs that are present in both the current map and the specified
