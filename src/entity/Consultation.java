@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class Consultation {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     private String consultation_Id = "C000001";
@@ -159,8 +159,8 @@ public class Consultation {
 
         return String.format("%-14s %-15s %-17s %-17s %-9s %-7s",
                 consultation_Id,
-                new SimpleDateFormat("dd/MM/yyyy").format(appointment_date),
-                new SimpleDateFormat("dd/MM/yyyy").format(consultation_date),
+                new SimpleDateFormat("dd-MM-yyyy").format(appointment_date),
+                new SimpleDateFormat("dd-MM-yyyy").format(consultation_date),
                 consultationTime,
                 appointmentStatus,
                 type
