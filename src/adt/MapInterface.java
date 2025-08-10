@@ -19,6 +19,13 @@ public interface MapInterface<K, V> {
     public void put(K key, V value);
     
     /**
+     * Insert a new element at the front of the ADT
+     * @param key the key to be stored
+     * @param value the value to be associated with the key
+     */
+    public void addFirst(K key, V value);
+    
+    /**
      * Search the key from the ADT based on the given value
      * @param value the value to search for
      * @return the key that maps to the given value
@@ -37,6 +44,12 @@ public interface MapInterface<K, V> {
      * @return an array of values in the order they were inserted
      */
     public V[] getAllValues();
+    
+    /**
+     * Return all the values in insertion order
+     * @return array of keys in the order they were inserted
+     */
+    public K[] getAllKeys();
     
     /**
      * Remove the entry associated with the specified key from the map
@@ -103,5 +116,14 @@ public interface MapInterface<K, V> {
      * @return the First note value
      */
     public V removeFirst();
+    
+    /**
+     * Creates a new map containing only the value pairs that are present in both the current map and the specified
+     * @param map 
+     * @return a new map containing only the value pairs with map and existing map
+     */
+    public MapInterface<K, V> intersect(MapInterface<K, V> map);
+    
+
     
 }

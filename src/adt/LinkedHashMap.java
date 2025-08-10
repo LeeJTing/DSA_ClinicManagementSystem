@@ -10,7 +10,6 @@ import java.util.Iterator;
  *
  * @author User
  */
-//V extends Comparable<V>
 public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
     private Entry<K, V>[] entries;
@@ -25,11 +24,6 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         tail = null;
     }
 
-//    @Override
-//    public int compareTo(V o) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//extends Comparable<V>
     private static class Entry<K, V> {
 
         private K key;
@@ -158,16 +152,6 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     }
 
     @Override
-    public V removeFirst() {
-        V value = null;
-        if (head != null) {
-            value = head.value;
-            remove(head.key);
-        }
-        return value;
-    }
-
-    @Override
     public V getValue(K key) {
         //directly point to the value in the entries based on the hash value (key -> index) and keep looping
         int index = hashing(key);
@@ -199,6 +183,32 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             return values;
         }
         return null;
+    }
+
+    @Override
+    public K[] getAllKeys() {
+        K[] keys = (K[]) new Object[size];
+        Entry<K, V> current = head;
+        int i = 0;
+        if (!isEmpty()) {
+            while (current != null) {
+                keys[i] = current.key;
+                current = current.after;
+                i++;
+            }
+            return keys;
+        }
+        return null;
+    }
+
+    @Override
+    public V removeFirst() {
+        V value = null;
+        if (head != null) {
+            value = head.value;
+            remove(head.key);
+        }
+        return value;
     }
 
     @Override
@@ -280,14 +290,14 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public void sorting() {
 
-        if(isEmpty() || size == 1){
+        if (isEmpty() || size == 1) {
             return;
-        }else {
+        } else {
             // find the largest one
-             int cSize = size;
+            int cSize = size;
             Entry<K, V>[] largeToSmall = new Entry[cSize];
             Entry<K, V> current, largest;
-           
+
             for (int i = 0; i < cSize; i++) {
                 // largest to store the largest value, current is a pointer
                 largest = head;
@@ -306,7 +316,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
                 // remove stored entry
                 remove(largest.key);
             }
-            
+
             // put back the note from largest to smallest
             for (int i = 0; i < cSize; i++) {
                 if (largeToSmall[i] != null) {
@@ -324,6 +334,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         size = 0;
     }
 
+    @Override
     public void addFirst(K key, V value) {
         int hashValue = hashing(key);
         Entry<K, V> newEntry = new Entry<>(key, value);
@@ -355,4 +366,57 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         entries[hashValue] = newEntry;
         size++;
     }
+
+    @Override
+    public MapInterface<K, V> intersect(MapInterface<K, V> map) {
+        MapInterface<K, V> intersectMap = new LinkedHashMap<>();
+        if (isEmpty()) {
+            return null;
+        } else {
+            Entry<K, V> current = head;
+            Object[] otherMapValues = map.getAllValues();
+            for (int i = 0; i < size; i++) {
+                if (current != null) {
+                    boolean found = false;
+                    for (int j = 0;!found && j<otherMapValues.length;j++) {
+                        V vl = (V) otherMapValues[j];
+                        if (current.value.equals(vl)) {
+                            intersectMap.put(current.key, current.value);
+                            otherMapValues[j] = null;
+                            found = true;
+                        }
+
+                    }
+                    current = current.after;
+                }
+            }
+        }
+
+        return intersectMap;
+    }
+    
+//    public static void main(String[] args) {
+//        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
+//        MapInterface<Integer, String> str2 = new LinkedHashMap<>();
+//        
+//        str1.put(1, "I");
+//        str1.put(5, "I");
+//        str1.put(2, "Love");
+//        str1.put(3, "You");
+//        str1.put(4, "Hee");
+//        
+//        str2.put(1, "I");
+//        str2.put(5, "I");
+//        str2.put(2, "Love");
+//        str2.put(3, "You");
+//        str2.put(4, "Hellow");
+//        MapInterface<Integer, String> str3 = str1.intersect(str2);
+//        
+//        Object[] obj = str3.getAllValues();
+//        for(Object o: obj){
+//            String str = (String) o;
+//            System.out.println(str);
+//            
+//        }
+//    }
 }
