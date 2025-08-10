@@ -280,44 +280,18 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public void sorting() {
 
-//        if (isEmpty() || size == 1) {
-//            return;
-//        }
-//
-//        if (head.value instanceof Comparable) {
-//            Entry<K, V>[] largeToSmall = new Entry[size];
-//            Entry<K, V> current, largest;
-//            current = largest = head;
-//            for (int i = 0; i < size; i++) {
-//                while (current != null) {
-//                    if (largest.value instanceof Comparable) {
-//                        Comparable largestCmp = (Comparable) largest.value;
-//                        if(largestCmp.compareTo(current.value) < 0){
-//                            largest = current;
-//                        }
-//                    }
-//                    current = current.after;
-//                }
-//                largeToSmall[i] = largest;
-//                remove(largest.key);
-//            }
-//            for(Entry<K, V> e: largeToSmall){
-//                if(e != null){
-//                    put(e.key, e.value);
-//                }
-//            }
-//
-//        }
-
-        if (!isEmpty() && size != 1) {
+        if(isEmpty() || size == 1){
+            return;
+        }else {
             // find the largest one
-            Entry<K, V>[] largeToSmall = new Entry[size];
+             int cSize = size;
+            Entry<K, V>[] largeToSmall = new Entry[cSize];
             Entry<K, V> current, largest;
-            for (int i = 0; i < size; i++) {
+           
+            for (int i = 0; i < cSize; i++) {
                 // largest to store the largest value, current is a pointer
                 largest = head;
                 current = head;
-
                 while (current != null) {
                     if (largest.value instanceof Comparable && current.value instanceof Comparable) {
                         Comparable<V> largestCmp = (Comparable<V>) largest.value;
@@ -332,10 +306,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
                 // remove stored entry
                 remove(largest.key);
             }
+            
             // put back the note from largest to smallest
-            for (Entry<K, V> e : largeToSmall) {
-                if (e != null) {
-                    put(e.key, e.value);
+            for (int i = 0; i < cSize; i++) {
+                if (largeToSmall[i] != null) {
+                    put(largeToSmall[i].key, largeToSmall[i].value);
                 }
             }
         }
@@ -380,5 +355,4 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         entries[hashValue] = newEntry;
         size++;
     }
-
 }
