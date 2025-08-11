@@ -79,16 +79,16 @@ public class Initializer {
             medicineMap5.put("M000010", new Medicine("M000010", "Naproxen", "Anti-inflammatory Drugs", expiryDate, 1, 9.7));
 
             //String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList, String staff_id, String patient_id, String treatment_id
-            prescriptionMap.put("PH000001", new Prescription("PH000000", medicineMap1, "S000001", "P000005", "T000001"));
-            prescriptionMap.put("PH000002", new Prescription("PH000001", medicineMap2, "S000002", "P000004", "T000002"));
-            prescriptionMap.put("PH000003", new Prescription("PH000002", medicineMap3, "S000001", "P000003", "T000003"));
-            prescriptionMap.put("PH000004", new Prescription("PH000003", medicineMap4, "S000003", "P000001", "T000004"));
-            prescriptionMap.put("PH000005", new Prescription("PH000004", medicineMap5, "S000002", "P000002", "T000005"));
-            prescriptionMap.put("PH000006", new Prescription("PH000005", medicineMap1, "S000004", "P000006", "T000006"));
-            prescriptionMap.put("PH000007", new Prescription("PH000006", medicineMap2, "S000006", "P000007", "T000007"));
-            prescriptionMap.put("PH000008", new Prescription("PH000007", medicineMap3, "S000005", "P000008", "T000008"));
-            prescriptionMap.put("PH000009", new Prescription("PH000008", medicineMap4, "S000003", "P000009", "T000009"));
-            prescriptionMap.put("PH000010", new Prescription("PH000009", medicineMap5, "S000007", "P000010", "T000010"));
+            prescriptionMap.put("PH000001", new Prescription("PH000001", medicineMap1, "S000001", "P000005", "T000001"));
+            prescriptionMap.put("PH000002", new Prescription("PH000002", medicineMap2, "S000002", "P000004", "T000002"));
+            prescriptionMap.put("PH000003", new Prescription("PH000003", medicineMap3, "S000001", "P000003", "T000003"));
+            prescriptionMap.put("PH000004", new Prescription("PH000004", medicineMap4, "S000003", "P000001", "T000004"));
+            prescriptionMap.put("PH000005", new Prescription("PH000005", medicineMap5, "S000002", "P000002", "T000005"));
+            prescriptionMap.put("PH000006", new Prescription("PH000006", medicineMap1, "S000004", "P000006", "T000006"));
+            prescriptionMap.put("PH000007", new Prescription("PH000007", medicineMap2, "S000006", "P000007", "T000007"));
+            prescriptionMap.put("PH000008", new Prescription("PH000008", medicineMap3, "S000005", "P000008", "T000008"));
+            prescriptionMap.put("PH000009", new Prescription("PH000009", medicineMap4, "S000003", "P000009", "T000009"));
+            prescriptionMap.put("PH000010", new Prescription("PH000010", medicineMap5, "S000007", "P000010", "T000010"));
         } catch (ParseException ex) {
             Logger.getLogger(Initializer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -160,7 +160,7 @@ public class Initializer {
                     continue;
                 }
 
-                medicineListInPrescription = p.getMedicineLIst();
+                medicineListInPrescription = p.getMedicineList();
                 Object[] prescriptionMedicine = medicineListInPrescription.getAllValues();
                 Object[] medicineMapMedicine = medicineMap.getAllValues();
 

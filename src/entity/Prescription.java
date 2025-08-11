@@ -31,9 +31,9 @@ public class Prescription {
         this.treatment_id = "";
     }
 
-    public Prescription(String previous_prescription_id, LinkedHashMap<String, Medicine> medicineList,
+    public Prescription(String prescription_id, LinkedHashMap<String, Medicine> medicineList,
             String staff_id, String patient_id, String treatment_id) {
-        this.prescription_id = IDGenerator.generateNextID(previous_prescription_id);
+        this.prescription_id = prescription_id;
         this.medicineList = medicineList;
         this.medicine_total_cost = this.calculateTotalCost();
         this.staff_id = staff_id;
@@ -59,7 +59,7 @@ public class Prescription {
         this.medicine_total_cost = medicine_total_cost;
     }
 
-    public void setMedicineLIst(LinkedHashMap<String, Medicine> medicineLIst) {
+    public void setMedicineList(LinkedHashMap<String, Medicine> medicineLIst) {
         this.medicineList = medicineLIst;
     }
 
@@ -83,7 +83,7 @@ public class Prescription {
         return medicine_total_cost;
     }
 
-    public LinkedHashMap<String, Medicine> getMedicineLIst() {
+    public LinkedHashMap<String, Medicine> getMedicineList() {
         return medicineList;
     }
 
