@@ -247,7 +247,7 @@ public class Initializer {
     }
 
     public MapInterface<Integer, String> doctorA_Initializer() {
-        LinkedHashMap<Integer, String> doctorAMap = new LinkedHashMap<>();
+        MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
         doctorAMap.put(1, "S000001");
         doctorAMap.put(2, "S000002");
         doctorAMap.put(3, "S000003");
@@ -256,7 +256,7 @@ public class Initializer {
     }
 
     public MapInterface<Integer, String> doctorB_Initializer() {
-        LinkedHashMap<Integer, String> doctorBMap = new LinkedHashMap<>();
+        MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
         doctorBMap.put(1, "S000004");
         doctorBMap.put(2, "S000005");
         doctorBMap.put(3, "S000006");
