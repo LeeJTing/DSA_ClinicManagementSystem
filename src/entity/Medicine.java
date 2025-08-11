@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Teh Zhi Qin
  */
-public class Medicine {
+public class Medicine implements Comparable<Medicine> {
 
     private String medicine_id = "M0001";
     private String medicine_name;
@@ -27,6 +27,11 @@ public class Medicine {
         this.medicine_expiryDate = null;
         this.medicine_stock = 0;
         this.unit_price = 0.0;
+    }
+
+    public Medicine(String medicineName, int medicineDispensedStock) {
+        this.medicine_name = medicineName;
+        this.medicine_stock = medicineDispensedStock;
     }
 
     public Medicine(String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice) {
@@ -85,7 +90,7 @@ public class Medicine {
     public void setMedicineUnitPrice(double unitPrice) {
         this.unit_price = unitPrice;
     }
-    
+
     public void updateMedicineStock(int stock) {
         this.medicine_stock -= stock;
     }
@@ -94,7 +99,16 @@ public class Medicine {
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(medicine_expiryDate);
-        
+
         return String.format("\t\t%-14s %-20s %-32s %-14s %-8d %15.2f\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price);
+    }
+    
+    public String customizedToString() {
+        return String.format("\t\t%-20s %-8d\n", medicine_name, medicine_stock);
+    }
+
+    @Override
+    public int compareTo(Medicine other) {
+        return Integer.compare(this.medicine_stock, other.medicine_stock);
     }
 }
