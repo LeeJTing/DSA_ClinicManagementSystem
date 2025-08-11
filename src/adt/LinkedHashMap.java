@@ -83,6 +83,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
     }
 
+    @Override
     public Iterator<V> getIterator() {
         return new LinkedHashMapValueIterator();
     }
@@ -145,10 +146,20 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     public K getLastKey() {
         return (tail != null) ? tail.key : null;
     }
+    
+    @Override
+    public K getFrontKey() {
+        return (head != null) ? head.key : null;
+    }
 
     @Override
     public V getFront() {
         return (head != null) ? head.value : null;
+    }
+    
+    @Override
+    public V getLast() {
+        return (tail != null) ? tail.value : null;
     }
 
     @Override

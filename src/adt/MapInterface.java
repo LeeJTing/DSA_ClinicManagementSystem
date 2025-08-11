@@ -90,6 +90,12 @@ public interface MapInterface<K, V> {
     public K getLastKey();
     
     /**
+     * Return the first key from the ADT
+     * @return return the first key of the ADT
+     */
+    public K getFrontKey();
+    
+    /**
      * Returns an iterator that traverses all values stored in the map
      * @return an Iterator over the values of type V in this map
      */
@@ -110,6 +116,12 @@ public interface MapInterface<K, V> {
      * @return return the value of the first key of the ADT
      */
     public V getFront();
+    
+     /**
+     * Return the value of the last key from the ADT
+     * @return return the value of the last key of the ADT
+     */
+    public V getLast();
     
     /**
      * Remove the first node from the ADT
