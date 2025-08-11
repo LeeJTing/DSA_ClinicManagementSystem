@@ -23,7 +23,7 @@ public class Initializer {
     public MapInterface<String, Treatment> medicalTreatmentInitializer() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-        LinkedHashMap<String, Treatment> treatmentMap = new LinkedHashMap<>();
+        MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
         try {
             // String previousTreatmentID,String disease, String treatment_advice, Date treatment_date, String staff_id, boolean isScan, String remark
             treatmentMap.put("T000001", new Treatment("T000001", "C000001", "Hypertension", "Reduce salt intake, daily morning walk, medication prescribed",
@@ -54,13 +54,13 @@ public class Initializer {
     }
 
     public MapInterface<String, Prescription> prescriptionInitializer() {
-        LinkedHashMap<String, Prescription> prescriptionMap = new LinkedHashMap<>();
+        MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
 
-        LinkedHashMap<String, Medicine> medicineMap1 = new LinkedHashMap<>();
-        LinkedHashMap<String, Medicine> medicineMap2 = new LinkedHashMap<>();
-        LinkedHashMap<String, Medicine> medicineMap3 = new LinkedHashMap<>();
-        LinkedHashMap<String, Medicine> medicineMap4 = new LinkedHashMap<>();
-        LinkedHashMap<String, Medicine> medicineMap5 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap1 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap2 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap3 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap4 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap5 = new LinkedHashMap<>();
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -97,7 +97,7 @@ public class Initializer {
 
     // initialize the medicine dummy data
     public MapInterface<String, Medicine> medicineInitializer() {
-        LinkedHashMap<String, Medicine> medicineMap = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             Date expiryDate = sdf.parse("10-10-2030");
@@ -120,7 +120,7 @@ public class Initializer {
 
     // initialize the payment dummy data
     public MapInterface<String, Payment> paymentInitializer() {
-        LinkedHashMap<String, Payment> paymentMap = new LinkedHashMap<>();
+        MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
         MapInterface<String, Prescription> prescriptionMap = prescriptionInitializer();
         MapInterface<String, Consultation> consultationMap = consultationInitializer();
         MapInterface<String, Treatment> treatmentMap = medicalTreatmentInitializer();
@@ -141,7 +141,7 @@ public class Initializer {
             paymentMap.put("PM000010", new Payment("PM000010", "P000010", prescriptionMap.getValue("PH000010"), 0.0, 0.0, sdf.parse("10-07-2025 14:40:02")));
 
             Object[] paymentObjects = paymentMap.getAllValues();
-            LinkedHashMap<String, Medicine> medicineListInPrescription;
+            MapInterface<String, Medicine> medicineListInPrescription;
             for (Object paymentObj : paymentObjects) {
                 Payment pm = (Payment) paymentObj;
 
@@ -188,7 +188,7 @@ public class Initializer {
 
     //initialize the patient dummy data
     public MapInterface<String, Patient> patientInitializer() {
-        LinkedHashMap<String, Patient> patientMap = new LinkedHashMap<>();
+        MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         try {
@@ -211,7 +211,7 @@ public class Initializer {
 
     //initialize the Consultation dummy data 
     public MapInterface<String, Consultation> consultationInitializer() {
-        LinkedHashMap<String, Consultation> consultMap = new LinkedHashMap<>();
+        MapInterface<String, Consultation> consultMap = new LinkedHashMap<>();
 //        String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime,
 //        String consultationEndTime, String appointmentStatus, String type
         consultMap.put("C000001", new Consultation("C000001", "25-07-2025", "26-07-2025", "09:00", "10:00", "Completed", "Online", "P000001", "S000001"));
@@ -231,7 +231,7 @@ public class Initializer {
     }
 
     public MapInterface<String, Staff> staffInitializer() {
-        LinkedHashMap<String, Staff> staffMap = new LinkedHashMap<>();
+        MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
 
         // staff_id, staff_password, staff_name, staff_position, staff_contact, staff_email,
         // education_level, service_duration, dutyStatus, joined_date, pendingLeaveDate
@@ -265,7 +265,7 @@ public class Initializer {
     }
 
     public MapInterface<LocalDate, MapInterface<Integer, String>> dutySchedule_Initializer() {
-        LinkedHashMap<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
+        MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
 
         MapInterface<Integer, String> doctorA = doctorA_Initializer();
         MapInterface<Integer, String> doctorB = doctorB_Initializer();

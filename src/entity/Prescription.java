@@ -3,6 +3,7 @@ package entity;
 import utility.IDGenerator;
 
 import adt.LinkedHashMap;
+import adt.MapInterface;
 import utility.IDGenerator;
 
 /*
@@ -17,7 +18,7 @@ public class Prescription {
 
     private String prescription_id; //Start from PH000001
     private double medicine_total_cost;
-    private LinkedHashMap<String, Medicine> medicineList;
+    private MapInterface<String, Medicine> medicineList;
     private String staff_id;
     private String patient_id;
     private String treatment_id;
@@ -25,13 +26,13 @@ public class Prescription {
     public Prescription() {
         this.prescription_id = "PH000001";
         this.medicine_total_cost = 0.0;
-        this.medicineList = null;
+        this.medicineList = new LinkedHashMap<>();
         this.staff_id = "";
         this.patient_id = "";
         this.treatment_id = "";
     }
 
-    public Prescription(String prescription_id, LinkedHashMap<String, Medicine> medicineList,
+    public Prescription(String prescription_id, MapInterface<String, Medicine> medicineList,
             String staff_id, String patient_id, String treatment_id) {
         this.prescription_id = prescription_id;
         this.medicineList = medicineList;
@@ -59,7 +60,7 @@ public class Prescription {
         this.medicine_total_cost = medicine_total_cost;
     }
 
-    public void setMedicineList(LinkedHashMap<String, Medicine> medicineLIst) {
+    public void setMedicineList(MapInterface<String, Medicine> medicineLIst) {
         this.medicineList = medicineLIst;
     }
 
@@ -83,7 +84,7 @@ public class Prescription {
         return medicine_total_cost;
     }
 
-    public LinkedHashMap<String, Medicine> getMedicineList() {
+    public MapInterface<String, Medicine> getMedicineList() {
         return medicineList;
     }
 
