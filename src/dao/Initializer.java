@@ -212,20 +212,26 @@ public class Initializer {
     //initialize the Consultation dummy data 
     public MapInterface<String, Consultation> consultationInitializer() {
         MapInterface<String, Consultation> consultMap = new LinkedHashMap<>();
-//        String consultation_Id, Date consultation_duration, String appointmentDate, String consultationDate, String consultationStartTime,
-//        String consultationEndTime, String appointmentStatus, String type
-        consultMap.put("C000001", new Consultation("C000001", "25-07-2025", "26-07-2025", "09:00", "10:00", "Completed", "Online", "P000001", "S000001"));
-        consultMap.put("C000002", new Consultation("C000002", "25-07-2025", "26-07-2025", "10:00", "11:00", "Completed", "Online", "P000002", "S000002"));
-        consultMap.put("C000003", new Consultation("C000003", "26-07-2025", "27-07-2025", "11:00", "11:30", "Completed", "Online", "P000003", "S000003"));
-        consultMap.put("C000004", new Consultation("C000004", "26-07-2025", "27-07-2025", "14:00", "15:00", "Completed", "Online", "P000004", "S000004"));
-        consultMap.put("C000005", new Consultation("C000005", "26-07-2025", "27-07-2025", "15:30", "16:00", "Completed", "Online", "P000005", "S000005"));
-        consultMap.put("C000006", new Consultation("C000006", "27-07-2025", "28-07-2025", "09:00", "10:00", "Completed", "Walk-In", "P000006", "S000006"));
-        consultMap.put("C000007", new Consultation("C000007", "27-07-2025", "28-07-2025", "09:30", "10:00", "Completed", "Walk-In", "P000007", "S000006"));
-        consultMap.put("C000008", new Consultation("C000008", "27-07-2025", "28-07-2025", "10:00", "11:00", "Completed", "Walk-In", "P000008", "S000001"));
-        consultMap.put("C000009", new Consultation("C000009", "28-07-2025", "29-07-2025", "11:00", "12:00", "Completed", "Walk-In", "P000009", "S000002"));
-        consultMap.put("C000010", new Consultation("C000010", "28-07-2025", "29-07-2025", "12:00", "12:30", "Completed", "Walk-In", "P000010", "S000003"));
-        consultMap.put("C000011", new Consultation("C000011", "28-07-2025", "29-07-2025", "12:00", "00:00", "On-going", "Walk-In", "P000001", "S000004"));
-        consultMap.put("C000012", new Consultation("C000012", "28-07-2025", "29-07-2025", "15:00", "15:30", "Pending", "Online", "P000002", "S000005"));
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+
+        try {
+            consultMap.put("C000001", new Consultation("C000001", sdf1.parse("25-07-2025"), sdf1.parse("26-07-2025"), sdf2.parse("09:00"), sdf2.parse("10:00"), "Completed", "Online", "P000001", "S000001"));
+            consultMap.put("C000002", new Consultation("C000002", sdf1.parse("25-07-2025"), sdf1.parse("26-07-2025"), sdf2.parse("10:00"), sdf2.parse("11:00"), "Completed", "Online", "P000002", "S000002"));
+            consultMap.put("C000003", new Consultation("C000003", sdf1.parse("26-07-2025"), sdf1.parse("27-07-2025"), sdf2.parse("11:00"), sdf2.parse("11:30"), "Completed", "Online", "P000003", "S000003"));
+            consultMap.put("C000004", new Consultation("C000004", sdf1.parse("26-07-2025"), sdf1.parse("27-07-2025"), sdf2.parse("14:00"), sdf2.parse("15:00"), "Completed", "Online", "P000004", "S000004"));
+            consultMap.put("C000005", new Consultation("C000005", sdf1.parse("26-07-2025"), sdf1.parse("27-07-2025"), sdf2.parse("15:30"), sdf2.parse("16:00"), "Completed", "Online", "P000005", "S000005"));
+            consultMap.put("C000006", new Consultation("C000006", sdf1.parse("27-07-2025"), sdf1.parse("28-07-2025"), sdf2.parse("09:00"), sdf2.parse("10:00"), "Completed", "Walk-In", "P000006", "S000006"));
+            consultMap.put("C000007", new Consultation("C000007", sdf1.parse("27-07-2025"), sdf1.parse("28-07-2025"), sdf2.parse("09:30"), sdf2.parse("10:00"), "Completed", "Walk-In", "P000007", "S000006"));
+            consultMap.put("C000008", new Consultation("C000008", sdf1.parse("27-07-2025"), sdf1.parse("28-07-2025"), sdf2.parse("10:00"), sdf2.parse("11:00"), "Completed", "Walk-In", "P000008", "S000001"));
+            consultMap.put("C000009", new Consultation("C000009", sdf1.parse("28-07-2025"), sdf1.parse("29-07-2025"), sdf2.parse("11:00"), sdf2.parse("12:00"), "Completed", "Walk-In", "P000009", "S000002"));
+            consultMap.put("C000010", new Consultation("C000010", sdf1.parse("28-07-2025"), sdf1.parse("29-07-2025"), sdf2.parse("12:00"), sdf2.parse("12:30"), "Completed", "Walk-In", "P000010", "S000003"));
+            consultMap.put("C000011", new Consultation("C000011", sdf1.parse("28-07-2025"), sdf1.parse("29-07-2025"), sdf2.parse("12:00"), sdf2.parse("00:00"), "On-going", "Walk-In", "P000001", "S000004"));
+            consultMap.put("C000012", new Consultation("C000012", sdf1.parse("28-07-2025"), sdf1.parse("29-07-2025"), sdf2.parse("15:00"), sdf2.parse("15:30"), "Pending", "Online", "P000002", "S000005"));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return consultMap;
     }

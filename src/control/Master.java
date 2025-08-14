@@ -25,8 +25,8 @@ public class Master {
     private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
     private static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
-    private static String currentPatientId = "P000001";
-    private static String currentStaffId = "S000001";
+    private static String currentPatientId = "";
+    private static String currentStaffId = "";
 
     private static final Initializer INITIALIZER = new Initializer();
 

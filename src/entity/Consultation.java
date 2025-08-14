@@ -39,16 +39,20 @@ public class Consultation {
         this.staff_Id = "";
     }
 
-    public Consultation(String consultation_Id, String appointmentDate, String consultationDate, String consultationStartTime, String consultationEndTime, String appointmentStatus, String type, String patient_Id, String staff_Id) {
+    public Consultation(String consultation_Id, Date appointmentDate, Date consultationDate, Date consultationStartTime, Date consultationEndTime, String appointmentStatus, String type, String patient_Id, String staff_Id) {
         this.consultation_Id = consultation_Id;
-        try {
-            this.appointment_date = dateFormat.parse(appointmentDate);
-            this.consultation_date = dateFormat.parse(consultationDate);
-            this.consultation_start_time = timeFormat.parse(consultationStartTime);
-            this.consultation_end_time = timeFormat.parse(consultationEndTime);
-        } catch (ParseException e) {
-            System.out.println("Error parsing date/time strings: " + e.getMessage());
-        }
+//        try {
+//            this.appointment_date = dateFormat.parse(appointmentDate);
+        ////            this.consultation_date = dateFormat.parse(consultationDate);
+////            this.consultation_start_time = timeFormat.parse(consultationStartTime);
+////            this.consultation_end_time = timeFormat.parse(consultationEndTime);
+//        } catch (ParseException e) {
+//            System.out.println("Error parsing date strings: " + e.getMessage());
+//        }
+        this.appointment_date = appointmentDate;
+        this.consultation_date = consultationDate;
+        this.consultation_start_time = consultationStartTime;
+        this.consultation_end_time = consultationEndTime;
         this.appointmentStatus = appointmentStatus;
         this.type = type;
         this.patient_Id = patient_Id;
@@ -152,23 +156,24 @@ public class Consultation {
 
     @Override
     public String toString() {
+
         String consultationTime = String.format("%s-%s",
-                new SimpleDateFormat("HH:mm").format(consultation_start_time),
-                new SimpleDateFormat("HH:mm").format(consultation_end_time)
+                timeFormat.format(consultation_start_time),
+                timeFormat.format(consultation_end_time)
         );
 
-        return String.format("%-14s %-15s %-17s %-17s %-9s %-7s",
+        return String.format("%-7s %-15s %-17s %-17s %-9s %-7s",
                 consultation_Id,
-                new SimpleDateFormat("dd-MM-yyyy").format(appointment_date),
-                new SimpleDateFormat("dd-MM-yyyy").format(consultation_date),
+                dateFormat.format(appointment_date),
+                dateFormat.format(consultation_date),
                 consultationTime,
                 appointmentStatus,
                 type
         );
     }
-    
-    public String toStaffString(){
-        return toString()+ String.format("%7s", staff_Id);
+
+    public String toStaffString() {
+        return toString() + String.format("%7s", patient_Id);
     }
 
 }
