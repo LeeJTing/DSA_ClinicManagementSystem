@@ -101,10 +101,11 @@ public class Initializer {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             Date expiryDate = sdf.parse("10-10-2030");
+            Date expiryDate2 = sdf.parse("20-09-2025");
 
-            medicineMap.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 100, 5.0));
-            medicineMap.put("M000002", new Medicine("M000002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate, 100, 5.2));
-            medicineMap.put("M000003", new Medicine("M000003", "Amoxicillin", "Antibiotics", expiryDate, 80, 13.5));
+            medicineMap.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate2, 100, 5.0));
+            medicineMap.put("M000002", new Medicine("M000002", "Ibuprofen", "Analgesics (Painkillers)", expiryDate2, 100, 5.2));
+            medicineMap.put("M000003", new Medicine("M000003", "Amoxicillin", "Antibiotics", expiryDate, 20, 13.5));
             medicineMap.put("M000004", new Medicine("M000004", "Paracetamol", "Antipyretics (Fever Reducers)", expiryDate, 200, 5.0));
             medicineMap.put("M000005", new Medicine("M000005", "Hydrogen Peroxide", "Antiseptics & Disinfectants", expiryDate, 110, 18.3));
             medicineMap.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 90, 4.0));
