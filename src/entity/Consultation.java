@@ -12,7 +12,7 @@ import java.util.*;
  *
  * @author Tan Kok Hong
  */
-public class Consultation {
+public class Consultation implements Comparable<Consultation> {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -174,6 +174,16 @@ public class Consultation {
 
     public String toStaffString() {
         return toString() + String.format("%7s", patient_Id);
+    }
+
+    @Override
+    public int compareTo(Consultation other) {
+        int dateCompare = other.consultation_date.compareTo(this.consultation_date);
+        if (dateCompare != 0) {
+            return dateCompare; // different dates, sort by date
+        }
+        // Same date → compare by start time
+        return other.consultation_start_time.compareTo(this.consultation_start_time);
     }
 
 }

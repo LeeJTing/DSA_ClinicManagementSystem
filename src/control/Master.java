@@ -25,6 +25,8 @@ public class Master {
     private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
     private static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
+    private static MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
+    private static MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
     private static String currentPatientId = "";
     private static String currentStaffId = "";
 
@@ -43,6 +45,9 @@ public class Master {
         staffMap = INITIALIZER.staffInitializer();
         prescriptionMap = INITIALIZER.prescriptionInitializer();
         dutyScheduleMap = INITIALIZER.dutySchedule_Initializer();
+        doctorAMap = INITIALIZER.doctorA_Initializer();
+        doctorBMap = INITIALIZER.doctorB_Initializer();
+
     }
 
     public static String getCurrentPatientId() {
@@ -85,6 +90,14 @@ public class Master {
         return dutyScheduleMap;
     }
 
+    public static MapInterface<Integer, String> getDoctorAMap() {
+        return doctorAMap;
+    }
+
+    public static MapInterface<Integer, String> getDoctorBMap() {
+        return doctorBMap;
+    }
+
     public static void setCurrentPatientId(String currentPatientId) {
         Master.currentPatientId = currentPatientId;
     }
@@ -124,5 +137,15 @@ public class Master {
     public static void setDutyScheduleMap(MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap) {
         Master.dutyScheduleMap = dutyScheduleMap;
     }
+
+    public static void setDoctorAMap(MapInterface<Integer, String> doctorAMap) {
+        Master.doctorAMap = doctorAMap;
+    }
+
+    public static void setDoctorBMap(MapInterface<Integer, String> doctorBMap) {
+        Master.doctorBMap = doctorBMap;
+    }
+    
+    
 
 }
