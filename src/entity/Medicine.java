@@ -13,12 +13,13 @@ import java.util.Date;
  */
 public class Medicine implements Comparable<Medicine> {
 
-    private String medicine_id = "M0001";
+    private String medicine_id;
     private String medicine_name;
     private String medicine_category;
     private Date medicine_expiryDate;
     private int medicine_stock;
     private double unit_price;
+    private String status;
 
     public Medicine() {
         this.medicine_id = "";
@@ -34,6 +35,13 @@ public class Medicine implements Comparable<Medicine> {
         this.medicine_stock = medicineDispensedStock;
     }
 
+    public Medicine(String medicineName, String medicineCategory, int medicineStock, double medicineUnitPrice) {
+        this.medicine_name = medicineName;
+        this.medicine_category = medicineCategory;
+        this.medicine_stock = medicineStock;
+        this.unit_price = medicineUnitPrice;
+    }
+
     public Medicine(String medicineID, String medicineName, String medicineCategory, Date expiryDate, int medicineStock, double medicineUnitPrice) {
         this.medicine_id = medicineID;
         this.medicine_name = medicineName;
@@ -41,6 +49,16 @@ public class Medicine implements Comparable<Medicine> {
         this.medicine_expiryDate = expiryDate;
         this.medicine_stock = medicineStock;
         this.unit_price = medicineUnitPrice;
+    }
+
+    public Medicine(Medicine med, String status) {
+        this.medicine_id = med.getMedicineID();
+        this.medicine_name = med.getMedicineName();
+        this.medicine_category = med.getMedicineCategory();
+        this.medicine_expiryDate = med.getMedicineExpiryDate();
+        this.medicine_stock = med.getMedicineStock();
+        this.unit_price = med.getMedicineUnitPrice();
+        this.status = status;
     }
 
     public String getMedicineID() {
@@ -65,6 +83,10 @@ public class Medicine implements Comparable<Medicine> {
 
     public double getMedicineUnitPrice() {
         return unit_price;
+    }
+    
+    public String getMedicineStatus() {
+        return status;
     }
 
     public void setMedicineID(String medicineID) {
@@ -100,11 +122,18 @@ public class Medicine implements Comparable<Medicine> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(medicine_expiryDate);
 
-        return String.format("\t\t%-14s %-20s %-32s %-14s %-8d %15.2f\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price);
+        return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price);
+    }
+
+    public String customizedToString() {
+        return String.format("\t\t|  %-20s | %-32s | %-8d | %15.2f  |\n", medicine_name, medicine_category, medicine_stock, unit_price);
     }
     
-    public String customizedToString() {
-        return String.format("\t\t%-20s %-8d\n", medicine_name, medicine_stock);
+    public String statusToString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(medicine_expiryDate);
+
+        return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %-16s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, status);
     }
 
     @Override
