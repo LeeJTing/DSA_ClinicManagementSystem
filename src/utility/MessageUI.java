@@ -19,15 +19,15 @@ public class MessageUI {
     public static final String RESET = "\u001B[0m";
 
     public static void errorMessage() {
-        System.out.println(RED + "Invalid Input!" + RESET);
+        System.out.println(RED + "\t\tInvalid Input!" + RESET);
     }
 
     public static void inputIntegerMessage() {
-        System.out.println(RED + "Input must in Integer." + RESET);
+        System.out.println(RED + "\t\tInput must in Integer." + RESET);
     }
 
     public static void doubleIntegerMessage() {
-        System.out.println(RED + "Invalid input. Input must be in Double." + RESET);
+        System.out.println(RED + "\t\tInvalid input. Input must be in Double." + RESET);
     }
 
     public static void yesNoMessage() {
