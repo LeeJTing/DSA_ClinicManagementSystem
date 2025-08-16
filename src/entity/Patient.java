@@ -16,7 +16,7 @@ import java.text.ParseException;
 public class Patient {
 
     private Date currentDate = new Date();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     private String patient_id;
     private String patient_name;
     private String patient_contact;
