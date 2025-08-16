@@ -142,6 +142,6 @@ public interface MapInterface<K, V> {
      */
     public MapInterface<K, V> intersect(MapInterface<K, V> map);
     
-
+    public MapInterface<K, V> groupBy(V value);
     
 }

@@ -391,7 +391,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public MapInterface<K, V> intersect(MapInterface<K, V> map) {
         MapInterface<K, V> intersectMap = new LinkedHashMap<>();
-        if (isEmpty() || map.isEmpty()) {
+        if (isEmpty()) {
             return null;
         } else {
             Entry<K, V> current = head;
@@ -400,14 +400,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
                 if (current != null) {
                     boolean found = false;
                     for (int j = 0; !found && j < otherMapValues.length; j++) {
-                        Comparable<V> vl = (Comparable<V>) otherMapValues[j];
-                        if (current.value instanceof Comparable) {
-                            Comparable<V> temp = (Comparable<V>) current.value;
-                            if (vl != null && temp.compareTo((V) vl) == 0) {
-                                intersectMap.put(current.key, current.value);
-                                otherMapValues[j] = null;
-                                found = true;
-                            }
+                        V vl = (V) otherMapValues[j];
+                        if (current.value.equals(vl)) {
+                            intersectMap.put(current.key, current.value);
+                            otherMapValues[j] = null;
+                            found = true;
                         }
 
                     }
@@ -419,28 +416,48 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         return intersectMap;
     }
 
+    @Override
+    public MapInterface<K, V> groupBy(V value) {
+        MapInterface<K, V> group = new LinkedHashMap<>();
+
+        if (!isEmpty()) {
+            Entry<K, V> current = head;
+            while (current != null) {
+                if (current.value instanceof Comparable) {
+                    Comparable<V> valueTemp = (Comparable<V>) current.value;
+                    if (valueTemp.compareTo(value) == 0) {
+                        group.put(current.key, current.value);
+                    }
+                }
+                current = current.after;
+            }
+        }
+
+        return group;
+    }
+
 //    public static void main(String[] args) {
 //        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
 //        MapInterface<Integer, String> str2 = new LinkedHashMap<>();
-//        
+//
 //        str1.put(1, "I");
 //        str1.put(5, "I");
 //        str1.put(2, "Love");
 //        str1.put(3, "You");
 //        str1.put(4, "Hee");
-//        
+//
 //        str2.put(1, "I");
 //        str2.put(5, "I");
 //        str2.put(2, "Love");
 //        str2.put(3, "You");
 //        str2.put(4, "Hellow");
-//        MapInterface<Integer, String> str3 = str1.intersect(str2);
-//        
+//        MapInterface<Integer, String> str3 = str2.groupBy("I");
+//
 //        Object[] obj = str3.getAllValues();
-//        for(Object o: obj){
+//        for (Object o : obj) {
 //            String str = (String) o;
 //            System.out.println(str);
-//            
+//
 //        }
 //    }
 }
