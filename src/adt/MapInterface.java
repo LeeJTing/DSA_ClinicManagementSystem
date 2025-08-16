@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package adt;
+import java.util.Comparator;
 import java.util.Iterator;
 /**
  *
@@ -143,5 +144,7 @@ public interface MapInterface<K, V> {
     public MapInterface<K, V> intersect(MapInterface<K, V> map);
     
     public MapInterface<K, V> groupBy(V value);
+    
+    public MapInterface<K, V> groupBy(V value, Comparator<V> comparator);
     
 }
