@@ -17,8 +17,7 @@ public class Patient {
 
     private Date currentDate = new Date();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-    private String patient_id = "P000001";
+    private String patient_id;
     private String patient_name;
     private String patient_contact;
     private String patient_email;
@@ -27,7 +26,8 @@ public class Patient {
     private Date registration_date;
     private Date queue_start;
     private Date queue_end;
-
+    private String ticket;
+    
     public Patient() {
         this.patient_id = "";
         this.patient_name = "";
@@ -38,10 +38,11 @@ public class Patient {
         this.registration_date = null;
         this.queue_start = null;
         this.queue_end= null;
+        this.ticket = "";
     }
 
-    public Patient(String patient_id, String patient_name, String patient_contact, String patient_email, String patient_gender, int age, Date registration_date, Date queue_start, Date queue_end) {
-        this.patient_id = PatientManagement.generateNextPatientId();
+    public Patient(String patient_id, String patient_name, String patient_contact, String patient_email, String patient_gender, int age, Date registration_date, Date queue_start, Date queue_end, String ticket) {
+        this.patient_id = patient_id;
         this.patient_name = patient_name;
         this.patient_contact = patient_contact;
         this.patient_email = patient_email;
@@ -55,6 +56,7 @@ public class Patient {
         }        
         this.queue_start = queue_start;
         this.queue_end = queue_end;
+        this.ticket = ticket;
     }
 
     public Date getCurrentDate() {
@@ -145,6 +147,13 @@ public class Patient {
         this.queue_end = queue_end;
     }
 
+    public String getTicket(){
+        return ticket;
+    }
+    
+    public void setTicket(String ticket){
+        this.ticket = ticket;
+    }
     
     public void displayProfile() {
         System.out.println(String.format("=== Patient Profile ==="));
@@ -157,11 +166,12 @@ public class Patient {
         System.out.println(String.format("Registration    : %s", this.registration_date));
         System.out.println(String.format("Queue Start     : %s", this.queue_start));
         System.out.println(String.format("Queue End       : %s", this.queue_end));
+        System.out.println(String.format("Ticket            :%s", this.ticket));
         System.out.println(String.format("======================="));
     }
 
     public String toDataString() {
-        return String.format("%s,%s,%s,%s,%s,%d,%s,%s,%s",
+        return String.format("%s,%s,%s,%s,%s,%d,%s,%s,%s, %s",
                 patient_id,
                 patient_name,
                 patient_contact,
@@ -170,14 +180,15 @@ public class Patient {
                 age,
                 registration_date,
                 queue_start,
-                queue_end
+                queue_end,
+                ticket
         );
     }
 
     @Override
      public String toString() {
         return String.format(
-                "Patient{patient_id='%s', patient_name='%s', patient_contact='%s', patient_email='%s', patient_gender='%s', age=%d, registration_date='%s', queue_start='%s', queue_end='%s'}",
+                "Patient{patient_id='%s', patient_name='%s', patient_contact='%s', patient_email='%s', patient_gender='%s', age=%d, registration_date='%s', queue_start='%s', queue_end='%s', ticket = '%s'}",
                 patient_id,
                 patient_name,
                 patient_contact,
@@ -186,7 +197,8 @@ public class Patient {
                 age,
                 registration_date,
                 queue_start,
-                queue_end
+                queue_end,
+                ticket
         );
     }
 }

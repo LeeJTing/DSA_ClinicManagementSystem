@@ -30,7 +30,7 @@ public class Master {
     private static MapInterface<String, String> timeSlotMap = new LinkedHashMap<>();
     private static String currentPatientId = "";
     private static String currentStaffId = "";
-
+    private static String currentTicket = "";
     private static final Initializer INITIALIZER = new Initializer();
 
     public Master() {
@@ -103,6 +103,10 @@ public class Master {
         return timeSlotMap;
     }
 
+    public static String getCurrentTicket() {
+        return currentTicket;
+    }
+    
     public static void setCurrentPatientId(String currentPatientId) {
         Master.currentPatientId = currentPatientId;
     }
@@ -155,4 +159,7 @@ public class Master {
         Master.timeSlotMap = timeSlotMap;
     }
 
+    public static void setCurrentTicket(String currentTicket){
+        Master.currentTicket = currentTicket;
+    }
 }
