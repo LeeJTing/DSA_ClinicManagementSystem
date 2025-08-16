@@ -400,10 +400,10 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
                 if (current != null) {
                     boolean found = false;
                     for (int j = 0; !found && j < otherMapValues.length; j++) {
-                        V vl = (V) otherMapValues[j];
+                        Comparable<V> vl = (Comparable<V>) otherMapValues[j];
                         if (current.value instanceof Comparable) {
                             Comparable<V> temp = (Comparable<V>) current.value;
-                            if (temp.compareTo(vl) == 0) {
+                            if (vl != null && temp.compareTo((V) vl) == 0) {
                                 intersectMap.put(current.key, current.value);
                                 otherMapValues[j] = null;
                                 found = true;
