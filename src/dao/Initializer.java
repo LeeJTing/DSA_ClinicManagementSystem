@@ -248,7 +248,7 @@ public class Initializer {
         staffMap.put("S000004", new Staff("S000004", "pass987", "Sophia Wong", "Doctor", "014-5566778", "sophia.wong@hospital.com", 4, 8, "Work", "25-04-2014"));
         staffMap.put("S000005", new Staff("S000005", "pass654", "David Tan", "Doctor", "010-9988776", "david.tan@hospital.com", 2, 5, "Work", "15-09-2015"));
         staffMap.put("S000006", new Staff("S000006", "pass155", "Jacksong Tee", "Doctor", "018-7988776", "jacksonTee@hospital.com", 2, 5, "Work", "30-12-2015"));
-        staffMap.put("S000007", new Staff("S000007", "pass111", "Esther Yong", "Pharmacist", "012-5988776", "Esther@hospital.com", 2, 5, "Work", "12-01-2015"));
+        staffMap.put("S000007", new Staff("S000007", "pass111", "Esther Yong", "Pharmacist", "012-5988776", "Esther@hospital.com", 2, 5, "Leave", "12-01-2015"));
 
         return staffMap;
     }
@@ -290,7 +290,31 @@ public class Initializer {
 
         return dutyScheduleMap;
     }
-    
-    
+
+    public MapInterface<String, String> timeSlotInitializer() {
+        MapInterface<String, String> timeSlots = new LinkedHashMap<>();
+
+        timeSlots.put("09:00", "09:00");
+        timeSlots.put("09:30", "09:30");
+        timeSlots.put("10:00", "10:00");
+        timeSlots.put("10:30", "10:30");
+        timeSlots.put("11:00", "11:00");
+        timeSlots.put("11:30", "11:30");
+        timeSlots.put("12:00", "12:00");
+        timeSlots.put("12:30", "12:30");
+        timeSlots.put("13:00", "13:00");
+        timeSlots.put("13:30", "13:30");
+        timeSlots.put("14:00", "14:00");
+        timeSlots.put("14:30", "14:30");
+        timeSlots.put("15:00", "15:00");
+        timeSlots.put("15:30", "15:30");
+        timeSlots.put("16:00", "16:00");
+        timeSlots.put("16:30", "16:30");
+        timeSlots.put("17:00", "17:00");
+        timeSlots.put("17:30", "17:30");
+        timeSlots.put("18:00", "18:00");
+
+        return timeSlots;
+    }
 
 }
