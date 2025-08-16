@@ -216,6 +216,7 @@ public class Initializer {
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
 
+        
         try {
             consultMap.put("C000001", new Consultation("C000001", sdf1.parse("25-08-2025"), sdf1.parse("26-08-2025"), sdf2.parse("09:00"), sdf2.parse("10:00"), "Completed", "Online", "P000001", "S000001"));
             consultMap.put("C000002", new Consultation("C000002", sdf1.parse("25-08-2025"), sdf1.parse("26-08-2025"), sdf2.parse("10:00"), sdf2.parse("11:00"), "Completed", "Online", "P000002", "S000002"));

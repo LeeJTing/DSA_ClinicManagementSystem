@@ -4,9 +4,10 @@
  */
 package boundary;
 
-import control.Master;
+
 import utility.Input;
 import control.PatientManagement;
+import dao.Master;
 
 /**
  *

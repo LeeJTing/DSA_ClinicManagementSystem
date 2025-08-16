@@ -16,8 +16,8 @@ import java.awt.event.KeyEvent;
 public class main {
 
     public static void main(String[] args) {
-        final Master MASTER = new Master();
-        MASTER.initializer();
+//        final Master MASTER = new Master();
+//        MASTER.initializer();
         
         menu.mainMenu();
     }

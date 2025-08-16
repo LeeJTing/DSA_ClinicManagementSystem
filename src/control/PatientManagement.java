@@ -6,6 +6,7 @@ package control;
 
 import adt.LinkedHashMap;
 import adt.MapInterface;
+import dao.Master;
 import entity.Patient;
 import utility.IDGenerator;
 import java.io.*;
