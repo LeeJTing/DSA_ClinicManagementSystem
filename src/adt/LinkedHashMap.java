@@ -146,7 +146,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     public K getLastKey() {
         return (tail != null) ? tail.key : null;
     }
-    
+
     @Override
     public K getFrontKey() {
         return (head != null) ? head.key : null;
@@ -156,7 +156,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     public V getFront() {
         return (head != null) ? head.value : null;
     }
-    
+
     @Override
     public V getLast() {
         return (tail != null) ? tail.value : null;
@@ -221,7 +221,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         }
         return value;
     }
-    
+
     @Override
     public V removeLast() {
         V value = null;
@@ -391,7 +391,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     @Override
     public MapInterface<K, V> intersect(MapInterface<K, V> map) {
         MapInterface<K, V> intersectMap = new LinkedHashMap<>();
-        if (isEmpty()) {
+        if (isEmpty() || map.isEmpty()) {
             return null;
         } else {
             Entry<K, V> current = head;
@@ -399,12 +399,15 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
             for (int i = 0; i < size; i++) {
                 if (current != null) {
                     boolean found = false;
-                    for (int j = 0;!found && j<otherMapValues.length;j++) {
+                    for (int j = 0; !found && j < otherMapValues.length; j++) {
                         V vl = (V) otherMapValues[j];
-                        if (current.value.equals(vl)) {
-                            intersectMap.put(current.key, current.value);
-                            otherMapValues[j] = null;
-                            found = true;
+                        if (current.value instanceof Comparable) {
+                            Comparable<V> temp = (Comparable<V>) current.value;
+                            if (temp.compareTo(vl) == 0) {
+                                intersectMap.put(current.key, current.value);
+                                otherMapValues[j] = null;
+                                found = true;
+                            }
                         }
 
                     }
@@ -415,7 +418,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
         return intersectMap;
     }
-        
+
 //    public static void main(String[] args) {
 //        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
 //        MapInterface<Integer, String> str2 = new LinkedHashMap<>();
