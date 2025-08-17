@@ -271,6 +271,13 @@ public class MedicalTreatmentManagement implements CRUD {
         saveHistory(treatment, prescription, "Create");
 
         // call payment method to generate payment
+        prescriptionToPayment(prescription);
+    }
+    
+    public void prescriptionToPayment(Prescription prescription){
+        
+        PharmacyManagementModule pharmacyManagementModule = new PharmacyManagementModule();
+        pharmacyManagementModule.payment(prescription);
     }
 
     // Display all Medical Treatment Record
