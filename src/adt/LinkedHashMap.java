@@ -437,21 +437,21 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
         return group;
     }
     
-    @Override
-    public MapInterface<K, V> groupBy(V value, Comparator<V> comparator) {
-        MapInterface<K, V> group = new LinkedHashMap<>();
-
-        if (!isEmpty()) {
-            Entry<K, V> current = head;
-            while (current != null) {
-                if (comparator.compare(current.value, value) == 0) {
-                    group.put(current.key, current.value);
-                }
-                current = current.after;
-            }
-        }
-        return group;
-    }
+//    @Override
+//    public MapInterface<K, V> groupBy(V value, Comparator<V> comparator) {
+//        MapInterface<K, V> group = new LinkedHashMap<>();
+//
+//        if (!isEmpty()) {
+//            Entry<K, V> current = head;
+//            while (current != null) {
+//                if (comparator.compare(current.value, value) == 0) {
+//                    group.put(current.key, current.value);
+//                }
+//                current = current.after;
+//            }
+//        }
+//        return group;
+//    }
 
 //    public static void main(String[] args) {
 //        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
