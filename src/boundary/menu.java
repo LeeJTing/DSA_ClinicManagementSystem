@@ -4,139 +4,225 @@
  */
 package boundary;
 
-
-import utility.Input;
 import control.PatientManagement;
+import static control.PatientManagement.getCurrentPatient;
 import dao.Master;
+import entity.Patient;
+import utility.Input;
 
 /**
+ * Main Menu System for Hospital Management System
  *
- * @author User
+ * @author Lwin
  */
 public class menu {
-    // main Menu (User,Staff,exit)
-    
-    public static void mainMenu() {
-        
-        while (true) {
-            System.out.println("\n====== Main Page ======");
-            System.out.println("1. User");
-            System.out.println("2. Staff");
-            System.out.println("3. Exit");
-            System.out.print("Select option: ");
-            int mainChoice = Input.getIntegerInput();
+    private static PatientManagement patientManagement = new PatientManagement();
 
-            switch (mainChoice) {
-                case 1 ->
-                    displayUserMenu();
-                case 2, 3 -> {
-                    System.out.println("Exiting...");
+    public static void mainMenu() {
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t          WELCOME TO HOSPITAL MANAGEMENT SYSTEM     ");
+        System.out.println("\t\t\t\t=====================================================");
+
+        displayMainMenu();
+    }
+
+    public static void displayMainMenu() {
+        while (true) {
+            int choice = AllMenu.mainMenuUI();
+
+            switch (choice) {
+                case 1 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t              Entering User Portal                   ");
+                    System.out.println("\t\t\t\t=====================================================");
+                    handleUserPortal();
+                }
+                case 2 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t              Entering Staff Portal                  ");
+                    System.out.println("\t\t\t\t=====================================================");
+                    handleStaffPortal();
+                }
+                case 3 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|    Thank you for using Hospital Management       |");
+                    System.out.println("\t\t\t\t|                   System!                         |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|                   Goodbye!                        |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
                     System.exit(0);
                 }
-                default ->
-                    System.out.println("Invalid selection.");
+                default -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                    ERROR                          |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|        Invalid option. Please select 1-3.        |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
             }
         }
     }
 
-    public static void displayUserMenu() {
-        while (true) {
-            System.out.println("\n====== User Page ======");
-            System.out.println("1. New User");
-            System.out.println("2. Existing User");
-            System.out.println("3. Exit");
-            System.out.print("Select option: ");
-            int userChoice = Input.getIntegerInput();
+    private static void handlePatientMenu() {
+        PatientManagement pm = new PatientManagement();
+        while (!pm.patientWasDeleted) {
+            int choice = AllMenu.patientMenu();
+            Patient current = PatientManagement.getCurrentPatient();
+            if (current == null) {
+                break;
+            }
 
-            switch (userChoice) {
-                case 1 ->
-                    PatientManagement.registerPatient();
+            switch (choice) {
+                case 1 -> {
+                    current.displayProfile();
+                    pm.patientManagementModule();
+                }
                 case 2 -> {
-                    Master.setCurrentPatientId(Input.getStringInput("Enter Patient ID: "));
-                    if (PatientManagement.patientExists(Master.getCurrentPatientId())) {
-                        PatientManagement.displayPatientById(Master.getCurrentPatientId()); // pass ID to next menu
-                        
-                        displayExistingUserMenu();
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t               My Consultations                      ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 3 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t                My Treatments                        ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 4 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t               My Prescriptions                      ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 5 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t                 My Medicines                        ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 6 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|               Logging out...                      |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                    Master.setCurrentPatientId("");
+                    return;
+                }
+                default -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                    ERROR                          |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|               Invalid option.                     |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+            }
+        }
+    }
+
+    private static void handleUserPortal() {
+        while (true) {
+            if (Master.getPatientMap().isEmpty()) {
+                Master.initializer();
+            }
+            int choice = PatientManagementUI.displayUserPageMenu();
+            switch (choice) {
+                case 1 ->
+                    patientManagement.createNewInstance();
+                case 2 -> {
+                    String enteredId = Input.getStringInput("\t\t\t\tEnter your Patient ID: ");
+                    if (patientManagement.patientExists(enteredId)) {
+                        patientManagement.patientWasDeleted = false;
+                        Master.setCurrentPatientId(enteredId.toUpperCase());
+                        handlePatientMenu();
                     } else {
-                        System.out.println("No patient found with ID: " + Master.getCurrentPatientId());
+                        System.out.println("\n\t\t\t\t=====================================================");
+                        System.out.println("\t\t\t\t|                    ERROR                          |");
+                        System.out.println("\t\t\t\t|                                                   |");
+                        System.out.println("\t\t\t\t|            Patient ID not found.                 |");
+                        System.out.println("\t\t\t\t|                                                   |");
+                        System.out.println("\t\t\t\t=====================================================");
                     }
                 }
                 case 3 -> {
-                    System.out.println("Returning to Main Menu...");
                     return;
                 }
-                default ->
-                    System.out.println("Invalid selection.");
+                default -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                    ERROR                          |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|               Invalid option.                     |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
             }
         }
     }
 
-    public static void displayExistingUserMenu() {
+    
+    public void patientPortalAfterLogin() {
         while (true) {
-            System.out.println("\n====== Existing User Menu ======");
-            System.out.println("1. Patient Management Module");
-            System.out.println("2. Consultation Module");
-            System.out.println("3. Treatment Module");
-            System.out.println("4. Prescription Module");
-            System.out.println("5. Medicine Module");
-            System.out.println("6. Exit");
-            System.out.print("Select option: ");
-            int moduleChoice = Input.getIntegerInput();
-
-            switch (moduleChoice) {
+            int choice = AllMenu.patientMenu();
+            Patient current = getCurrentPatient();
+            if (current == null) {
+                break;
+            }
+            switch (choice) {
                 case 1 -> {
-                    int patientChoice = PatientManagementUI.displayPatientManagementMenu(Master.getCurrentPatientId());
-                    switch (patientChoice) {
-                        case 1 -> PatientManagement.displayPatientById(Master.getCurrentPatientId());
-                        case 2 -> PatientManagement.editPatient(Master.getCurrentPatientId());
-                        case 3 -> PatientManagement.deletePatient(Master.getCurrentPatientId());
-                        case 4 -> System.out.println("Returning to Previous Menu...");
-                        default -> System.out.println("Invalid selection.");
+                    current.displayProfile();
+                    patientManagement.patientManagementModule();
+                    if (patientManagement.patientWasDeleted) {
+                        return;
                     }
                 }
-
                 case 2 -> {
-                    int consultationChoice = ConsultationUI.consultationMenu();
-                    switch (consultationChoice) {
-                        case 1 ->
-                            System.out.println("...");
-                        case 2 ->
-                            System.out.println("...");
-                        case 3 -> {
-                            int addType = ConsultationUI.addAppointmentMenu();
-                            if (addType == 1) {
-                                System.out.println("...");
-                            } else if (addType == 2) {
-                                System.out.println("...");
-                            }
-                        }
-                        case 4 ->
-                            System.out.println("...");
-                        case 5 ->
-                            System.out.println("...");
-                        case 6 ->
-                            System.out.println("...");
-                        case 7 ->
-                            System.out.println("...");
-                        case 8 ->
-                            System.out.println("...");
-                        default ->
-                            System.out.println("Invalid selection.");
-                    }
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t               My Consultations                      ");
+                    System.out.println("\t\t\t\t=====================================================");
                 }
-
-                case 3, 4, 5 -> {
-                    System.out.println("This module is not implemented yet. Exiting...");
-                    System.exit(0);
+                case 3 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t                My Treatments                        ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 4 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t               My Prescriptions                      ");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
+                case 5 -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t                 My Medicines                        ");
+                    System.out.println("\t\t\t\t=====================================================");
                 }
                 case 6 -> {
-                    System.out.println("Returning to User Page...");
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|               Logging out...                      |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                    Master.setCurrentPatientId("");
                     return;
                 }
-                default ->
-                    System.out.println("Invalid selection.");
+                default -> {
+                    System.out.println("\n\t\t\t\t=====================================================");
+                    System.out.println("\t\t\t\t|                    ERROR                          |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t|               Invalid option.                     |");
+                    System.out.println("\t\t\t\t|                                                   |");
+                    System.out.println("\t\t\t\t=====================================================");
+                }
             }
         }
     }
-
+    
+    private static void handleStaffPortal() {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                    NOTICE                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|          Staff Portal not implemented.           |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
+    }
 }

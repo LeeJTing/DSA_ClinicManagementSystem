@@ -19,9 +19,7 @@ public class PatientManagement implements CRUD {
 
     @Override
     public void createNewInstance() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t              NEW PATIENT REGISTRATION               ");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayCreateHeader();
         
         String id = IDGenerator.generateNextID(Master.getPatientMap().isEmpty()
                 ? "P000000" : Master.getPatientMap().getLastKey());
@@ -35,13 +33,7 @@ public class PatientManagement implements CRUD {
                 new java.util.Date(), null, null, "");
 
         Master.getPatientMap().put(id, patient);
-        
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                   SUCCESS                         |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|         Patient %s registered.%-14s|\n", id, "");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayCreateSuccess(id);
     }
 
     @Override
@@ -59,31 +51,14 @@ public class PatientManagement implements CRUD {
         String[] values = {patient.getPatient_contact(), patient.getPatient_email(), String.valueOf(patient.getAge())};
 
         while (true) {
-            System.out.println("\n\t\t\t\t=====================================================");
-            System.out.println("\t\t\t\t                EDIT PATIENT                         ");
-            System.out.println("\t\t\t\t=====================================================");
-            System.out.println("\t\t\t\t|                                                   |");
-            for (int i = 0; i < 3; i++) {
-                System.out.printf("\t\t\t\t|  %d. %-15s: %-27s  |\n", i + 1, options[i], values[i]);
-            }
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.println("\t\t\t\t|  4. Save Changes                                  |");
-            System.out.println("\t\t\t\t|  5. Cancel                                        |");
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.println("\t\t\t\t=====================================================");
-
+            PatientManagementUI.displayUpdateMenu(options, values);
+            
             int choice = Input.getIntegerInput("\t\t\t\tSelect option: ");
             if (choice == 4) {
                 patient.setPatient_contact(values[0]);
                 patient.setPatient_email(values[1]);
                 patient.setAge(Integer.parseInt(values[2]));
-                
-                System.out.println("\n\t\t\t\t=====================================================");
-                System.out.println("\t\t\t\t|                   SUCCESS                         |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t|            Patient updated successfully.          |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t=====================================================");
+                PatientManagementUI.displayUpdateSuccess();
                 return;
             }
             if (choice == 5) return;
@@ -98,25 +73,11 @@ public class PatientManagement implements CRUD {
         Patient patient = getCurrentPatient();
         if (patient == null) return;
 
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t                DELETE ACCOUNT                       ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|               WARNING                             |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|         This action cannot be undone!            |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
-
+        PatientManagementUI.displayDeleteWarning();
+        
         if (Input.getStringInput("\t\t\t\tConfirm delete (Y/N): ").equalsIgnoreCase("Y")) {
             Master.getPatientMap().remove(patient.getPatient_id());
-            
-            System.out.println("\n\t\t\t\t=====================================================");
-            System.out.println("\t\t\t\t|                   SUCCESS                         |");
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.println("\t\t\t\t|            Patient account deleted.               |");
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.println("\t\t\t\t=====================================================");
+            PatientManagementUI.displayDeleteSuccess();
             patientWasDeleted = true;
         }
     }
@@ -132,12 +93,7 @@ public class PatientManagement implements CRUD {
         for (Object obj : allTickets) {
             Ticket ticket = (Ticket) obj;
             if (currentPatientId.equals(ticket.getPatientId())) {
-                System.out.println("\n\t\t\t\t=====================================================");
-                System.out.println("\t\t\t\t|                    NOTICE                         |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.printf("\t\t\t\t|      Patient already has ticket: %-14s |\n", ticket.getTicketNumber());
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t=====================================================");
+                PatientManagementUI.displayExistingTicket(ticket.getTicketNumber());
                 return;
             }
         }
@@ -153,34 +109,21 @@ public class PatientManagement implements CRUD {
                 Master.setCurrentTicket(ticket.getTicketNumber());
                 patient.setTicket(ticket.getTicketNumber());
                 Master.getPatientMap().put(currentPatientId, patient);
-                
-                System.out.println("\n\t\t\t\t=====================================================");
-                System.out.println("\t\t\t\t|                   SUCCESS                         |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.printf("\t\t\t\t|    Assigned ticket %s to Dr.%-16s   |\n", ticket.getTicketNumber(), ticket.getStaffId());
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t=====================================================");
+                PatientManagementUI.displayTicketAssigned(ticket.getTicketNumber(), ticket.getStaffId());
                 return;
             }
         }
         
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                    NOTICE                         |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|     No available tickets for today's doctors     |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayNoTicketsAvailable();
     }
 
     private void displayCurrentQueue(String currentTicketNumber) {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t                 CURRENT QUEUE                       ");
-        System.out.println("\t\t\t\t=====================================================");
-        
         Object[] allTickets = Master.getTicketQueue().getAllValues();
         int position = 1;
         boolean queueEmpty = true;
         int currentPosition = -1;
+        
+        PatientManagementUI.displayQueueHeader();
         
         for (Object obj : allTickets) {
             Ticket ticket = (Ticket) obj;
@@ -190,38 +133,25 @@ public class PatientManagement implements CRUD {
                 boolean isCurrent = ticket.getTicketNumber().equals(currentTicketNumber);
                 if (isCurrent) currentPosition = position;
                 
-                System.out.printf("\t\t\t\t%d. %s - %s (Dr.%s)%s%n", position++, ticket.getTicketNumber(),
-                    p != null ? p.getPatient_name() : "Unknown", ticket.getStaffId(), isCurrent ? " [CURRENT]" : "");
+                PatientManagementUI.displayQueueItem(position++, ticket.getTicketNumber(),
+                    p != null ? p.getPatient_name() : "Unknown", 
+                    ticket.getStaffId(), isCurrent);
             }
         }
         
         if (queueEmpty) {
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.println("\t\t\t\t|            No patients in queue                   |");
-            System.out.println("\t\t\t\t|                                                   |");
+            PatientManagementUI.displayEmptyQueue();
         } else if (currentTicketNumber != null && currentPosition != -1) {
-            System.out.println("\t\t\t\t|                                                   |");
-            System.out.printf("\t\t\t\t|       Your position in queue: %-18d |\n", currentPosition);
-            System.out.println("\t\t\t\t|                                                   |");
+            PatientManagementUI.displayQueuePosition(currentPosition);
         }
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayQueueFooter();
     }
 
     public void averageQueueTimeReport() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t            QUEUE TIME ANALYSIS REPORT              ");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayReportHeader();
         
         Object[] patients = patientMap.getAllValues();
-        
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t              SELECT REPORT TYPE                     ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|  1. All Data                                      |");
-        System.out.println("\t\t\t\t|  2. Date Range                                    |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayReportTypeMenu();
         
         int reportChoice = Input.getIntegerInput("\t\t\t\tEnter choice: ");
         
@@ -270,63 +200,25 @@ public class PatientManagement implements CRUD {
             else waitCategories[3]++;
         }
 
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t              PERFORMANCE SUMMARY                    ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|  Report Scope: %-34s |\n", reportScope);
-        System.out.printf("\t\t\t\t|  Patients Processed: %-27d  |\n", totalPatients);
-        if (totalPatients > 0) {
-            System.out.printf("\t\t\t\t|  Average Queue Time: %-5d minutes                |\n", (totalTime / totalPatients));
-        }
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
-
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t           WAIT TIME DISTRIBUTION                    ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                                                   |");
-        String[] labels = {"0-15 min", "16-30 min", "31-45 min", "45+ min"};
-        for (int i = 0; i < 4; i++) {
-            int pct = (totalPatients > 0) ? (waitCategories[i] * 100 / totalPatients) : 0;
-            System.out.printf("\t\t\t\t|  %-12s: %3d (%3d%%)%-25s|\n", labels[i], waitCategories[i], pct, "");
-        }
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayPerformanceSummary(reportScope, totalPatients, 
+            totalPatients > 0 ? (totalTime / totalPatients) : 0);
+        
+        PatientManagementUI.displayWaitTimeDistribution(waitCategories, totalPatients);
     }
 
     public void patientReport() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t           PATIENT DEMOGRAPHICS REPORT              ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|  1. Group by Gender                               |");
-        System.out.println("\t\t\t\t|  2. Group by Age Range                            |");
-        System.out.println("\t\t\t\t|  3. Back                                          |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayDemographicsHeader();
         
         int choice = Input.getIntegerInput("\t\t\t\tSelect option: ");
         switch (choice) {
             case 1 -> groupByGender();
             case 2 -> groupByAge();
             case 3 -> { return; }
-            default -> {
-                System.out.println("\n\t\t\t\t=====================================================");
-                System.out.println("\t\t\t\t|                    ERROR                          |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t|               Invalid choice                      |");
-                System.out.println("\t\t\t\t|                                                   |");
-                System.out.println("\t\t\t\t=====================================================");
-            }
+            default -> PatientManagementUI.displayInvalidChoice();
         }
     }
 
     private void groupByGender() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t              GENDER DEMOGRAPHICS                    ");
-        System.out.println("\t\t\t\t=====================================================");
-        
         Object[] allPatients = patientMap.getAllValues();
         int totalPatients = patientMap.size();
         int maleCount = 0, femaleCount = 0;
@@ -337,27 +229,12 @@ public class PatientManagement implements CRUD {
             else if (p.getPatient_gender().equalsIgnoreCase("Female")) femaleCount++;
         }
         
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|  Total: %-41d |\n", totalPatients);
-        System.out.printf("\t\t\t\t|  Male: %3d (%.1f%%)%-31s |\n", maleCount, (maleCount * 100.0 / totalPatients), "");
-        System.out.printf("\t\t\t\t|  Female: %3d (%.1f%%)%-29s |\n", femaleCount, (femaleCount * 100.0 / totalPatients), "");
-        
-        int others = totalPatients - maleCount - femaleCount;
-        if (others > 0) {
-            System.out.printf("\t\t\t\t|  Others: %3d (%.1f%%)%-32s |\n", others, (others * 100.0 / totalPatients), "");
-        }
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayGenderDemographics(totalPatients, maleCount, femaleCount);
     }
 
     private void groupByAge() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t               AGE DEMOGRAPHICS                      ");
-        System.out.println("\t\t\t\t=====================================================");
-        
         Object[] allPatients = patientMap.getAllValues();
         int youngAdult = 0, middleAge = 0, senior = 0;
-        int validCount = 0;
         
         for (Object obj : allPatients) {
             Patient p = (Patient) obj;
@@ -369,13 +246,7 @@ public class PatientManagement implements CRUD {
             }
         }
         
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|  Total: %-42d|\n", patientMap.size());
-        System.out.printf("\t\t\t\t|  Young Adult (18-35): %-27d |\n", youngAdult);
-        System.out.printf("\t\t\t\t|  Middle Age (36-55): %-28d |\n", middleAge);
-        System.out.printf("\t\t\t\t|  Senior (55+): %-34d |\n", senior);
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
+        PatientManagementUI.displayAgeDemographics(patientMap.size(), youngAdult, middleAge, senior);
     }
 
     public static Patient getCurrentPatient() {
