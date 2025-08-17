@@ -20,6 +20,7 @@ public class Medicine implements Comparable<Medicine> {
     private int medicine_stock;
     private double unit_price;
     private String status;
+    private static String compare;
 
     public Medicine() {
         this.medicine_id = "";
@@ -28,6 +29,10 @@ public class Medicine implements Comparable<Medicine> {
         this.medicine_expiryDate = null;
         this.medicine_stock = 0;
         this.unit_price = 0.0;
+    }
+
+    public Medicine(String category) {
+        this.medicine_category = category;
     }
 
     public Medicine(String medicineName, int medicineDispensedStock) {
@@ -84,7 +89,7 @@ public class Medicine implements Comparable<Medicine> {
     public double getMedicineUnitPrice() {
         return unit_price;
     }
-    
+
     public String getMedicineStatus() {
         return status;
     }
@@ -117,6 +122,10 @@ public class Medicine implements Comparable<Medicine> {
         this.medicine_stock -= stock;
     }
 
+    public void setCompare(String compare) {
+        this.compare = compare;
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -128,16 +137,32 @@ public class Medicine implements Comparable<Medicine> {
     public String customizedToString() {
         return String.format("\t\t|  %-20s | %-32s | %-8d | %15.2f  |\n", medicine_name, medicine_category, medicine_stock, unit_price);
     }
-    
+
     public String statusToString() {
+        String red = "\u001B[31m";
+        String reset = "\u001B[0m";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(medicine_expiryDate);
+        if (status.equals("Good")) {
+            return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %-16s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, status);
+        } else {
+            return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %s%-16s%s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, red, status, reset);
+        }
+    }
 
-        return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %-16s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, status);
+    public String categoryToString() {
+        return String.format("\t\t|  %-32s | %-8d  |\n", medicine_name, medicine_stock);
     }
 
     @Override
     public int compareTo(Medicine other) {
-        return Integer.compare(this.medicine_stock, other.medicine_stock);
+        if (this.compare.equals("medicine_stock")) {
+            return Integer.compare(this.medicine_stock, other.medicine_stock);
+        } else if (this.compare.equals("medicine_stock_asc")) {
+            return Integer.compare(other.medicine_stock, this.medicine_stock);
+        } else {
+            return this.medicine_category.compareTo(other.medicine_category);
+        }
     }
+
 }
