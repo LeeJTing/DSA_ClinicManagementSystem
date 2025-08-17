@@ -107,6 +107,8 @@ public interface MapInterface<K, V> {
      */
     public void sorting();
     
+    public void keyReverseSorting();
+    
     /**
      * Clear the ADT
      */

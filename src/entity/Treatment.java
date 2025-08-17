@@ -6,13 +6,12 @@ package entity;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import utility.IDGenerator;
 
 /**
  *
  * @author Lee Jun Ting
  */
-public class Treatment {
+public class Treatment implements Comparable<Treatment>{
     
     private SimpleDateFormat dateForm = new SimpleDateFormat("dd-MM-yyyy");
     
@@ -36,6 +35,11 @@ public class Treatment {
         this.patient_id = "";
         this.isScan = false;
         this.remark = "";
+    }
+    
+    public Treatment(String disease){
+        this();
+        this.disease = disease;
     }
 
     public Treatment(String treatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
@@ -132,6 +136,11 @@ public class Treatment {
                 + "\nPatient ID: " + patient_id
                 + "\nScan: " + (isScan ? "Yes" : "No")
                 + "\nRemark: " + remark;
+    }
+
+    @Override
+    public int compareTo(Treatment o) {
+        return this.disease.compareTo(o.getDisease());
     }
     
 }

@@ -4,7 +4,6 @@
  */
 package adt;
 
-import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -308,6 +307,44 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
     public boolean isEmpty() {
         return size == 0;
     }
+    
+    @Override
+    public void keyReverseSorting(){
+        if (isEmpty() || size == 1) {
+            return;
+        } else {
+             // find the largest one
+            int cSize = size;
+            Entry<K, V>[] largeToSmall = new Entry[cSize];
+            Entry<K, V> current, largest;
+
+            for (int i = 0; i < cSize; i++) {
+                // largest to store the largest value, current is a pointer
+                largest = head;
+                current = head;
+                while (current != null) {
+                    if (largest.key instanceof Comparable && current.key instanceof Comparable) {
+                        Comparable<K> largestCmp = (Comparable<K>) largest.key;
+                        if (largestCmp.compareTo(current.key) < 0) {
+                            largest = current;
+                        }
+                    }
+                    current = current.after;
+                }
+                // store the largest entry inside the array
+                largeToSmall[i] = largest;
+                // remove stored entry
+                remove(largest.key);
+            }
+
+            // put back the note from largest to smallest
+            for (int i = cSize - 1; i >= 0; i--) {
+                if (largeToSmall[i] != null) {
+                    put(largeToSmall[i].key, largeToSmall[i].value);
+                }
+            }
+        }
+    }
 
     @Override
     public void sorting() {
@@ -464,11 +501,11 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 //        str1.put(4, "Hee");
 //
 //        str2.put(1, "I");
-//        str2.put(5, "I");
+////        str2.put(5, "I");
 //        str2.put(2, "Love");
 //        str2.put(3, "You");
 //        str2.put(4, "Hellow");
-//        MapInterface<Integer, String> str3 = str2.groupBy("I");
+//        MapInterface<Integer, String> str3 = str2.intersect(str1);
 //
 //        Object[] obj = str3.getAllValues();
 //        for (Object o : obj) {
