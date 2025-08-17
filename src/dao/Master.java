@@ -32,6 +32,7 @@ public class Master {
     private static String currentStaffId = "";
     private static String currentTicket = "";
     private static final Initializer INITIALIZER = new Initializer();
+    private static MapInterface<String, Ticket> ticketQueue = new LinkedHashMap<>();
 
     public Master() {
 
@@ -49,6 +50,7 @@ public class Master {
         doctorAMap = INITIALIZER.doctorA_Initializer();
         doctorBMap = INITIALIZER.doctorB_Initializer();
         timeSlotMap = INITIALIZER.timeSlotInitializer();
+        ticketQueue = INITIALIZER.ticketInitializer();
     }
 
     public static String getCurrentPatientId() {
@@ -106,7 +108,11 @@ public class Master {
     public static String getCurrentTicket() {
         return currentTicket;
     }
-    
+
+    public static MapInterface<String, Ticket> getTicketQueue() {
+        return ticketQueue;
+    }
+
     public static void setCurrentPatientId(String currentPatientId) {
         Master.currentPatientId = currentPatientId;
     }
@@ -159,7 +165,11 @@ public class Master {
         Master.timeSlotMap = timeSlotMap;
     }
 
-    public static void setCurrentTicket(String currentTicket){
+    public static void setCurrentTicket(String currentTicket) {
         Master.currentTicket = currentTicket;
+    }
+
+    public static void setTicketQueue(MapInterface<String, Ticket> ticketQueue) {
+        Master.ticketQueue = ticketQueue;
     }
 }

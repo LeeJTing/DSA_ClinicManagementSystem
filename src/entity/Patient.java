@@ -27,7 +27,7 @@ public class Patient {
     private Date queue_start;
     private Date queue_end;
     private String ticket;
-    
+
     public Patient() {
         this.patient_id = "";
         this.patient_name = "";
@@ -37,7 +37,7 @@ public class Patient {
         this.age = 0;
         this.registration_date = null;
         this.queue_start = null;
-        this.queue_end= null;
+        this.queue_end = null;
         this.ticket = "";
     }
 
@@ -53,7 +53,7 @@ public class Patient {
             this.registration_date = dateFormat.parse(newRegisterDate);
         } catch (ParseException e) {
             System.out.println("Error parsing date: " + e.getMessage());
-        }        
+        }
         this.queue_start = queue_start;
         this.queue_end = queue_end;
         this.ticket = ticket;
@@ -147,27 +147,29 @@ public class Patient {
         this.queue_end = queue_end;
     }
 
-    public String getTicket(){
+    public String getTicket() {
         return ticket;
     }
-    
-    public void setTicket(String ticket){
+
+    public void setTicket(String ticket) {
         this.ticket = ticket;
     }
-    
+
     public void displayProfile() {
-        System.out.println(String.format("=== Patient Profile ==="));
-        System.out.println(String.format("Patient ID      : %s", this.patient_id));
-        System.out.println(String.format("Name            : %s", this.patient_name));
-        System.out.println(String.format("Contact         : %s", this.patient_contact));
-        System.out.println(String.format("Email           : %s", this.patient_email));
-        System.out.println(String.format("Gender          : %s", this.patient_gender));
-        System.out.println(String.format("Age             : %d years old", this.age));
-        System.out.println(String.format("Registration    : %s", this.registration_date));
-        System.out.println(String.format("Queue Start     : %s", this.queue_start));
-        System.out.println(String.format("Queue End       : %s", this.queue_end));
-        System.out.println(String.format("Ticket            :%s", this.ticket));
-        System.out.println(String.format("======================="));
+        System.out.println("\n\t\t\t\t========================================================");
+        System.out.println("\t\t\t\t               Patient Details                      ");
+        System.out.println("\t\t\t\t========================================================");
+        System.out.println(String.format("\t\t\t\t|Patient ID      : %s \t\t\t\t  |", this.patient_id));
+        System.out.println(String.format("\t\t\t\t|Name            : %s\t\t\t\t  |", this.patient_name));
+        System.out.println(String.format("\t\t\t\t|Contact         : %s\t\t\t\t  |", this.patient_contact));
+        System.out.println(String.format("\t\t\t\t|Email           : %s\t\t\t  |", this.patient_email));
+        System.out.println(String.format("\t\t\t\t|Gender          : %s\t\t\t\t  |", this.patient_gender));
+        System.out.println(String.format("\t\t\t\t|Age             : %d years old\t\t\t  |", this.age));
+        System.out.println(String.format("\t\t\t\t|Registration    : %s |", this.registration_date));
+        System.out.println(String.format("\t\t\t\t|Queue Start     : %s |", this.queue_start));
+        System.out.println(String.format("\t\t\t\t|Queue End       : %s |", this.queue_end));
+        System.out.println(String.format("\t\t\t\t|Ticket          :%s\t\t\t\t  |", this.ticket));
+        System.out.println("\t\t\t\t========================================================");
     }
 
     public String toDataString() {
@@ -186,7 +188,7 @@ public class Patient {
     }
 
     @Override
-     public String toString() {
+    public String toString() {
         return String.format(
                 "Patient{patient_id='%s', patient_name='%s', patient_contact='%s', patient_email='%s', patient_gender='%s', age=%d, registration_date='%s', queue_start='%s', queue_end='%s', ticket = '%s'}",
                 patient_id,
