@@ -105,7 +105,6 @@ public class PharmacyManagementModule implements CRUD {
                     PharmacyUI.promptReturn();
                     break;
                 case 7:
-//                    testPayment();
                     alertGeneration();
                     PharmacyUI.promptReturn();
                     break;
@@ -598,28 +597,28 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
-    public void testPayment() {
-        try {
-            MapInterface<String, Medicine> testMed = new LinkedHashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Date expiryDate = sdf.parse("10-10-2030");
-            testMed.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
-            testMed.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
-            Prescription testPre = new Prescription("PH000001", testMed, "S000001", "P000005", "T000001");
-            payment(testPre);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void displayPaymentMap() {
-        Object[] payment = paymentMap.getAllValues();
-        for (Object p : payment) {
-            Payment pm = (Payment) p;
-            PaymentUI.displayPaymentToString(pm);
-        }
-    }
+//    public void testPayment() {
+//        try {
+//            MapInterface<String, Medicine> testMed = new LinkedHashMap<>();
+//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//            Date expiryDate = sdf.parse("10-10-2030");
+//            testMed.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
+//            testMed.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
+//            Prescription testPre = new Prescription("PH000001", testMed, "S000001", "P000005", "T000001");
+//            payment(testPre);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    public void displayPaymentMap() {
+//        Object[] payment = paymentMap.getAllValues();
+//        for (Object p : payment) {
+//            Payment pm = (Payment) p;
+//            PaymentUI.displayPaymentToString(pm);
+//        }
+//    }
 
     public void payment(Prescription prescription) {
         String lastID = paymentMap.getLastKey();
