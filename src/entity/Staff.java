@@ -80,6 +80,19 @@ public class Staff implements Comparable<Staff> {
         }
     }
 
+    public Staff(Staff other) {
+        this.staff_id = other.staff_id;
+        this.staff_password = other.staff_password;
+        this.staff_name = other.staff_name;
+        this.staff_position = other.staff_position;
+        this.staff_contact = other.staff_contact;
+        this.staff_email = other.staff_email;
+        this.education_level = other.education_level;
+        this.service_duration = other.service_duration;
+        this.dutyStatus = other.dutyStatus;
+        this.joined_date = other.joined_date;
+    }
+
     //getter
     public String getStaffID() {
         return staff_id;
@@ -178,44 +191,47 @@ public class Staff implements Comparable<Staff> {
         this.compare = compare;
     }
 
-    @Override
-    public String toString() {
+    public String customizedToString(String level) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
-        return "+------------------------------------------------------+\n"
-                + String.format("| %-52s |%n", "Doctor Profile")
-                + "+------------------------------------------------------+\n"
-                + String.format("| %-18s : %-31s |\n", "Staff ID", staff_id)
-                + String.format("| %-18s : %-31s |\n", "Staff Name", staff_name)
-                + String.format("| %-18s : %-31s |\n", "Position", staff_position)
-                + String.format("| %-18s : %-31s |\n", "Contact", staff_contact)
-                + String.format("| %-18s : %-31s |\n", "Email", staff_email)
-                + String.format("| %-18s : %-31s |\n", "Education Level", education_level)
-                + String.format("| %-18s : %-31s |\n", "Service Years", service_duration + " years")
-                + String.format("| %-18s : %-31s |\n", "Duty Status", dutyStatus)
-                + String.format("| %-18s : %-31s |\n", "Joined Date", joined_date.format(dateFormat))
-                + "+------------------------------------------------------+\n";
+        return "\t+------------------------------------------------------+\n"
+                + String.format("\t| %-52s |%n", "Doctor Profile")
+                + "\t+------------------------------------------------------+\n"
+                + String.format("\t| %-18s : %-31s |\n", "Staff ID", staff_id)
+                + String.format("\t| %-18s : %-31s |\n", "Staff Name", staff_name)
+                + String.format("\t| %-18s : %-31s |\n", "Position", staff_position)
+                + String.format("\t| %-18s : %-31s |\n", "Contact", staff_contact)
+                + String.format("\t| %-18s : %-31s |\n", "Email", staff_email)
+                + String.format("\t| %-18s : %-31s |\n", "Education Level", level)
+                + String.format("\t| %-18s : %-31s |\n", "Service Years", service_duration + " years")
+                + String.format("\t| %-18s : %-31s |\n", "Duty Status", dutyStatus)
+                + String.format("\t| %-18s : %-31s |\n", "Joined Date", joined_date.format(dateFormat))
+                + "\t+------------------------------------------------------+\n";
     }
 
-    public String customizedToString() {
+    @Override
+    public String toString() {
 //        staffId, staffName, clinicYrs, industryYrs, education, score)
-        return String.format("| %-10s | %-20s | %-13d | %-13d | %-14d | %-15d |", staff_id, staff_name, clinic_years, service_duration, education_level, score);
+        return String.format("\t| %-10s | %-20s | %-13d | %-13d | %-14d | %-15d |", staff_id, staff_name, clinic_years, service_duration, education_level, score);
     }
 
     public String patientPerformanceToString() {
-        return String.format("| %-20s | %-20s | %-20d  |", staff_id, staff_name, patient_count);
+        return String.format("\t| %-20s | %-20s | %-20d  |", staff_id, staff_name, patient_count);
     }
 
     public String consultationPerformanceToString() {
-        return String.format("| %-20s | %-20s | %-20d  |", staff_id, staff_name, consultation_duration);
+        return String.format("\t| %-20s | %-20s | %-20d  |", staff_id, staff_name, consultation_duration);
     }
 
-//    @Override
-//    public int compareTo(Staff s) {
-//        return Integer.compare(this.score, s.getScore());
-//    }
+    public String allDoctorToString(String level) {
+        return String.format("\t| %-15s | %-20s | %-10s | %-15s | %-25s | %-12s | %-20d | %-25s | %-12s |", staff_id, staff_name, staff_position, staff_contact, staff_email, dutyStatus, service_duration, level, joined_date);
+    }
+
     @Override
     public int compareTo(Staff s) {
+        if (this.compare == null) {
+            return 0;
+        }
         if (this.compare.equals("clinic_years")) {
             return Integer.compare(this.clinic_years, s.clinic_years);
         } else if (this.compare.equals("score")) {
@@ -224,8 +240,11 @@ public class Staff implements Comparable<Staff> {
             return Integer.compare(this.patient_count, s.patient_count);
         } else if (this.compare.equals("duration")) {
             return Integer.compare(this.consultation_duration, s.consultation_duration);
+        } else if (this.compare.equalsIgnoreCase("position")) {
+            return this.staff_position.compareToIgnoreCase(s.staff_position);
         } else {
-            return 0; 
+            return 0;
         }
     }
+
 }
