@@ -133,9 +133,7 @@ public class PatientManagement implements CRUD {
                 boolean isCurrent = ticket.getTicketNumber().equals(currentTicketNumber);
                 if (isCurrent) currentPosition = position;
                 
-                PatientManagementUI.displayQueueItem(position++, ticket.getTicketNumber(),
-                    p != null ? p.getPatient_name() : "Unknown", 
-                    ticket.getStaffId(), isCurrent);
+                PatientManagementUI.displayQueueItem(position++, ticket.getTicketNumber(), p != null ? p.getPatient_name() : "Unknown", ticket.getStaffId());
             }
         }
         

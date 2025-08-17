@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package boundary;
 import utility.Input;
@@ -105,9 +105,9 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
     
-    public static void displayQueueItem(int position, String ticketNumber, String patientName, String staffId, boolean isCurrent) {
+    public static void displayQueueItem(int position, String ticketNumber, String patientName, String staffId) {
         System.out.printf("\t\t\t\t%d. %s - %s (Dr.%s)%s%n", position, ticketNumber,
-            patientName, staffId, isCurrent ? " [CURRENT]" : "");
+            patientName, staffId);
     }
     
     public static void displayEmptyQueue() {
