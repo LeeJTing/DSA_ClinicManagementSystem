@@ -228,25 +228,62 @@ public class Initializer {
     }
 
     //initialize the patient dummy data
-    public MapInterface<String, Patient> patientInitializer() {
+   public MapInterface<String, Patient> patientInitializer() {
         MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-//patientID, name, contact, email, gender, age, registrationDate,queueStart,queueEnd,ticket
+
         try {
-            patientMap.put("P000001", new Patient("P000001", "Adam Lee", "0123456789", "adam@gmail.com", "Male", 25, sdf.parse("24-07-2025 12:00"), sdf.parse("26-08-2025 08:45"), sdf.parse("26-08-2025 09:00"), ""));
-            patientMap.put("P000002", new Patient("P000002", "Betty Tan", "0112233445", "betty@gmail.com", "Female", 30, sdf.parse("24-07-2025 13:30"), sdf.parse("26-08-2025 09:25"), sdf.parse("26-08-2025 10:00"), ""));
-            patientMap.put("P000003", new Patient("P000003", "Charlie Goh", "0103344556", "charlie@gmail.com", "Male", 22, sdf.parse("25-07-2025 10:20"), sdf.parse("27-08-2025 10:15"), sdf.parse("27-08-2025 11:23"), ""));
-            patientMap.put("P000004", new Patient("P000004", "Diana Lim", "0167788990", "diana@gmail.com", "Female", 28, sdf.parse("25-07-2025 09:50"), sdf.parse("27-08-2025 13:35"), sdf.parse("27-08-2025 14:12"), ""));
-            patientMap.put("P000005", new Patient("P000005", "Ethan Yong", "0188899776", "ethan@gmail.com", "Male", 27, sdf.parse("25-07-2025 11:10"), sdf.parse("27-08-2025 15:10"), sdf.parse("27-08-2025 15:30"), ""));
-            patientMap.put("P000006", new Patient("P000006", "Fiona Cheah", "0198877665", "fiona@gmail.com", "Female", 35, sdf.parse("26-07-2025 14:00"), sdf.parse("28-08-2025 08:50"), sdf.parse("28-08-2025 09:00"), "TK001"));
-            patientMap.put("P000007", new Patient("P000007", "Gavin Ong", "0177766554", "gavin@gmail.com", "Male", 26, sdf.parse("26-07-2025 14:10"), sdf.parse("28-08-2025 08:40"), sdf.parse("28-08-2025 09:30"), "TK002"));
-            patientMap.put("P000008", new Patient("P000008", "Hannah Yap", "0135566778", "hannah@gmail.com", "Female", 24, sdf.parse("26-07-2025 15:45"), sdf.parse("28-07-2025 09:40"), sdf.parse("28-08-2025 10:00"), "TK003"));
-            patientMap.put("P000009", new Patient("P000009", "Ivan Lim", "0129988776", "ivan@gmail.com", "Male", 29, sdf.parse("27-07-2025 11:35"), sdf.parse("17-08-2025 10:45"), sdf.parse("17-08-2025 11:00"), "TK001"));
-            patientMap.put("P000010", new Patient("P000010", "Joanne Teo", "0117788665", "joanne@gmail.com", "Female", 31, sdf.parse("27-07-2025 12:10"), sdf.parse("17-08-2025 11:45"), sdf.parse("17-08-2025 12:00"), "TK002"));
-            patientMap.put("P000001", new Patient("P000001", "Adam Lee", "0123456789", "adam@gmail.com", "Male", 25, sdf.parse("24-07-2025 12:00"), sdf.parse("17-08-2025 11:00"), sdf.parse("17-08-2025 12:00"), "TK001"));
-            patientMap.put("P000002", new Patient("P000002", "Betty Tan", "0112233445", "betty@gmail.com", "Female", 30, sdf.parse("24-07-2025 13:30"), sdf.parse("17-08-2025 14:25"), sdf.parse("17-08-2025 15:00"), ""));
-            patientMap.put("P000011", new Patient("P000011", "Monday Patient 1", "0111111111", "monday1@clinic.com", "Male", 40, sdf.parse("30-07-2025 08:00"), sdf.parse("04-08-2025 08:15"), sdf.parse("04-08-2025 08:45"), ""));
-            patientMap.put("P000012", new Patient("P000012", "Monday Patient 2", "0111111112", "monday2@clinic.com", "Female", 35, sdf.parse("30-07-2025 09:00"), sdf.parse("04-08-2025 09:30"), sdf.parse("04-08-2025 10:30"), ""));
+            Patient p1 = new Patient("P000001", "Adam Lee", "0123456789", "adam@gmail.com", "Male", 25, sdf.parse("24-07-2025 12:00"));
+            p1.addVisit(sdf.parse("26-08-2025 08:45"), sdf.parse("26-08-2025 09:00"), "");
+            p1.addVisit(sdf.parse("17-08-2025 11:00"), sdf.parse("17-08-2025 12:00"), "TK001");
+
+            Patient p2 = new Patient("P000002", "Betty Tan", "0112233445", "betty@gmail.com", "Female", 30, sdf.parse("24-07-2025 13:30"));
+            p2.addVisit(sdf.parse("26-08-2025 09:25"), sdf.parse("26-08-2025 10:00"), "");
+            p2.addVisit(sdf.parse("17-08-2025 14:25"), sdf.parse("17-08-2025 15:00"), "");
+
+            Patient p3 = new Patient("P000003", "Charlie Goh", "0103344556", "charlie@gmail.com", "Male", 22, sdf.parse("25-07-2025 10:20"));
+            p3.addVisit(sdf.parse("27-08-2025 10:15"), sdf.parse("27-08-2025 11:23"), "");
+
+            Patient p4 = new Patient("P000004", "Diana Lim", "0167788990", "diana@gmail.com", "Female", 28, sdf.parse("25-07-2025 09:50"));
+            p4.addVisit(sdf.parse("27-08-2025 13:35"), sdf.parse("27-08-2025 14:12"), "");
+
+            Patient p5 = new Patient("P000005", "Ethan Yong", "0188899776", "ethan@gmail.com", "Male", 27, sdf.parse("25-07-2025 11:10"));
+            p5.addVisit(sdf.parse("27-08-2025 15:10"), sdf.parse("27-08-2025 15:30"), "");
+
+            Patient p6 = new Patient("P000006", "Fiona Cheah", "0198877665", "fiona@gmail.com", "Female", 35, sdf.parse("26-07-2025 14:00"));
+            p6.addVisit(sdf.parse("28-08-2025 08:50"), sdf.parse("28-08-2025 09:00"), "TK001");
+
+            Patient p7 = new Patient("P000007", "Gavin Ong", "0177766554", "gavin@gmail.com", "Male", 26, sdf.parse("26-07-2025 14:10"));
+            p7.addVisit(sdf.parse("28-08-2025 08:40"), sdf.parse("28-08-2025 09:30"), "TK002");
+
+            Patient p8 = new Patient("P000008", "Hannah Yap", "0135566778", "hannah@gmail.com", "Female", 24, sdf.parse("26-07-2025 15:45"));
+            p8.addVisit(sdf.parse("28-08-2025 09:40"), sdf.parse("28-08-2025 10:00"), "TK003");
+
+            Patient p9 = new Patient("P000009", "Ivan Lim", "0129988776", "ivan@gmail.com", "Male", 29, sdf.parse("27-07-2025 11:35"));
+            p9.addVisit(sdf.parse("17-08-2025 10:45"), sdf.parse("17-08-2025 11:00"), "TK001");
+
+            Patient p10 = new Patient("P000010", "Joanne Teo", "0117788665", "joanne@gmail.com", "Female", 31, sdf.parse("27-07-2025 12:10"));
+            p10.addVisit(sdf.parse("17-08-2025 11:45"), sdf.parse("17-08-2025 12:00"), "TK002");
+
+            Patient p11 = new Patient("P000011", "Monday Patient 1", "0111111111", "monday1@clinic.com", "Male", 40, sdf.parse("30-07-2025 08:00"));
+            p11.addVisit(sdf.parse("04-08-2025 08:15"), sdf.parse("04-08-2025 08:45"), "");
+
+            Patient p12 = new Patient("P000012", "Monday Patient 2", "0111111112", "monday2@clinic.com", "Female", 35, sdf.parse("30-07-2025 09:00"));
+            p12.addVisit(sdf.parse("04-08-2025 09:30"), sdf.parse("04-08-2025 10:30"), "");
+
+            patientMap.put(p1.getPatient_id(), p1);
+            patientMap.put(p2.getPatient_id(), p2);
+            patientMap.put(p3.getPatient_id(), p3);
+            patientMap.put(p4.getPatient_id(), p4);
+            patientMap.put(p5.getPatient_id(), p5);
+            patientMap.put(p6.getPatient_id(), p6);
+            patientMap.put(p7.getPatient_id(), p7);
+            patientMap.put(p8.getPatient_id(), p8);
+            patientMap.put(p9.getPatient_id(), p9);
+            patientMap.put(p10.getPatient_id(), p10);
+            patientMap.put(p11.getPatient_id(), p11);
+            patientMap.put(p12.getPatient_id(), p12);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

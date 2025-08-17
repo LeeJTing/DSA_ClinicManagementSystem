@@ -24,9 +24,8 @@ public class Patient {
     private String patient_gender;
     private int age;
     private Date registration_date;
-    private Date queue_start;
-    private Date queue_end;
-    private String ticket;
+    private Visit[] visits = new Visit[10]; // allows up to 10 visits
+    private int visitCount = 0;
 
     public Patient() {
         this.patient_id = "";
@@ -36,17 +35,14 @@ public class Patient {
         this.patient_gender = "";
         this.age = 0;
         this.registration_date = null;
-        this.queue_start = null;
-        this.queue_end = null;
-        this.ticket = "";
     }
 
-    public Patient(String patient_id, String patient_name, String patient_contact, String patient_email, String patient_gender, int age, Date registration_date, Date queue_start, Date queue_end, String ticket) {
-        this.patient_id = patient_id;
-        this.patient_name = patient_name;
-        this.patient_contact = patient_contact;
-        this.patient_email = patient_email;
-        this.patient_gender = patient_gender;
+    public Patient(String patientId, String name, String contact, String email, String gender, int age, Date registrationDate) {
+        this.patient_id = patientId;
+        this.patient_name = name;
+        this.patient_contact = contact;
+        this.patient_email = email;
+        this.patient_gender = gender;
         this.age = age;
         String newRegisterDate = dateFormat.format(currentDate);
         try {
@@ -54,9 +50,28 @@ public class Patient {
         } catch (ParseException e) {
             System.out.println("Error parsing date: " + e.getMessage());
         }
-        this.queue_start = queue_start;
-        this.queue_end = queue_end;
-        this.ticket = ticket;
+    }
+
+    public void addVisit(Date queueStart, Date queueEnd, String ticket) {
+        if (visitCount < visits.length) {
+            visits[visitCount++] = new Visit(queueStart, queueEnd, ticket);
+        }
+    }
+
+    public Visit[] getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Visit[] visits) {
+        this.visits = visits;
+    }
+
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(int visitCount) {
+        this.visitCount = visitCount;
     }
 
     public Date getCurrentDate() {
@@ -127,80 +142,12 @@ public class Patient {
         return registration_date;
     }
 
-    public void setRegistration_date(Date registration_date) {
-        this.registration_date = registration_date;
-    }
-
-    public Date getQueue_start() {
-        return queue_start;
-    }
-
-    public void setQueue_start(Date queue_start) {
-        this.queue_start = queue_start;
-    }
-
-    public Date getQueue_end() {
-        return queue_end;
-    }
-
-    public void setQueue_end(Date queue_end) {
-        this.queue_end = queue_end;
-    }
-
-    public String getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(String ticket) {
-        this.ticket = ticket;
-    }
-
-    public void displayProfile() {
-        System.out.println("\n\t\t\t\t========================================================");
-        System.out.println("\t\t\t\t               Patient Details                      ");
-        System.out.println("\t\t\t\t========================================================");
-        System.out.println(String.format("\t\t\t\t|Patient ID      : %s \t\t\t\t  |", this.patient_id));
-        System.out.println(String.format("\t\t\t\t|Name            : %s\t\t\t\t  |", this.patient_name));
-        System.out.println(String.format("\t\t\t\t|Contact         : %s\t\t\t\t  |", this.patient_contact));
-        System.out.println(String.format("\t\t\t\t|Email           : %s\t\t\t  |", this.patient_email));
-        System.out.println(String.format("\t\t\t\t|Gender          : %s\t\t\t\t  |", this.patient_gender));
-        System.out.println(String.format("\t\t\t\t|Age             : %d years old\t\t\t  |", this.age));
-        System.out.println(String.format("\t\t\t\t|Registration    : %s |", this.registration_date));
-        System.out.println(String.format("\t\t\t\t|Queue Start     : %s |", this.queue_start));
-        System.out.println(String.format("\t\t\t\t|Queue End       : %s |", this.queue_end));
-        System.out.println(String.format("\t\t\t\t|Ticket          :%s\t\t\t\t  |", this.ticket));
-        System.out.println("\t\t\t\t========================================================");
-    }
-
-    public String toDataString() {
-        return String.format("%s,%s,%s,%s,%s,%d,%s,%s,%s, %s",
-                patient_id,
-                patient_name,
-                patient_contact,
-                patient_email,
-                patient_gender,
-                age,
-                registration_date,
-                queue_start,
-                queue_end,
-                ticket
-        );
-    }
-
     @Override
     public String toString() {
-        return String.format(
-                "Patient{patient_id='%s', patient_name='%s', patient_contact='%s', patient_email='%s', patient_gender='%s', age=%d, registration_date='%s', queue_start='%s', queue_end='%s', ticket = '%s'}",
-                patient_id,
-                patient_name,
-                patient_contact,
-                patient_email,
-                patient_gender,
-                age,
-                registration_date,
-                queue_start,
-                queue_end,
-                ticket
-        );
+        return "Patient{" + "currentDate=" + currentDate + ", dateFormat=" + dateFormat + ", patient_id=" + patient_id + ", patient_name=" + patient_name + ", patient_contact=" + patient_contact + ", patient_email=" + patient_email + ", patient_gender=" + patient_gender + ", age=" + age + ", registration_date=" + registration_date + ", visits=" + visits + ", visitCount=" + visitCount + '}';
+    }
+
+    public void setRegistration_date(Date registration_date) {
+        this.registration_date = registration_date;
     }
 }

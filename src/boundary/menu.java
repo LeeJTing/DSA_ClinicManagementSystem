@@ -16,6 +16,7 @@ import utility.Input;
  * @author Lwin
  */
 public class menu {
+
     private static PatientManagement patientManagement = new PatientManagement();
 
     public static void mainMenu() {
@@ -77,7 +78,6 @@ public class menu {
 
             switch (choice) {
                 case 1 -> {
-                    current.displayProfile();
                     pm.patientManagementModule();
                 }
                 case 2 -> {
@@ -160,7 +160,6 @@ public class menu {
         }
     }
 
-    
     public void patientPortalAfterLogin() {
         while (true) {
             int choice = AllMenu.patientMenu();
@@ -170,7 +169,6 @@ public class menu {
             }
             switch (choice) {
                 case 1 -> {
-                    current.displayProfile();
                     patientManagement.patientManagementModule();
                     if (patientManagement.patientWasDeleted) {
                         return;
@@ -216,7 +214,7 @@ public class menu {
             }
         }
     }
-    
+
     private static void handleStaffPortal() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
