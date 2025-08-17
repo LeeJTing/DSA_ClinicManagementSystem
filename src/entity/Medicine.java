@@ -20,7 +20,7 @@ public class Medicine implements Comparable<Medicine> {
     private int medicine_stock;
     private double unit_price;
     private String status;
-    private static String compare;
+    private static String compare = "medicine_stock";
 
     public Medicine() {
         this.medicine_id = "";
