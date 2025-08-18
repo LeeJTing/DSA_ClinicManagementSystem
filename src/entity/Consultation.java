@@ -4,6 +4,8 @@
  */
 package entity;
 
+import adt.MapInterface;
+import dao.Master;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -162,7 +164,7 @@ public class Consultation implements Comparable<Consultation> {
                 timeFormat.format(consultation_end_time)
         );
 
-        return String.format("%-7s %-15s %-17s %-17s %-9s %-7s",
+        return String.format("\t\t | %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s |",
                 consultation_Id,
                 dateFormat.format(appointment_date),
                 dateFormat.format(consultation_date),
@@ -173,7 +175,17 @@ public class Consultation implements Comparable<Consultation> {
     }
 
     public String toStaffString() {
-        return toString() + String.format("%7s", patient_Id);
+        int tableWidth = 110; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+        return toString() + String.format(" %7s |", patient_Id) + String.format(" \n\t\t %s", border);
+    }
+
+    public String toAllString() {
+        int tableWidth = 122; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+        return toString() + String.format(" %7s | %7s   |", staff_Id, patient_Id) + String.format(" \n\t\t %s", border);
     }
 
     @Override
