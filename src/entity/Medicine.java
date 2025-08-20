@@ -55,6 +55,15 @@ public class Medicine implements Comparable<Medicine> {
         this.medicine_stock = medicineStock;
         this.unit_price = medicineUnitPrice;
     }
+    
+    public Medicine(Medicine med) {
+        this.medicine_id = med.getMedicineID();
+        this.medicine_name = med.getMedicineName();
+        this.medicine_category = med.getMedicineCategory();
+        this.medicine_expiryDate = med.getMedicineExpiryDate();
+        this.medicine_stock = med.getMedicineStock();
+        this.unit_price = med.getMedicineUnitPrice();
+    }
 
     public Medicine(Medicine med, String status) {
         this.medicine_id = med.getMedicineID();
@@ -154,14 +163,23 @@ public class Medicine implements Comparable<Medicine> {
         return String.format("\t\t|  %-32s | %-8d  |\n", medicine_name, medicine_stock);
     }
 
+    public String expiryToString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(medicine_expiryDate);
+
+        return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s  |\n", medicine_id, medicine_name, medicine_category, formattedDate);
+    }
+
     @Override
     public int compareTo(Medicine other) {
         if (this.compare.equals("medicine_stock")) {
             return Integer.compare(this.medicine_stock, other.medicine_stock);
         } else if (this.compare.equals("medicine_stock_asc")) {
             return Integer.compare(other.medicine_stock, this.medicine_stock);
-        } else {
+        } else if (this.compare.equals("category")) {
             return this.medicine_category.compareTo(other.medicine_category);
+        } else {
+            return other.medicine_expiryDate.compareTo(this.medicine_expiryDate);
         }
     }
 

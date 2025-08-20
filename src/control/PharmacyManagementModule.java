@@ -14,8 +14,6 @@ import entity.Medicine;
 import entity.Payment;
 import entity.Prescription;
 import entity.Treatment;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -39,16 +37,17 @@ public class PharmacyManagementModule implements CRUD {
     private static final MapInterface<String, Medicine> medicineDispensedMap = new LinkedHashMap<>();
     private static final MapInterface<Integer, String> alertMap = new LinkedHashMap<>();
     private static final MapInterface<String, Medicine> medicineStatusMap = new LinkedHashMap<>();
+    private static final MapInterface<String, Medicine> actionHistory = new LinkedHashMap<>();
+    private static final MapInterface<Integer, Medicine> expiredMedicine = new LinkedHashMap<>();
     private static final PharmacyUI PharmacyUI = new PharmacyUI();
     private static final PaymentUI PaymentUI = new PaymentUI();
 
-    private static final Master Master = new Master();
-    
     PharmacyManagementModule() {
         getAllMap();
     }
 
     private void getAllMap() {
+        Master.initializer();
         medicineMap = Master.getMedicineMap();
         paymentMap = Master.getPaymentMap();
         treatmentMap = Master.getTreatmentMap();
@@ -77,45 +76,46 @@ public class PharmacyManagementModule implements CRUD {
                     PharmacyUI.promptReturn();
                     break;
                 case 3:
-                    if (medicineMap.size() != 0) {
-                        readInstance();
-                        boolean detail = PharmacyUI.promptViewMedicineDetails();
-                        if (detail) {
-                            searchMedicine();
-                        }
-                    } else {
-                        PharmacyUI.displayMedicineNotFound();
+                    readInstance();
+                    boolean detail = PharmacyUI.promptViewMedicineDetails();
+                    if (detail) {
+                        searchMedicine();
                     }
                     PharmacyUI.promptReturn();
                     break;
                 case 4:
-                    if (medicineMap.size() != 0) {
-                        deleteInstance();
-                    } else {
-                        PharmacyUI.displayMedicineNotFound();
-                    }
+                    deleteInstance();
                     PharmacyUI.promptReturn();
                     break;
                 case 5:
-                    generateDispensingSummaryReport();
+                    removeExpiredMedicine();
                     PharmacyUI.promptReturn();
                     break;
                 case 6:
-                    generateStockStatusReport();
+                    generateDispensingSummaryReport();
                     PharmacyUI.promptReturn();
                     break;
                 case 7:
-                    alertGeneration();
+                    generateStockStatusReport();
                     PharmacyUI.promptReturn();
                     break;
                 case 8:
+                    alertGeneration();
+                    PharmacyUI.promptReturn();
+                    break;
+                case 9:
+                    undoAction();
+                    PharmacyUI.promptReturn();
+                    break;
+                case 10:
                     exit = true;
-                    System.out.println("\n\t\tExiting Pharmacy Module.\n");
+                    PharmacyUI.displayExitMsg();
             }
         }
 
     }
 
+    // Add new medicine
     @Override
     public void createNewInstance() {
         String category;
@@ -124,10 +124,16 @@ public class PharmacyManagementModule implements CRUD {
         if (!"".equals(category)) {
             String lastID = medicineMap.getLastKey();
             String nextID = IDGenerator.generateNextID(lastID);
+            Medicine medicineFound = medicineMap.getValue(nextID);
+            while (medicineFound != null) {
+                nextID = IDGenerator.generateNextID(nextID);
+                medicineFound = medicineMap.getValue(nextID);
+            }
 
             Medicine newMedicine = PharmacyUI.addMedicineUI(nextID, category);
             if (newMedicine != null) {
                 medicineMap.put(newMedicine.getMedicineID(), newMedicine);
+                actionHistory.put("Create", newMedicine);
                 Master.setMedicineMap(medicineMap);
                 PharmacyUI.displayOperationSuccessfullyMessage("added");
 
@@ -140,25 +146,21 @@ public class PharmacyManagementModule implements CRUD {
 
     }
 
-    public Medicine getMedicine(String id) {
-        if (medicineMap.containsKey(id)) {
-            return medicineMap.getValue(id);
-        }
-        return null;
-    }
-
+    // Edit medicine details
     @Override
     public void updateInstance() {
         readInstance();
         String id = PharmacyUI.promptMedicineID();
-        Medicine medicineFound = getMedicine(id);
+        Medicine medicineFound = medicineMap.getValue(id);
         boolean exit = false;
 
         while (medicineFound == null) {
             PharmacyUI.displayMedicineNotFound();
             id = PharmacyUI.promptMedicineID();
-            medicineFound = getMedicine(id);
+            medicineFound = medicineMap.getValue(id);
         }
+
+        Medicine beforeEditMed = new Medicine(medicineFound);
 
         PharmacyUI.displayMedicineDetails(medicineFound);
         while (!exit) {
@@ -167,27 +169,32 @@ public class PharmacyManagementModule implements CRUD {
 
             switch (editField) {
                 case 1:
+                    // Edit medicine name
                     String newName = PharmacyUI.promptName();
                     medicineFound.setMedicineName(newName);
                     edited = true;
                     break;
                 case 2:
+                    // Edit medicine category
                     String newCategory = PharmacyUI.promptCategory();
                     medicineFound.setMedicineCategory(newCategory);
                     edited = true;
                     break;
                 case 3:
-                    Date newExpiryDate = PharmacyUI.promptExpiryDate();
+                    // Edit medicine expiry date
+                    Date newExpiryDate = PharmacyUI.promptExpiryDateWithoutLimit();
                     medicineFound.setMedicineExpiryDate(newExpiryDate);
                     edited = true;
                     break;
                 case 4:
+                    // Add medicine stock
                     int currentStock = medicineFound.getMedicineStock();
                     int newStock = PharmacyUI.promptStock();
                     medicineFound.setMedicineStock(newStock + currentStock);
                     edited = true;
                     break;
                 case 5:
+                    // Edit medicine unit price
                     double newUnitPrice = PharmacyUI.promptUnitPrice();
                     medicineFound.setMedicineUnitPrice(newUnitPrice);
                     edited = true;
@@ -201,6 +208,7 @@ public class PharmacyManagementModule implements CRUD {
 
             if (edited) {
                 medicineMap.put(id, medicineFound);
+                actionHistory.put("Edit", beforeEditMed);
                 PharmacyUI.displayOperationSuccessfullyMessage("updated");
                 PharmacyUI.displayMedicineDetails(medicineFound);
                 Master.setMedicineMap(medicineMap);
@@ -209,19 +217,24 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // display medicine list
     @Override
     public void readInstance() {
-        PharmacyUI.displayMedicineListHeader();
-        PharmacyUI.displayMedicineHeader();
+        if (!medicineMap.isEmpty()) {
+            PharmacyUI.displayMedicineListHeader();
+            PharmacyUI.displayMedicineHeader();
 
-        Object[] medicine = medicineMap.getAllValues();
-        for (Object m : medicine) {
-            Medicine med = (Medicine) m;
-            PharmacyUI.displayMedicineToString(med);
+            Object[] medicine = medicineMap.getAllValues();
+            for (Object m : medicine) {
+                Medicine med = (Medicine) m;
+                PharmacyUI.displayMedicineToString(med);
+            }
+        } else {
+            PharmacyUI.displayMedicineNotFound();
         }
-
     }
 
+    // search medicine by id, name or category
     private void searchMedicine() {
         int search;
         boolean exit = false;
@@ -248,6 +261,7 @@ public class PharmacyManagementModule implements CRUD {
 
     }
 
+    // get medicine by id, name or category
     private void findMedicine(String searchValue, Function<Medicine, String> getter) {
         boolean found = false;
         Iterator<Medicine> mIterator = medicineMap.getIterator();
@@ -263,6 +277,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // delete medicine
     @Override
     public void deleteInstance() {
         int i = 0;
@@ -270,39 +285,39 @@ public class PharmacyManagementModule implements CRUD {
         Medicine medicineFound;
         boolean confirm;
 
-        id = PharmacyUI.promptMedicineID();
-        medicineFound = getMedicine(id);
-
-        while (i < 3 && medicineFound == null) {
-            PharmacyUI.displayMedicineNotFound();
+        if (medicineMap.size() != 0) {
             id = PharmacyUI.promptMedicineID();
-            medicineFound = getMedicine(id);
-            i++;
-        }
+            medicineFound = medicineMap.getValue(id);
 
-        if (medicineFound != null) {
-            PharmacyUI.displayMedicineDetails(medicineFound);
-            confirm = PharmacyUI.promptDeleteMsg();
-            if (confirm) {
-                medicineMap.remove(id);
-                Master.setMedicineMap(medicineMap);
-                PharmacyUI.displayOperationSuccessfullyMessage("deleted");
-                boolean undo = PharmacyUI.promptUndo();
-                if (undo) {
-                    medicineMap.put(id, medicineFound);
-                    medicineMap.keyReverseSorting();
+            while (i < 3 && medicineFound == null) {
+                PharmacyUI.displayMedicineNotFound();
+                id = PharmacyUI.promptMedicineID();
+                medicineFound = medicineMap.getValue(id);
+                i++;
+            }
+
+            if (medicineFound != null) {
+                PharmacyUI.displayMedicineDetails(medicineFound);
+                confirm = PharmacyUI.promptDeleteMsg();
+                if (confirm) {
+                    medicineMap.remove(id);
+                    actionHistory.put("Delete", medicineFound);
                     Master.setMedicineMap(medicineMap);
-                    PharmacyUI.displayOperationSuccessfullyMessage("restored");
-                } 
+                    PharmacyUI.displayOperationSuccessfullyMessage("deleted");
+                } else {
+                    PharmacyUI.displayOperationErrorMessage("delete");
+                }
             } else {
-                PharmacyUI.displayOperationErrorMessage("delete");
+                PharmacyUI.displayExceedLimitMsg();
+
             }
         } else {
-            PharmacyUI.displayExceedLimitMsg();
-
+            PharmacyUI.displayMedicineNotFound();
         }
+
     }
 
+    // display medicine with only medicine_name, medicine_category, medicine_stock, unit_price
     public void displayCustomMedicineList() {
         Iterator<Medicine> medicineDispensedIt = medicineDispensedMap.getIterator();
         while (medicineDispensedIt.hasNext()) {
@@ -311,11 +326,17 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // generate medicine dispensed summary report
     public void generateDispensingSummaryReport() {
         int choice;
         boolean exit = false;
+        
+        // clear current medicineDispensedMap
         medicineDispensedMap.clear();
+        
+        // update medicineDispensedMap
         updateMedicineDispensed();
+        
         PharmacyUI.displayDispensingSummaryReportUI();
         displayCustomMedicineList();
 
@@ -323,9 +344,11 @@ public class PharmacyManagementModule implements CRUD {
             choice = PharmacyUI.promptMedicineDispensingSummaryFilter();
             switch (choice) {
                 case 1:
+                    // Display the top value desired by user
                     filterDispensingSummaryReportByTopValue();
                     break;
                 case 2:
+                    // Display the total medicine dispensed for each category
                     groupMedicineDispensedByCategory();
                     break;
                 case 3:
@@ -336,6 +359,7 @@ public class PharmacyManagementModule implements CRUD {
 
     }
 
+    // Display the top value desired by user
     private void filterDispensingSummaryReportByTopValue() {
         int i = 0;
         int topValue;
@@ -345,6 +369,7 @@ public class PharmacyManagementModule implements CRUD {
         Medicine firstMed = medicineDispensedMap.getFront();
         firstMed.setCompare("medicine_stock");
         medicineDispensedMap.sorting();
+
         Iterator<Medicine> medicineIterator = medicineDispensedMap.getIterator();
         PharmacyUI.displayTopDispensingSummaryReportUI(topValue);
         while (medicineIterator.hasNext() && i < topValue) {
@@ -354,6 +379,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Display medicine list with stock status (Expiry Soon/Low Stock)
     public void displayMedicineStockStatus() {
         medicineStatusMap.clear();
         updateMedicineStockStatus();
@@ -373,6 +399,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Update medicine stock status
     private void updateMedicineStockStatus() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
@@ -381,9 +408,9 @@ public class PharmacyManagementModule implements CRUD {
         Object[] medicine = medicineMap.getAllValues();
         for (Object m : medicine) {
             Medicine med = (Medicine) m;
-            if (med.getMedicineExpiryDate().before(expiryDateThreshold)) {
+            if (med.getMedicineExpiryDate().before(expiryDateThreshold)) { // Check expiry date
                 medicineStatusMap.put(med.getMedicineID(), new Medicine(med, "Expiry Alert"));
-            } else if (med.getMedicineStock() < 30) {
+            } else if (med.getMedicineStock() < 30) { // Check low stock (30)
                 medicineStatusMap.put(med.getMedicineID(), new Medicine(med, "Low Stock Alert"));
             } else {
                 medicineStatusMap.put(med.getMedicineID(), new Medicine(med, "Good"));
@@ -391,6 +418,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Display medicine list with stock status report
     public void generateStockStatusReport() {
         displayMedicineStockStatus();
         boolean exit = false;
@@ -419,17 +447,17 @@ public class PharmacyManagementModule implements CRUD {
 
     }
 
+    // Update medicineDispensedMap
     private void updateMedicineDispensed() {
         Iterator<Prescription> prescriptionIterator = prescriptionMap.getIterator();
 
-        // loop through every prescription
         while (prescriptionIterator.hasNext()) {
             Prescription prescription = prescriptionIterator.next();
 
             // get medicine list from the prescription
             Iterator<Medicine> medIterator = prescription.getMedicineList().getIterator();
 
-            // loop through each medicine in the prescription
+            // loop through the medicine list in the prescription
             while (medIterator.hasNext()) {
                 Medicine med = medIterator.next();
                 String name = med.getMedicineName();
@@ -451,6 +479,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Display the total medicine dispensed for each category
     private void groupMedicineDispensedByCategory() {
         MapInterface<String, Medicine> categoryMedicineDispensedMap = new LinkedHashMap<>();
 
@@ -473,20 +502,24 @@ public class PharmacyManagementModule implements CRUD {
                     Medicine med = catMedIterator.next();
                     totalStock += med.getMedicineStock();
                 }
+                // Store the total medicine dispensed for each category
                 categoryMedicineDispensedMap.put(category, new Medicine(category, totalStock));
             }
         }
 
         Medicine compareMed = new Medicine();
         compareMed.setCompare("medicine_stock");
+        
+        // display the value in descending
         categoryMedicineDispensedMap.sorting();
-
         Iterator<Medicine> medIt = categoryMedicineDispensedMap.getIterator();
         PharmacyUI.displayMedicineCategoryHeader();
         while (medIt.hasNext()) {
             Medicine med = medIt.next();
             PharmacyUI.displayMedicineListByCategory(med);
         }
+        
+        // display the value in ascending
         compareMed.setCompare("medicine_stock_asc");
         categoryMedicineDispensedMap.sorting();
         medIt = categoryMedicineDispensedMap.getIterator();
@@ -497,6 +530,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Filter the medicine stock level desired by the user
     private void filterMedicineStockLevel(int threshold) {
         Iterator<Medicine> medicineIterator = medicineMap.getIterator();
         boolean found = false;
@@ -516,6 +550,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Filter the medicine expiry date desired by the user
     private void filterMedicineByExpiryDate(Date expiryDate) {
         Iterator<Medicine> medicineIterator = medicineMap.getIterator();
         boolean found = false;
@@ -534,7 +569,8 @@ public class PharmacyManagementModule implements CRUD {
             PharmacyUI.displayNoMedicineBeforeExpiryDate(expiryDate);
         }
     }
-
+    
+    // Filter the medicine category desired by the user
     private void filterMedicineByCategory(String category) {
         MapInterface<String, Medicine> categoryMedicine;
         boolean found = false;
@@ -542,7 +578,7 @@ public class PharmacyManagementModule implements CRUD {
         Medicine newMed = new Medicine();
         newMed.setCompare("category");
         categoryMedicine = medicineMap.groupBy(new Medicine(category));
-        
+
         PharmacyUI.displayMedicineFilterByCategoryHeader();
         Iterator<Medicine> catMedIterator = categoryMedicine.getIterator();
         while (catMedIterator.hasNext()) {
@@ -555,6 +591,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Generate alert on low stock & expiry soon
     public void alertGeneration() {
         if (alertMap.size() > 0) {
             PharmacyUI.displayAlertHeader();
@@ -568,6 +605,7 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Check whether the medicine expiry date is within 1 month
     private void checkNearExpiryDate() {
         int alertIndex = alertMap.size() + 1;
         Calendar cal = Calendar.getInstance();
@@ -583,7 +621,8 @@ public class PharmacyManagementModule implements CRUD {
             }
         }
     }
-
+    
+    // Check whether the medicine stock level is under 30
     private void checkLowStock() {
         int alertIndex = alertMap.size() + 1;
         int stockThreshold = 30;
@@ -597,29 +636,63 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
-//    public void testPayment() {
-//        try {
-//            MapInterface<String, Medicine> testMed = new LinkedHashMap<>();
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//            Date expiryDate = sdf.parse("10-10-2030");
-//            testMed.put("M000001", new Medicine("M000001", "Paracetamol", "Analgesics (Painkillers)", expiryDate, 2, 5.0));
-//            testMed.put("M000006", new Medicine("M000006", "Iodine", "Antiseptics & Disinfectants", expiryDate, 9, 4.0));
-//            Prescription testPre = new Prescription("PH000001", testMed, "S000001", "P000005", "T000001");
-//            payment(testPre);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    public void displayPaymentMap() {
-//        Object[] payment = paymentMap.getAllValues();
-//        for (Object p : payment) {
-//            Payment pm = (Payment) p;
-//            PaymentUI.displayPaymentToString(pm);
-//        }
-//    }
+    // Check and update expired medicine in expiredMedicine
+    private void updateExpiredMedicine() {
+        Calendar cal = Calendar.getInstance();
+        Date dateToCheck = cal.getTime();
+        expiredMedicine.clear();
+        int i = 0;
+        Iterator<Medicine> medIt = medicineMap.getIterator();
+        while (medIt.hasNext()) {
+            Medicine med = medIt.next();
+            if (med.getMedicineExpiryDate().before(dateToCheck)) {
+                expiredMedicine.put(++i, med);
+            }
+        }
+    }
 
+    // Removed expired medicine
+    public void removeExpiredMedicine() {
+        updateExpiredMedicine();
+        if (!expiredMedicine.isEmpty()) {
+            boolean delete = PharmacyUI.confirmDeleteExpiredItems();
+
+            if (delete) {
+                PharmacyUI.displayExpiredMedicineHeader();
+                while (!expiredMedicine.isEmpty()) {
+                    Medicine med = expiredMedicine.removeFirst();
+                    medicineMap.remove(med.getMedicineID());
+                    PharmacyUI.displayExpiredMedicine(med);
+                }
+                PharmacyUI.displayRemoveExpiredMedicineSuccessfully();
+            }
+        } else {
+            PharmacyUI.displayMedicineNotFound();
+        }
+    }
+
+    // Undo user action (Create, Edit and Delete)
+    public void undoAction() {
+        if (!actionHistory.isEmpty()) {
+            boolean undo = PharmacyUI.promptUndoLastAction();
+            if (undo) {
+                String action = actionHistory.getLastKey();
+                Medicine lastMed = actionHistory.removeLast();
+                if (action.equals("Create")) {
+                    medicineMap.remove(lastMed.getMedicineID()); // Remove created medicine
+                } else {
+                    medicineMap.put(lastMed.getMedicineID(), lastMed); // Replace / Restore the editted and removed medicine
+                }
+                Master.setMedicineMap(medicineMap);
+                PharmacyUI.displayOperationSuccessfullyMessage(action + " Operation restored successfully");
+            }
+        } else {
+            PharmacyUI.displayNoLastAction();
+        }
+
+    }
+
+    // Payment to consultation and medicine cost
     public void payment(Prescription prescription) {
         String lastID = paymentMap.getLastKey();
         String newID = IDGenerator.generateNextID(lastID);
@@ -636,9 +709,11 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
+    // Get the available medicine details
     public MapInterface<String, Medicine> getAvailableMedicine(MapInterface<String, Medicine> medicineNeeded) {
         MapInterface<String, Medicine> availableMedicine = new LinkedHashMap<>();
 
+        // Avoid dispensing medicine that expiry within 2 weeks
         LocalDate threshold = LocalDate.now().plusWeeks(2);
         Date expiryDateThreshold = Date.from(threshold.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -651,16 +726,16 @@ public class PharmacyManagementModule implements CRUD {
 
             Iterator<Medicine> mIterator = medicineMap.getIterator();
 
-            while (mIterator.hasNext() && stockUnfulfilled > 0) {
+            while (mIterator.hasNext() && stockUnfulfilled > 0) { // loop while stock needed havent fulfilled
                 Medicine med = mIterator.next();
 
                 if (med.getMedicineExpiryDate().after(expiryDateThreshold)
                         && med.getMedicineName().equals(medNeeded.getMedicineName())) {
 
-                    int availableStock = med.getMedicineStock();
+                    int availableStock = med.getMedicineStock(); // get the current available medicine stock
 
                     if (availableStock > 0) {
-                        int stockToTake = Math.min(availableStock, stockUnfulfilled);
+                        int stockToTake = Math.min(availableStock, stockUnfulfilled); // stock can be taken
 
                         Medicine takenMed = new Medicine(
                                 med.getMedicineID(),
@@ -671,9 +746,9 @@ public class PharmacyManagementModule implements CRUD {
                                 med.getMedicineUnitPrice()
                         );
 
-                        availableMedicine.put(med.getMedicineID(), takenMed);
-                        med.updateMedicineStock(stockToTake);
-                        stockUnfulfilled -= stockToTake;
+                        availableMedicine.put(med.getMedicineID(), takenMed); // add to the availableMedicine
+                        med.updateMedicineStock(stockToTake); // update the medicine stock
+                        stockUnfulfilled -= stockToTake; // update the stockUnfulfilled
                     }
                 }
             }

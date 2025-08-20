@@ -31,19 +31,21 @@ public class PharmacyUI {
         System.out.println("\t\t|       1. Add Medicine                             |");
         System.out.println("\t\t|       2. Update Medicine                          |");
         System.out.println("\t\t|       3. Display Medicine                         |");
-        System.out.println("\t\t|       4. Remove Medicine                          |");
-        System.out.println("\t\t|       5. Medicine Dispensing Summary Report       |");
-        System.out.println("\t\t|       6. Medicine Stock Status Report             |");
+        System.out.println("\t\t|       4. Delete Medicine                          |");
+        System.out.println("\t\t|       5. Delete Expired Medicine                  |");
+        System.out.println("\t\t|       6. Medicine Dispensing Summary Report       |");
+        System.out.println("\t\t|       7. Medicine Stock Status Report             |");
         System.out.printf(
                 "\t\t%s (%s%d%s)                   |\n",
-                "|       7. Alert Notification",
+                "|       8. Alert Notification",
                 RED, alert, RESET);
-        System.out.println("\t\t|       8. Exit                                     |");
+        System.out.println("\t\t|       9. Undo Last Action                         |");
+        System.out.println("\t\t|       10. Exit                                    |");
         System.out.println("\t\t=====================================================");
 
         choice = Input.getIntegerInput("\t\tEnter your choice: ");
 
-        while (choice < 1 || choice > 8) {
+        while (choice < 1 || choice > 10) {
             MessageUI.errorMessage();
             choice = Input.getIntegerInput("\t\tEnter your choice: ");
         }
@@ -274,14 +276,14 @@ public class PharmacyUI {
         System.out.printf("\t\t|                                                Medicine List Under %3d threshold                                         |\n", value);
         System.out.println("\t\t============================================================================================================================");
     }
-    
+
     public void displayMedicineFilterByExpiryDateHeader() {
         System.out.println("");
         System.out.println("\t\t============================================================================================================================");
         System.out.println("\t\t|                                                  Medicine List Filter By Date                                            |");
         System.out.println("\t\t============================================================================================================================");
     }
-    
+
     public void displayMedicineFilterByCategoryHeader() {
         System.out.println("");
         System.out.println("\t\t============================================================================================================================");
@@ -312,6 +314,10 @@ public class PharmacyUI {
 
     public void displayOperationErrorMessage(String operation) {
         System.out.println("\t\tFailed to " + operation + " medicine.");
+    }
+
+    public void displayRemoveExpiredMedicineSuccessfully() {
+        System.out.println("\t\tAll expired items has been deleted successfully.");
     }
 
     public boolean promptDeleteMsg() {
@@ -435,7 +441,7 @@ public class PharmacyUI {
 
     public boolean confirmDeleteExpiredItems() {
         char choice = 'n';
-        System.out.print("\t\tConfirm to delete expired item(s) (y/n)? ");
+        System.out.print("\n\t\tConfirm to delete expired item(s) (y/n)? ");
         String line = scanner.nextLine().trim();
 
         if (!line.isEmpty()) {
@@ -512,7 +518,7 @@ public class PharmacyUI {
         System.out.print(med.categoryToString());
         System.out.println("\t\t-------------------------------------------------");
     }
-    
+
     public boolean promptUndo() {
         char choice = 'n';
         do {
@@ -528,4 +534,45 @@ public class PharmacyUI {
         return choice == 'y' || choice == 'Y';
     }
 
+//    public int promptUndoSelection() {
+//        int choice = 0;
+//        System.out.println("\t\tUndo Menu: ");
+//        System.out.println("\t\t1. Last created medicine");
+//        System.out.println("\t\t2. Last edited medicine");
+//        System.out.println("\t\t2. Last deleted medicine");
+//        System.out.println("\t\t4. Back\n");
+//        while (choice < 1 || choice > 4) {
+//            choice = Input.getIntegerInput("\t\tEnter your choice: ");
+//        }
+//        return choice;
+//    }
+    public void displayExitMsg() {
+        System.out.println("\n\t\tExiting Pharmacy Module.\n");
+    }
+
+    public void displayExpiredMedicineHeader() {
+        System.out.println("\t\t===============================================================================================");
+        System.out.println("\t\t|                                     Expired Medicine                                        |");
+        System.out.println("\t\t===============================================================================================");
+    }
+
+    public void displayExpiredMedicine(Medicine med) {
+        System.out.print(med.expiryToString());
+        System.out.println("\t\t----------------------------------------------------------------------------------------------");
+    }
+
+    public boolean promptUndoLastAction() {
+        char choice = 'n';
+        System.out.print("\n\t\tConfirm to undo last action (y/n): ");
+        String line = scanner.nextLine().trim();
+
+        if (!line.isEmpty()) {
+            choice = line.charAt(0);
+        }
+        return choice == 'y' || choice == 'Y';
+    }
+
+    public void displayNoLastAction() {
+        System.out.println("\t\tUndo operation disable currently, does not have any last action found.");
+    }
 }
