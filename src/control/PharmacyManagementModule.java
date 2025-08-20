@@ -54,7 +54,7 @@ public class PharmacyManagementModule implements CRUD {
         consultationMap = Master.getConsultationMap();
         prescriptionMap = Master.getPrescriptionMap();
     }
-
+   
     public void pharmacyMenu() {
         boolean exit = false;
         alertMap.clear();
@@ -132,8 +132,8 @@ public class PharmacyManagementModule implements CRUD {
 
             Medicine newMedicine = PharmacyUI.addMedicineUI(nextID, category);
             if (newMedicine != null) {
-                medicineMap.put(newMedicine.getMedicineID(), newMedicine);
-                actionHistory.put("Create", newMedicine);
+                medicineMap.put(nextID, newMedicine);
+                actionHistory.put("Create " + nextID, newMedicine);
                 Master.setMedicineMap(medicineMap);
                 PharmacyUI.displayOperationSuccessfullyMessage("added");
 
@@ -208,7 +208,7 @@ public class PharmacyManagementModule implements CRUD {
 
             if (edited) {
                 medicineMap.put(id, medicineFound);
-                actionHistory.put("Edit", beforeEditMed);
+                actionHistory.put("Edit "+id, beforeEditMed);
                 PharmacyUI.displayOperationSuccessfullyMessage("updated");
                 PharmacyUI.displayMedicineDetails(medicineFound);
                 Master.setMedicineMap(medicineMap);
@@ -301,7 +301,7 @@ public class PharmacyManagementModule implements CRUD {
                 confirm = PharmacyUI.promptDeleteMsg();
                 if (confirm) {
                     medicineMap.remove(id);
-                    actionHistory.put("Delete", medicineFound);
+                    actionHistory.put("Delete " + id, medicineFound);
                     Master.setMedicineMap(medicineMap);
                     PharmacyUI.displayOperationSuccessfullyMessage("deleted");
                 } else {
@@ -678,13 +678,13 @@ public class PharmacyManagementModule implements CRUD {
             if (undo) {
                 String action = actionHistory.getLastKey();
                 Medicine lastMed = actionHistory.removeLast();
-                if (action.equals("Create")) {
+                if (action.startsWith("Create")) {
                     medicineMap.remove(lastMed.getMedicineID()); // Remove created medicine
                 } else {
                     medicineMap.put(lastMed.getMedicineID(), lastMed); // Replace / Restore the editted and removed medicine
                 }
                 Master.setMedicineMap(medicineMap);
-                PharmacyUI.displayOperationSuccessfullyMessage(action + " Operation restored successfully");
+                PharmacyUI.displayOperationSuccessfullyMessage(action + " Operation restored");
             }
         } else {
             PharmacyUI.displayNoLastAction();
