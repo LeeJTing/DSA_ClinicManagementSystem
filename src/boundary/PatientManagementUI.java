@@ -13,7 +13,6 @@ import java.util.Date;
 
 public class PatientManagementUI {
 
-    // ===== Basic UI you already had =====
     public static void displayCreateHeader() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t              NEW PATIENT REGISTRATION               ");
@@ -165,9 +164,9 @@ public class PatientManagementUI {
     }
 
     public static void displayQueuePosition(int position) {
-        System.out.println("\t\t\t |                                                   |");
+        System.out.println("\t\t\t\t|                                                   |");
         System.out.printf("\t\t\t\t|       Your position in queue: %-18d |\n", position);
-        System.out.println("\t \t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|                                                   |");
     }
 
     public static void displayQueueFooter() {
@@ -265,7 +264,8 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|  4. Average Queue Time Report                     |");
         System.out.println("\t\t\t\t|  5. Get Ticket                                    |");
         System.out.println("\t\t\t\t|  6. Patient Report                                |");
-        System.out.println("\t\t\t\t|  7. Return to Main Menu                           |");
+        System.out.println("\t\t\t\t|  7. Undo Last Change                              |");
+        System.out.println("\t\t\t\t|  8. Return to Main Menu                           |");
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
     }
@@ -317,88 +317,156 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    // ===== New small helpers used by PatientManagement =====
     public static String promptText(String label) {
         return Input.getStringInput("\t\t\t\t" + label);
     }
-
     public static int promptInt(String label) {
         return Input.getIntegerInput("\t\t\t\t" + label);
     }
-
     public static boolean confirm(String label) {
         String s = Input.getStringInput("\t\t\t\t" + label);
         return "Y".equalsIgnoreCase(s.trim());
     }
-
     public static void displayMessage(String msg) {
         System.out.println("\t\t\t\t" + msg);
     }
 
-    public static int displayDeleteOptions() {
-        System.out.println("\t\t\t\tDelete Options:");
-        System.out.println("\t\t\t\t1. Delete visit record");
-        System.out.println("\t\t\t\t2. Delete entire patient");
-        return Input.getIntegerInput("\t\t\t\tEnter option (1/2): ");
-    }
-
-    public static int selectVisitIndex(Visit[] visits, int count) {
-        System.out.println("\t\t\t\tVisit Records:");
-        for (int i = 0; i < count; i++) {
-            Date d = visits[i].getQueueStart();
-            System.out.println("\t\t\t\t[" + (i + 1) + "] " + (d == null ? "N/A" : d));
-        }
-        return Input.getIntegerInput("\t\t\t\tEnter visit number to delete: ");
-    }
-
     public static void displayAverageQueueMenu() {
-    System.out.println("\n\t\t\t\t=====================================================");
-    System.out.println("\t\t\t\t                   AVERAGE QUEUE TIME REPORT         ");
-    System.out.println("\t\t\t\t=====================================================");
-    System.out.println("\t\t\t\t|  1. Selected Date Range                           |");
-    System.out.println("\t\t\t\t|  2. Day of Week                                   |");
-    System.out.println("\t\t\t\t|  3. All Data Timeline                             |");
-    System.out.println("\t\t\t\t|  4. Back                                          |");
-    System.out.println("\t\t\t\t=====================================================");
-}
-
-public static void printHourlyTimeline(int startHour, int endHour, int[] avg) {
-    System.out.println("\n\t\t\t\t=====================================================");
-    System.out.println("\t\t\t\t                HOURLY TIMELINE (mins)               ");
-    System.out.println("\t\t\t\t=====================================================");
-    int idx = 0;
-    for (int h = startHour; h < endHour; h++) {
-        System.out.printf("\t\t\t\t| %02d:00-%02d:00 | Avg: %3d |\n", h, h + 1, avg[idx++]);
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t                   AVERAGE QUEUE TIME REPORT         ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|  1. Selected Date Range                           |");
+        System.out.println("\t\t\t\t|  2. Day of Week                                   |");
+        System.out.println("\t\t\t\t|  3. All Data Timeline                             |");
+        System.out.println("\t\t\t\t|  4. Back                                          |");
+        System.out.println("\t\t\t\t=====================================================");
     }
-    System.out.println("\t\t\t\t=====================================================");
-}
 
-public static void printHeatmap(int startHour, int endHour, int[][] avg) {
-    String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-    String pad = "\t\t\t\t";
-    int cells = (endHour - startHour) + 1;
-    sep(pad, cells);
-    System.out.printf(pad + "| %-5s |", "Day");
-    for (int h = startHour; h < endHour; h++) System.out.printf(" %5s |", h + ":00");
-    System.out.println();
-    sep(pad, cells);
-    for (int d = 0; d < 7; d++) {
-        System.out.printf(pad + "| %-5s |", days[d]);
-        for (int s = 0; s < endHour - startHour; s++) System.out.printf(" %5d |", avg[d][s]);
+    public static void printHourlyTimeline(int startHour, int endHour, int[] avg) {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t                HOURLY TIMELINE (mins)               ");
+        System.out.println("\t\t\t\t=====================================================");
+        int idx = 0;
+        for (int h = startHour; h < endHour; h++) {
+            System.out.printf("\t\t\t\t| %02d:00-%02d:00 | Avg: %3d |\n", h, h + 1, avg[idx++]);
+        }
+        System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public static void printHeatmap(int startHour, int endHour, int[][] avg) {
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        String pad = "\t\t\t\t";
+        int cells = (endHour - startHour) + 1;
+        sep(pad, cells);
+        System.out.printf(pad + "| %-5s |", "Day");
+        for (int h = startHour; h < endHour; h++) {
+            System.out.printf(" %5s |", h + ":00");
+        }
         System.out.println();
         sep(pad, cells);
+        for (int d = 0; d < 7; d++) {
+            System.out.printf(pad + "| %-5s |", days[d]);
+            for (int s = 0; s < endHour - startHour; s++) {
+                System.out.printf(" %5d |", avg[d][s]);
+            }
+            System.out.println();
+            sep(pad, cells);
+        }
     }
-}
 
-private static void sep(String pad, int cells) {
-    System.out.print(pad);
-    for (int i = 0; i < cells; i++) System.out.print("+-------");
-    System.out.println("+");
-}
+    private static void sep(String pad, int cells) {
+        System.out.print(pad);
+        for (int i = 0; i < cells; i++) {
+            System.out.print("+-------");
+        }
+        System.out.println("+");
+    }
+
+    @SuppressWarnings("unused")
     private static String fit(String s, int w) {
+        if (s == null) s = "";
         if (s.length() >= w) return s.substring(0, w);
         StringBuilder b = new StringBuilder(s);
         while (b.length() < w) b.append(' ');
         return b.toString();
+    }
+
+    public String promptPatientName()    { return Input.getStringInput ("\t\t\t\tEnter Patient Name: "); }
+    public String promptPatientContact() { return Input.getStringInput ("\t\t\t\tEnter Contact Number: "); }
+    public String promptPatientEmail()   { return Input.getStringInput ("\t\t\t\tEnter Email: "); }
+    public String promptPatientGender()  { return Input.getStringInput ("\t\t\t\tEnter Gender (Male/Female): "); }
+    public int    promptPatientAge()     { return Input.getIntegerInput("\t\t\t\tEnter Age: "); }
+    public void displaySingleVisitFound()             { System.out.println("\t\t\t\tSingle visit record found."); }
+    public void displayMultipleVisitsFound()          { System.out.println("\t\t\t\tMultiple visits found. Displaying visit menu..."); }
+    public int    promptUpdateSelectOption()  { return Input.getIntegerInput("\t\t\t\tSelect option: "); }
+    public String promptNewContactNumber()    { return Input.getStringInput ("\t\t\t\tEnter new Contact Number: "); }
+    public String promptNewEmail()            { return Input.getStringInput ("\t\t\t\tEnter new Email: "); }
+    public String promptNewAge()              { return Input.getStringInput ("\t\t\t\tEnter new Age: "); }
+    public void   displayDeleteOptions() {
+        System.out.println("\t\t\t\tDelete Options:");
+        System.out.println("\t\t\t\t1. Delete visit record");
+        System.out.println("\t\t\t\t2. Delete entire patient");
+    }
+    public int    promptDeleteOption()        { return Input.getIntegerInput("\t\t\t\tEnter option (1/2): "); }
+    public void   displayNoVisitRecordsToDelete() { System.out.println("\t\t\t\tNo visit records to delete."); }
+    public void   displayVisitList(Patient patient) {
+        System.out.println("\t\t\t\tVisit Records:");
+        Visit[] visits = patient.getVisits();
+        int count = patient.getVisitCount();
+        for (int i = 0; i < count; i++) {
+            Date d = visits[i].getQueueStart();
+            System.out.println("\t\t\t\t[" + (i + 1) + "] " + (d == null ? "N/A" : d));
+        }
+    }
+    public int    promptVisitNumberToDelete() { return Input.getIntegerInput("\t\t\t\tEnter visit number to delete: "); }
+    public void   displayVisitDeleteSuccess() { System.out.println("\t\t\t\tVisit record deleted successfully."); }
+    public boolean confirmDeletePatient() {
+        String s = Input.getStringInput("\t\t\t\tConfirm delete patient (Y/N): ");
+        return "Y".equalsIgnoreCase(s.trim());
+    }
+    public boolean confirmGetTicket() {
+        String s = Input.getStringInput("\t\t\t\tDo you want to get a ticket now? (Y/N): ");
+        return "Y".equalsIgnoreCase(s.trim());
+    }
+    public void   displayNoTicketIssued() { System.out.println("\t\t\t\tOkay, no ticket will be issued."); }
+    public int    promptQueueReportMenuOption() { return Input.getIntegerInput("\t\t\t\tSelect an option > "); }
+    public void   displayDayOfWeekMenu() {
+        System.out.println("\t\t\t\t1. Monday  2. Tuesday  3. Wednesday  4. Thursday");
+        System.out.println("\t\t\t\t5. Friday  6. Saturday 7. Sunday");
+    }
+    public int    promptDayOfWeek()       { return Input.getIntegerInput("\t\t\t\tChoose day of week (1 - 7): "); }
+    public String promptStartDate()       { return Input.getStringInput ("\t\t\t\tStart Date (dd-MM-yyyy): "); }
+    public String promptEndDate()         { return Input.getStringInput ("\t\t\t\tEnd Date   (dd-MM-yyyy): "); }
+    public int    promptDemographicsMenuOption() { return Input.getIntegerInput("\t\t\t\tSelect option: "); }
+    public void displayNoUndoHistory() {
+        System.out.println("\n\t\t\t\t----------------------------------------------");
+        System.out.println("\t\t\t\tNo undo history found.");
+        System.out.println("\t\t\t\t----------------------------------------------");
+    }
+    public void displayUndoDone(String action, String id) {
+        String msg = switch (action.toLowerCase()) {
+            case "create" -> "Undo: newly created patient removed";
+            case "delete" -> "Undo: deleted patient restored";
+            case "update" -> "Undo: patient reverted to previous data";
+            default       -> "Undo: change reverted";
+        };
+        System.out.println("\n\t\t\t\t----------------------------------------------");
+        System.out.println("\t\t\t\t" + msg + " (" + id + ").");
+        System.out.println("\t\t\t\t----------------------------------------------");
+    }
+    public void displayUndoNoEffect(String action) {
+        System.out.println("\n\t\t\t\t----------------------------------------------");
+        System.out.println("\t\t\t\tUndo: " + action + " had no effect (record not present).");
+        System.out.println("\t\t\t\t----------------------------------------------");
+    }
+    public void displayUndoFailed() {
+        System.out.println("\n\t\t\t\t----------------------------------------------");
+        System.out.println("\t\t\t\tUndo failed: snapshot missing or invalid.");
+        System.out.println("\t\t\t\t----------------------------------------------");
+    }
+    public void displayUndoUnknown() {
+        System.out.println("\n\t\t\t\t----------------------------------------------");
+        System.out.println("\t\t\t\tUnknown history action. Nothing undone.");
+        System.out.println("\t\t\t\t----------------------------------------------");
     }
 }

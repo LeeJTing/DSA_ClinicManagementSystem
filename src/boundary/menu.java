@@ -47,7 +47,7 @@ public class menu {
                 case 3 -> {
                     System.out.println("\n\t\t\t\t=====================================================");
                     System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t|    Thank you for using Hospital Management       |");
+                    System.out.println("\t\t\t\t|    Thank you for using Dental Management         |");
                     System.out.println("\t\t\t\t|                   System!                         |");
                     System.out.println("\t\t\t\t|                                                   |");
                     System.out.println("\t\t\t\t|                   Goodbye!                        |");
