@@ -58,8 +58,8 @@ public class DoctorManagement implements CRUD {
         consultationMap = Master.getConsultationMap();
         prescriptionMap = Master.getPrescriptionMap();
     }
-    
-    public void doctorManagementOuter(){
+
+    public void doctorManagementOuter() {
         updateDutyStatus();
 
         if (login()) {
@@ -289,15 +289,22 @@ public class DoctorManagement implements CRUD {
 
     @Override
     public void deleteInstance() {
+        Staff lastDeletedStaff;
         if (staffmenu.confirmDeleteAccountUI()) {
-            saveHistory(staffFound, "Delete", null, null);
+            // Keep reference for possible undo
+            lastDeletedStaff = staffFound;
 
+            // Perform deletion
             staffMap.remove(staffFound.getStaffID());
             staffmenu.deleteSuccessMsg();
             staffFound = null;
             Master.setStaffMap(staffMap);
+            // undo option
+            if (staffmenu.confirmUndoUI()) {
+                undoDeletion(lastDeletedStaff);
+            }
             staffmenu.logOutMsg();
-            //call main menu();
+
         } else {
             staffmenu.doctorManagementMenu(staffFound);
         }
@@ -544,53 +551,25 @@ public class DoctorManagement implements CRUD {
     }
 
     public void filterExprienceReport() {
-        int option = staffmenu.displayExperienceReportMenu();
-
-        switch (option) {
-            case 1: // Top 3 performers
-                printTopPerformers();
-                break;
-            case 2: // Long Service Award
-                printLongService();
-                break;
-            default:
-                System.out.println("Invalid option.");
-        }
+        int option = staffmenu.promptTopInput();
+        printTopPerformers(option);
     }
 
-    public void printTopPerformers() {
-        int i = 0;
+    public void printTopPerformers(int option) {
         staffmenu.printTopDoctor();
         staffmenu.printExperienceReportHeader();
-        Iterator<Staff> exIterator = doctorReportMap.getIterator();
-        while (exIterator.hasNext() && i < 3) {
-            Staff staff = exIterator.next();
-            staffmenu.experienceReportUI(staff);
-            i++;
-        }
-        staffmenu.printExperienceLine();
-        if (exitConfirmation()) {
-            return;
-        }
-    }
 
-    public void printLongService() {
         int i = 0;
-        staffmenu.printLongServiceTitle();
-        staffmenu.printExperienceReportHeader();
-        Iterator<Staff> exIterator = doctorReportMap.getIterator();
-        while (exIterator.hasNext()) {
-            exIterator.next().setCompare("clinic_years");
-        }
-        doctorReportMap.sorting();
+        Staff staff;
 
-        exIterator = doctorReportMap.getIterator();
-        while (exIterator.hasNext() && i < 3) {
-            Staff staff = exIterator.next();
+        // Keep removing doctors from the data structure and displaying them
+        while (i < option && (staff = doctorReportMap.removeFirst()) != null) {
             staffmenu.experienceReportUI(staff);
             i++;
         }
+
         staffmenu.printExperienceLine();
+
         if (exitConfirmation()) {
             return;
         }
@@ -602,39 +581,43 @@ public class DoctorManagement implements CRUD {
             return;
         }
 
-        int lastKey = historyKey - 1;
-        String lastAction = actionHistory.getValue(lastKey);
-        Staff prevStaff = staffRecordHistory.getValue(lastKey);
+        String lastAction = actionHistory.removeLast();
+        Staff prevStaff = staffRecordHistory.removeLast();
 
         if (lastAction.startsWith("Leave")) {
             String[] parts = lastAction.split(":");
-            int slotNumber = Integer.parseInt(parts[1]);//(date, (1, S000001))
-            LocalDate leaveDate = LocalDate.parse(parts[2]); // restore exact date
+            int slotNumber = Integer.parseInt(parts[1]);
+            LocalDate leaveDate = LocalDate.parse(parts[2]);
 
             MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
 
             if (doctorsOnDuty != null) {
-                doctorsOnDuty.put(slotNumber, prevStaff.getStaffID()); // restore ID
+                doctorsOnDuty.put(slotNumber, prevStaff.getStaffID());
                 staffFound = prevStaff;
                 staffmenu.printUndoMsg("leave");
             }
             viewDutySchedule();
+
+        } else if (lastAction.equals("Update")) {
+            staffMap.put(prevStaff.getStaffID(), prevStaff);
+            staffFound = prevStaff;
+            staffmenu.printUndoMsg("update");
+            displayProfile();
         } else {
-            switch (lastAction) {
-                case "Update":
-                    staffMap.put(prevStaff.getStaffID(), prevStaff);
-                    staffFound = prevStaff;
-                    staffmenu.printUndoMsg("update");
-                    displayProfile();
-                    break;
-                case "Delete":
-                    staffMap.put(prevStaff.getStaffID(), prevStaff);
-                    staffFound = prevStaff;
-                    staffmenu.printUndoMsg("delete");
-                    staffmenu.doctorManagementMenu(staffFound);
-                    break;
-            }
+            staffmenu.printInvalidInput();
         }
     }
 
+    public void undoDeletion(Staff lastDeletedStaff) {
+        if (lastDeletedStaff != null) {
+            staffMap.put(lastDeletedStaff.getStaffID(), lastDeletedStaff);
+            staffFound = lastDeletedStaff;
+
+            staffmenu.printUndoMsg("delete");
+            staffmenu.doctorManagementMenu(staffFound);
+            lastDeletedStaff = null;
+        } else {
+            staffmenu.printInvalidInput();
+        }
+    }
 }

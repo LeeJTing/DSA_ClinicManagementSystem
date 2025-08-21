@@ -206,6 +206,12 @@ public class StaffUI {
         return input.equals("Y");
     }
 
+    public boolean confirmUndoUI() {
+        System.out.print("\tDo you want to undo the last delete? (Y/N): ");
+        String choice = scanner.nextLine().trim().toUpperCase();
+        return choice.equals("Y");
+    }
+
     public void deleteSuccessMsg() {
         System.out.println("\tAccount deleted successfully.");
     }
@@ -303,16 +309,10 @@ public class StaffUI {
         System.out.println("\t--------------------------------------------------------------------------------------------------------");
     }
 
-    public int displayExperienceReportMenu() {
-        System.out.println("        =================================================");
-        System.out.println("        =          Experience Report Option             =");
-        System.out.println("        =================================================");
-        System.out.println("        =         1. Top 3 Experience                   =");
-        System.out.println("        =         2. Long Service Award                 =");
-        System.out.println("        =================================================");
-        System.out.print("\tEnter your choice > ");
-        int menuOption = scanner.nextInt();
-        return menuOption;
+    public int promptTopInput() {
+        System.out.print("\tEnter top value that you want to view > ");
+        int topOption = scanner.nextInt();
+        return topOption;
     }
 
 //    public void experienceReportUI(String staffId, String staffName, int clinicYrs, int industryYrs, int education, int score) {
@@ -346,10 +346,6 @@ public class StaffUI {
         }
     }
 
-    public void printLongServiceTitle() {
-        System.out.println("\n\t\t\t\t\tTop 3 Doctors with Long Service Award\n");
-    }
-
     public void printTopDoctor() {
         System.out.println("\n\t\t\t\t\tTop 3 Most Experience Doctors\n");
     }
@@ -380,4 +376,5 @@ public class StaffUI {
         }
 
     }
+
 }
