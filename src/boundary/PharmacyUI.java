@@ -20,8 +20,6 @@ import utility.MessageUI;
 public class PharmacyUI {
 
     Scanner scanner = new Scanner(System.in);
-    public static final String RED = "\u001B[31m";
-    public static final String RESET = "\u001B[0m";
 
     public int getMainMenuChoice(int alert) {
         int choice;
@@ -32,20 +30,19 @@ public class PharmacyUI {
         System.out.println("\t\t|       2. Update Medicine                          |");
         System.out.println("\t\t|       3. Display Medicine                         |");
         System.out.println("\t\t|       4. Delete Medicine                          |");
-        System.out.println("\t\t|       5. Delete Expired Medicine                  |");
-        System.out.println("\t\t|       6. Medicine Dispensing Summary Report       |");
-        System.out.println("\t\t|       7. Medicine Stock Status Report             |");
+        System.out.println("\t\t|       5. Medicine Dispensing Summary Report       |");
+        System.out.println("\t\t|       6. Medicine Stock Status Report             |");
         System.out.printf(
                 "\t\t%s (%s%d%s)                   |\n",
-                "|       8. Alert Notification",
-                RED, alert, RESET);
-        System.out.println("\t\t|       9. Undo Last Action                         |");
-        System.out.println("\t\t|       10. Exit                                    |");
+                "|       7. Alert Notification",
+                MessageUI.RED, alert, MessageUI.RESET);
+        System.out.println("\t\t|       8. Undo Last Action                         |");
+        System.out.println("\t\t|       9. Exit                                     |");
         System.out.println("\t\t=====================================================");
 
         choice = Input.getIntegerInput("\t\tEnter your choice: ");
 
-        while (choice < 1 || choice > 10) {
+        while (choice < 1 || choice > 9) {
             MessageUI.errorMessage();
             choice = Input.getIntegerInput("\t\tEnter your choice: ");
         }
@@ -319,6 +316,19 @@ public class PharmacyUI {
     public void displayRemoveExpiredMedicineSuccessfully() {
         System.out.println("\t\tAll expired items has been deleted successfully.");
     }
+    
+    public int promptDeleteMenu() {
+        int choice = 0;
+        System.out.println("\n\t\tDelete Medicine:");
+        System.out.println("\t\t1. Delete medicine by ID");
+        System.out.println("\t\t2. Delete expired medicine");
+        System.out.println("\t\t3. Back");
+        
+        while (choice < 1 || choice > 3) {
+            choice = Input.getIntegerInput("\t\tEnter your choice: ");
+        }
+        return choice;
+    }
 
     public boolean promptDeleteMsg() {
         char choice = 'n';
@@ -492,7 +502,7 @@ public class PharmacyUI {
     }
 
     public void displayMedicineNotFound() {
-        System.out.printf("\t\t%s%s%s\n", RED, "No medicine found.", RESET);
+        System.out.printf("\t\t%s%s%s\n", MessageUI.RED, "No medicine found.", MessageUI.RESET);
     }
 
     public void displayWarningMedicineStockStatus(Medicine med) {
@@ -534,18 +544,6 @@ public class PharmacyUI {
         return choice == 'y' || choice == 'Y';
     }
 
-//    public int promptUndoSelection() {
-//        int choice = 0;
-//        System.out.println("\t\tUndo Menu: ");
-//        System.out.println("\t\t1. Last created medicine");
-//        System.out.println("\t\t2. Last edited medicine");
-//        System.out.println("\t\t2. Last deleted medicine");
-//        System.out.println("\t\t4. Back\n");
-//        while (choice < 1 || choice > 4) {
-//            choice = Input.getIntegerInput("\t\tEnter your choice: ");
-//        }
-//        return choice;
-//    }
     public void displayExitMsg() {
         System.out.println("\n\t\tExiting Pharmacy Module.\n");
     }
@@ -558,7 +556,7 @@ public class PharmacyUI {
 
     public void displayExpiredMedicine(Medicine med) {
         System.out.print(med.expiryToString());
-        System.out.println("\t\t----------------------------------------------------------------------------------------------");
+        System.out.println("\t\t-----------------------------------------------------------------------------------------------");
     }
 
     public boolean promptUndoLastAction() {

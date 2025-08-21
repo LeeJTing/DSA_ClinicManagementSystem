@@ -54,7 +54,7 @@ public class PharmacyManagementModule implements CRUD {
         consultationMap = Master.getConsultationMap();
         prescriptionMap = Master.getPrescriptionMap();
     }
-   
+
     public void pharmacyMenu() {
         boolean exit = false;
         alertMap.clear();
@@ -88,26 +88,22 @@ public class PharmacyManagementModule implements CRUD {
                     PharmacyUI.promptReturn();
                     break;
                 case 5:
-                    removeExpiredMedicine();
-                    PharmacyUI.promptReturn();
-                    break;
-                case 6:
                     generateDispensingSummaryReport();
                     PharmacyUI.promptReturn();
                     break;
-                case 7:
+                case 6:
                     generateStockStatusReport();
                     PharmacyUI.promptReturn();
                     break;
-                case 8:
+                case 7:
                     alertGeneration();
                     PharmacyUI.promptReturn();
                     break;
-                case 9:
+                case 8:
                     undoAction();
                     PharmacyUI.promptReturn();
                     break;
-                case 10:
+                case 9:
                     exit = true;
                     PharmacyUI.displayExitMsg();
             }
@@ -208,7 +204,7 @@ public class PharmacyManagementModule implements CRUD {
 
             if (edited) {
                 medicineMap.put(id, medicineFound);
-                actionHistory.put("Edit "+id, beforeEditMed);
+                actionHistory.put("Edit " + id, beforeEditMed);
                 PharmacyUI.displayOperationSuccessfullyMessage("updated");
                 PharmacyUI.displayMedicineDetails(medicineFound);
                 Master.setMedicineMap(medicineMap);
@@ -277,9 +273,29 @@ public class PharmacyManagementModule implements CRUD {
         }
     }
 
-    // delete medicine
+    // delete medicine menu
     @Override
     public void deleteInstance() {
+        int choice = 0;
+
+        while (choice != 3) {
+            choice = PharmacyUI.promptDeleteMenu();
+            switch (choice) {
+                case 1:
+                    deleteMedicine();
+                    break;
+                case 2:
+                    removeExpiredMedicine();
+                    break;
+                case 3:
+                    break;
+            }
+        }
+
+    }
+
+    // delete medicine by id
+    public void deleteMedicine() {
         int i = 0;
         String id;
         Medicine medicineFound;
@@ -314,7 +330,6 @@ public class PharmacyManagementModule implements CRUD {
         } else {
             PharmacyUI.displayMedicineNotFound();
         }
-
     }
 
     // display medicine with only medicine_name, medicine_category, medicine_stock, unit_price
@@ -330,13 +345,13 @@ public class PharmacyManagementModule implements CRUD {
     public void generateDispensingSummaryReport() {
         int choice;
         boolean exit = false;
-        
+
         // clear current medicineDispensedMap
         medicineDispensedMap.clear();
-        
+
         // update medicineDispensedMap
         updateMedicineDispensed();
-        
+
         PharmacyUI.displayDispensingSummaryReportUI();
         displayCustomMedicineList();
 
@@ -509,7 +524,7 @@ public class PharmacyManagementModule implements CRUD {
 
         Medicine compareMed = new Medicine();
         compareMed.setCompare("medicine_stock");
-        
+
         // display the value in descending
         categoryMedicineDispensedMap.sorting();
         Iterator<Medicine> medIt = categoryMedicineDispensedMap.getIterator();
@@ -518,7 +533,7 @@ public class PharmacyManagementModule implements CRUD {
             Medicine med = medIt.next();
             PharmacyUI.displayMedicineListByCategory(med);
         }
-        
+
         // display the value in ascending
         compareMed.setCompare("medicine_stock_asc");
         categoryMedicineDispensedMap.sorting();
@@ -569,7 +584,7 @@ public class PharmacyManagementModule implements CRUD {
             PharmacyUI.displayNoMedicineBeforeExpiryDate(expiryDate);
         }
     }
-    
+
     // Filter the medicine category desired by the user
     private void filterMedicineByCategory(String category) {
         MapInterface<String, Medicine> categoryMedicine;
@@ -621,7 +636,7 @@ public class PharmacyManagementModule implements CRUD {
             }
         }
     }
-    
+
     // Check whether the medicine stock level is under 30
     private void checkLowStock() {
         int alertIndex = alertMap.size() + 1;

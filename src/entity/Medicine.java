@@ -6,6 +6,7 @@ package entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import utility.MessageUI;
 
 /**
  *
@@ -148,14 +149,12 @@ public class Medicine implements Comparable<Medicine> {
     }
 
     public String statusToString() {
-        String red = "\u001B[31m";
-        String reset = "\u001B[0m";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(medicine_expiryDate);
         if (status.equals("Good")) {
             return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %-16s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, status);
         } else {
-            return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %s%-16s%s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, red, status, reset);
+            return String.format("\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %s%-16s%s  |\n", medicine_id, medicine_name, medicine_category, formattedDate, medicine_stock, unit_price, MessageUI.RED, status, MessageUI.RESET);
         }
     }
 
