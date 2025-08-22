@@ -47,7 +47,6 @@ public class PharmacyManagementModule implements CRUD {
     }
 
     private void getAllMap() {
-        Master.initializer();
         medicineMap = Master.getMedicineMap();
         paymentMap = Master.getPaymentMap();
         treatmentMap = Master.getTreatmentMap();
