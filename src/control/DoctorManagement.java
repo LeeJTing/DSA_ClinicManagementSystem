@@ -13,7 +13,9 @@ import entity.Staff;
 import entity.Treatment;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Period;
+import java.time.YearMonth;
 import java.util.Iterator;
 import java.util.function.Function;
 
@@ -28,7 +30,6 @@ import java.util.function.Function;
  */
 public class DoctorManagement implements CRUD {
 
-    public static Initializer daoInitializer = new Initializer();
     private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
     private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
     private static MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
@@ -241,21 +242,25 @@ public class DoctorManagement implements CRUD {
     @Override
     public void createNewInstance() {
         int choice = staffmenu.leaveApplicationUI();
-        LocalDate today = LocalDate.now();
-        LocalDate leaveDate = today.plusDays(choice + 2);
-
-        // Find which slot this staff occupies on that leaveDate
-        MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
-        Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
-
-        if (slotNumber != null) {
-            saveHistory(staffFound, "Leave", slotNumber, leaveDate);
-        }
-
-        staffmenu.promptLeavSuccess(leaveDate);
-        updateLeaveDate(staffFound, leaveDate);
-        if (exitConfirmation()) {
+        if (choice == 8) {
             return;
+        } else {
+            LocalDate today = LocalDate.now();
+            LocalDate leaveDate = today.plusDays(choice + 2);
+
+            // Find which slot this staff occupies on that leaveDate
+            MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
+            Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
+
+            if (slotNumber != null) {
+                saveHistory(staffFound, "Leave", slotNumber, leaveDate);
+            }
+
+            staffmenu.promptLeavSuccess(leaveDate);
+            updateLeaveDate(staffFound, leaveDate);
+            if (exitConfirmation()) {
+                return;
+            }
         }
     }
 
@@ -313,36 +318,47 @@ public class DoctorManagement implements CRUD {
     public void viewDutySchedule() {
         int weekNumber = staffmenu.viewDutyScheduleMenu();
 
-        // Monday of the first week of August 2025
-        LocalDate baseMonday = LocalDate.of(2025, 8, 1).with(DayOfWeek.MONDAY);
+        if (weekNumber == 6) {
+            return;
+        } else {
 
-        // First day of the selected week
-        LocalDate weekStart = baseMonday.plusDays((weekNumber - 1) * 7);
+            YearMonth ym = YearMonth.of(2025, 8);
+            LocalDate firstDayOfMonth = ym.atDay(1);
 
-        staffmenu.printScheduleHeader();
+            // Compute week start correctly
+            LocalDate weekStart = firstDayOfMonth.plusDays((weekNumber - 1) * 7);
 
-        // Loop through 7 days (Monday to Sunday)
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = weekStart.plusDays(i);
-            staffmenu.printDayName(date);
+            staffmenu.printScheduleHeader();
 
-            MapInterface<Integer, String> group = dutyScheduleMap.getValue(date);
+            for (int i = 0; i < 7; i++) {
+                LocalDate date = weekStart.plusDays(i);
 
-            if (group != null) {
-                Object[] staffIds = (Object[]) group.getAllValues();
-                for (Object staffIdObj : staffIds) {
-                    String staffId = String.valueOf(staffIdObj);
-                    Staff staff = staffMap.getValue(staffId);
-                    if (staff != null) {
-                        staffmenu.printDoctorOnDuty(staff.getStaffName());
+                // Stop if date goes past end of month
+                if (date.getMonth() != Month.AUGUST) {
+                    break;
+                }
+
+                staffmenu.printDate(date);
+
+                MapInterface<Integer, String> group = dutyScheduleMap.getValue(date);
+                if (group != null) {
+                    Object[] staffIds = (Object[]) group.getAllValues();
+                    for (Object staffIdObj : staffIds) {
+                        String staffId = String.valueOf(staffIdObj);
+                        Staff staff = staffMap.getValue(staffId);
+                        if (staff != null) {
+                            staffmenu.printDoctorOnDuty(staff.getStaffName());
+                        }
                     }
                 }
+                System.out.println();
             }
-            System.out.println();
-        }
-        staffmenu.printSceduleFooter();
-        if (exitConfirmation()) {
-            return;
+
+            staffmenu.printSceduleFooter();
+
+            if (exitConfirmation()) {
+                return;
+            }
         }
     }
 

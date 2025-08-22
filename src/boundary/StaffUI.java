@@ -229,11 +229,12 @@ public class StaffUI {
             System.out.println("        =================================================");
             System.out.println("        =              Duty Schedule Option             =");
             System.out.println("        =================================================");
-            System.out.println("        =         1. Week 1                             =");
-            System.out.println("        =         2. Week 2                             =");
-            System.out.println("        =         3. Week 3                             =");
-            System.out.println("        =         4. Week 4                             =");
-            System.out.println("        =         5. Back                               =");
+            System.out.println("        =         1. 1 August - 7 August                =");
+            System.out.println("        =         2. 8 August - 14 August               =");
+            System.out.println("        =         3. 15 August - 21 August              =");
+            System.out.println("        =         4. 22 August - 28 August              ="); //remember change back to sept 30
+            System.out.println("        =         5. 29 August - 31 August              ="); //remember change back to sept 30
+            System.out.println("        =         6. Back                               =");
             System.out.println("        =================================================");
             System.out.print("\n\tEnter option > ");
             choice = scanner.nextInt();
@@ -264,7 +265,7 @@ public class StaffUI {
 
     public void printScheduleHeader() {
         System.out.println("\t---------------------------------------------------------------------------------------------------------");
-        System.out.println("\t| Day          | Doctor on Duty                                                                          |");
+        System.out.println("\t| Day           | Doctor on Duty                                                                         |");
         System.out.println("\t---------------------------------------------------------------------------------------------------------");
     }
 
@@ -272,10 +273,10 @@ public class StaffUI {
         System.out.println("\t-----------------------------------------------------------------------");
     }
 
-    public void printDayName(LocalDate date) {
-        String dayName = date.getDayOfWeek().toString();
-        dayName = dayName.charAt(0) + dayName.substring(1).toLowerCase();
-        System.out.print(String.format("\t| %-12s |", dayName));
+    public void printDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+        System.out.printf("\t| %-12s |", date.format(formatter));
+
     }
 
     public void printDoctorOnDuty(String staffName) {
