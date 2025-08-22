@@ -46,13 +46,27 @@ public class PatientManagement implements CRUD {
         return patientId != null && Master.getPatientMap().getValue(patientId) != null;
     }
 
-//    public void login(){
-//        ui.displayUserPageMenu();
-//        String enteredId = ui.promptLoginId();
-//        patientWasDeleted = false;
-//                        Master.setCurrentPatientId(enteredId.toUpperCase());
-//                        handlePatientMenu();
-//    }
+    public void PatientModule() {
+        int choice = ui.displayUserPageMenu();
+        switch (choice) {
+            case 1:
+                createNewInstance();
+                break;
+            case 2:
+                String enteredId = ui.promptLoginId();
+                if (patientExists(enteredId)) {
+                    patientWasDeleted = false;
+                    Master.setCurrentPatientId(enteredId.toUpperCase());
+                    patientManagementModule();
+                } else {
+                    ui.patientNotFound();
+                }
+            default:
+                return;
+        }
+
+    }
+
     public void patientManagementModule() {
         int choice;
         while (true) {
@@ -84,7 +98,6 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    
     public void reportsModule() {
         while (true) {
             PatientManagementUI.displayAverageQueueMenu();
