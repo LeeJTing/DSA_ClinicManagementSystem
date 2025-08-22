@@ -381,6 +381,8 @@ public class ConsultationManagement implements CRUD {
         String num = Master.getCurrentTicket();
         MedicalTreatmentManagement mt = new MedicalTreatmentManagement();
         Object[] staff = staffMap.getAllValues();
+        boolean valid = false;
+        String staffID = "";
 
         Date newAppoinmentDate = null;
         Date newConsultationDate = null;
@@ -395,13 +397,17 @@ public class ConsultationManagement implements CRUD {
             System.out.println(e);
         }
         String currentPatientID = consultUI.promptPatientID();
-        String staffID = consultUI.promptStaffID();
-        for (Object obj : staff) {
-            Staff s = (Staff) obj;
-            if (s.getDutyStatus().equalsIgnoreCase("Leave")) {
-                consultUI.displayStaffLeave();
+        do {
+            staffID = consultUI.promptStaffID();
+            for (Object obj : staff) {
+                Staff s = (Staff) obj;
+                if (s.getDutyStatus().equalsIgnoreCase("Leave")) {
+                    consultUI.displayStaffLeave();
+                }else{
+                    valid = true;
+                }
             }
-        }
+        } while (!valid);
 
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, null, "Pending", "Walk-in", currentPatientID, staffID);
 

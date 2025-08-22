@@ -459,7 +459,7 @@ public class ConsultationUI {
         String staffID = "";
         while (!valid) {
             staffID = Input.getStringInput("\t\t Enter Staff Id:");
-            if (Master.getPatientMap().containsKey(staffID)) {
+            if (Master.getStaffMap().containsKey(staffID)) {
                 valid = true;
             } else {
                 System.out.println("\t\t Invalid Staff ID. Please try again.");
