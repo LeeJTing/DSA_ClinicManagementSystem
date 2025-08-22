@@ -230,7 +230,7 @@ public class ConsultationManagement implements CRUD {
 
     public static void viewTodayAppoinment(Object[] consulations, String staffID) { // current staff (how many patient staff need to see)
         Date currentDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // format only date part
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // format only date part
         String todayStr = sdf.format(currentDate);
         if (!consultationMap.isEmpty()) {
             Consultation.setCompare("appointmentStatus");
@@ -239,7 +239,7 @@ public class ConsultationManagement implements CRUD {
             consultUI.appointmentFieldUI();
             for (Object c : consulations) {
                 Consultation consultation = (Consultation) c;
-                if (consultation.getStaff_Id().equals(staffID) && consultation.getConsultation_date().equals(todayStr)) {
+                if (consultation.getStaff_Id().equals(staffID) && sdf.format(consultation.getConsultation_date()).equals(todayStr)) {
                     consultUI.displayConsultationToString(consultation);
                 }
             }
@@ -248,6 +248,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    //*
     public static void viewTodayAppoinment(Object[] consulations) { // how many patient staff need to see
         if (!consultationMap.isEmpty()) {
             Consultation.setCompare("appointmentStatus");
@@ -260,6 +261,24 @@ public class ConsultationManagement implements CRUD {
         } else {
             consultUI.displayConsultationNotFound();
         }
+
+//        Date currentDate = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // format only date part
+//        String todayStr = sdf.format(currentDate);
+//        if (!consultationMap.isEmpty()) {
+//            Consultation.setCompare("appointmentStatus");
+//            consultationMap.sorting();
+////            consultUI.staffViewAppoinmentUI();
+//            consultUI.appointmentFieldUI();
+//            for (Object c : consulations) {
+//                Consultation consultation = (Consultation) c;
+//                if (consultation.getConsultation_date().equals(todayStr)) {
+//                    consultUI.displayConsultationToString(consultation);
+//                }
+//            }
+//        } else {
+//            consultUI.displayConsultationNotFound();
+//        }
     }
 
     public void searchAppoinment() {
@@ -403,7 +422,7 @@ public class ConsultationManagement implements CRUD {
                 Staff s = (Staff) obj;
                 if (s.getDutyStatus().equalsIgnoreCase("Leave")) {
                     consultUI.displayStaffLeave();
-                }else{
+                } else {
                     valid = true;
                 }
             }
@@ -424,6 +443,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    //*
     public static void addFlwUpAppoinment() {
         Date currentDate = new Date();
         boolean valid = false;
@@ -577,6 +597,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    //*
     public static void viewConsultationFlwUpReport() {
         Object[] consultations = consultationMap.getAllValues();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -627,7 +648,7 @@ public class ConsultationManagement implements CRUD {
             viewTodayAppoinment(consultations);
 
             int choice = consultUI.consultationFlwUpMenu();
-            do {
+//            do {
                 switch (choice) {
                     case 1 ->
                         filterConsultation(consultations, "year");
@@ -643,7 +664,7 @@ public class ConsultationManagement implements CRUD {
 
                     }
                 }
-            } while (choice != 4);
+//            } while (choice != 4);
         }
     }
 
