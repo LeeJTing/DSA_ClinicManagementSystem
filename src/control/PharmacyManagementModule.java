@@ -156,6 +156,7 @@ public class PharmacyManagementModule implements CRUD {
     @Override
     public void updateInstance() {
         readInstance();
+        int lastEditedIndex = actionHistory.size();
         String id = PharmacyUI.promptMedicineID();
         Medicine medicineFound = medicineMap.getValue(id);
         boolean exit = false;
@@ -214,7 +215,7 @@ public class PharmacyManagementModule implements CRUD {
 
             if (edited) {
                 medicineMap.put(id, medicineFound);
-                actionHistory.put("Edit " + id, beforeEditMed);
+                actionHistory.put("Edit " + id + " " + ++lastEditedIndex, beforeEditMed);
                 PharmacyUI.displayOperationSuccessfullyMessage("updated");
                 PharmacyUI.displayMedicineDetails(medicineFound);
                 Master.setMedicineMap(medicineMap);
