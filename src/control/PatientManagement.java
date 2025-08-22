@@ -9,8 +9,11 @@ import adt.LinkedHashMap;
 import boundary.PatientManagementUI;
 import dao.Master;
 import entity.Consultation;
+import entity.Medicine;
 import entity.Patient;
+import entity.Payment;
 import entity.Ticket;
+import entity.Treatment;
 import entity.Visit;
 import utility.IDGenerator;
 
@@ -20,12 +23,15 @@ import java.util.Iterator;
 public class PatientManagement implements CRUD {
 
     private MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
-    private final PatientManagementUI ui;
-    public boolean patientWasDeleted = false;
-
-    private final MapInterface<Integer, Patient> historyPatient = new LinkedHashMap<>();
-    private final MapInterface<Integer, String> historyAction = new LinkedHashMap<>();
+    private MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
+    private MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
+    private MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
+    private MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
+    private MapInterface<Integer, Patient> historyPatient = new LinkedHashMap<>();
+    private MapInterface<Integer, String> historyAction = new LinkedHashMap<>();
     private int historyKey = 1;
+    public boolean patientWasDeleted = false;
+    private final PatientManagementUI ui;
 
     public PatientManagement() {
         this.patientMap = Master.getPatientMap();
@@ -40,6 +46,74 @@ public class PatientManagement implements CRUD {
         return patientId != null && Master.getPatientMap().getValue(patientId) != null;
     }
 
+    
+     public void patientManagementModule() {
+        int choice;
+        while (true) {
+            choice = ui.displayPatientManagementMenu();
+            switch (choice) {
+                case 1 ->
+                    readInstance();
+                case 2 ->
+                    updateInstance();
+                case 3 ->
+                    deleteInstance();
+                case 4 ->
+                    reportsModule();
+                case 5 ->
+                    getTicket();
+                case 6 ->
+                    patientReport();
+                case 7 ->
+                    undo();
+                case 8 -> {
+                    return;
+                }
+                default ->
+                    ui.displayInvalidChoice();
+            }
+            if (patientWasDeleted) {
+                return;
+            }
+        }
+    }
+     
+         public void reportsModule() {
+        while (true) {
+            PatientManagementUI.displayAverageQueueMenu();
+            int ch = ui.promptQueueReportMenuOption();
+            switch (ch) {
+                case 1 ->
+                    reportTimelineByDateRange();
+                case 2 ->
+                    reportTimelineByDayOfWeek();
+                case 3 ->
+                    reportTimelineHeatmapAllData();
+                case 4 -> {
+                    return;
+                }
+                default ->
+                    ui.displayInvalidChoice();
+            }
+        }
+    }
+         
+          public void patientReport() {
+        ui.displayDemographicsHeader();
+        int choice = ui.promptDemographicsMenuOption();
+        switch (choice) {
+            case 1 ->
+                groupByGender();
+            case 2 ->
+                groupByAge();
+            case 3 -> {
+                return;
+            }
+            default ->
+                ui.displayInvalidChoice();
+        }
+    }
+         
     @Override
     public void createNewInstance() {
         ui.displayCreateHeader();
@@ -101,9 +175,12 @@ public class PatientManagement implements CRUD {
             ui.displayUpdateMenu(options, values);
             int choice = ui.promptUpdateSelectOption();
             switch (choice) {
-                case 1 -> values[0] = ui.promptNewContactNumber();
-                case 2 -> values[1] = ui.promptNewEmail();
-                case 3 -> values[2] = ui.promptNewAge();
+                case 1 ->
+                    values[0] = ui.promptNewContactNumber();
+                case 2 ->
+                    values[1] = ui.promptNewEmail();
+                case 3 ->
+                    values[2] = ui.promptNewAge();
                 case 4 -> {
                     saveHistory(patient, "Update");
                     patient.setPatient_contact(values[0]);
@@ -113,8 +190,11 @@ public class PatientManagement implements CRUD {
                     ui.displayUpdateSuccess();
                     return;
                 }
-                case 5 -> { return; }
-                default -> ui.displayInvalidChoice();
+                case 5 -> {
+                    return;
+                }
+                default ->
+                    ui.displayInvalidChoice();
             }
         }
     }
@@ -161,7 +241,8 @@ public class PatientManagement implements CRUD {
                     patientWasDeleted = true;
                 }
             }
-            default -> ui.displayInvalidChoice();
+            default ->
+                ui.displayInvalidChoice();
         }
     }
 
@@ -201,7 +282,8 @@ public class PatientManagement implements CRUD {
                 patientMap.put(id, snapshot);
                 ui.displayUndoDone("update", id);
             }
-            default -> ui.displayUndoUnknown();
+            default ->
+                ui.displayUndoUnknown();
         }
     }
 
@@ -248,32 +330,42 @@ public class PatientManagement implements CRUD {
 
     private void freeTicketsCompletedByConsultation() {
         MapInterface<String, Consultation> consMap = Master.getConsultationMap();
-        if (consMap == null || consMap.isEmpty()) return;
+        if (consMap == null || consMap.isEmpty()) {
+            return;
+        }
         Object[] consKeys = consMap.getAllKeys();
         for (int i = 0; i < consKeys.length; i++) {
             String cKey = (String) consKeys[i];
             Consultation c = consMap.getValue(cKey);
-            if (c == null) continue;
+            if (c == null) {
+                continue;
+            }
             String status = c.getAppointmentStatus() == null ? "" : c.getAppointmentStatus();
-            if (!"Completed".equalsIgnoreCase(status)) continue;
+            if (!"Completed".equalsIgnoreCase(status)) {
+                continue;
+            }
             String pid = c.getPatient_Id() == null ? "" : c.getPatient_Id();
             String sid = c.getStaff_Id() == null ? "" : c.getStaff_Id();
-            if (pid.isEmpty() || sid.isEmpty()) continue;
+            if (pid.isEmpty() || sid.isEmpty()) {
+                continue;
+            }
             Object[] tkKeys = Master.getTicketQueue().getAllKeys();
             for (int j = 0; j < tkKeys.length; j++) {
                 String tkKey = (String) tkKeys[j];
                 Ticket tk = Master.getTicketQueue().getValue(tkKey);
-                if (tk == null) continue;
+                if (tk == null) {
+                    continue;
+                }
                 String tPid = tk.getPatientId() == null ? "" : tk.getPatientId();
                 String tSid = tk.getStaffId() == null ? "" : tk.getStaffId();
                 if (!tPid.isEmpty() && tPid.equals(pid) && tSid.equals(sid)) {
                     Patient p = patientMap.getValue(pid);
                     if (p != null && p.getVisitCount() > 0) {
                         Visit[] vs = p.getVisits();
-                        for (int vi = 0; vi < p.getVisitCount(); vi++) {
-                            Visit v = vs[vi];
-                            if (v != null && tk.getTicketNumber().equals(v.getTicket())) {
-                                v.setTicket("");
+                        for (int count = 0; count < p.getVisitCount(); count++) {
+                            Visit visit = vs[count];
+                            if (visit != null && tk.getTicketNumber().equals(visit.getTicket())) {
+                                visit.setTicket("");
                                 break;
                             }
                         }
@@ -290,7 +382,9 @@ public class PatientManagement implements CRUD {
         for (int i = 0; i < tkKeys.length; i++) {
             String tkKey = (String) tkKeys[i];
             Ticket ticket = Master.getTicketQueue().getValue(tkKey);
-            if (ticket == null) continue;
+            if (ticket == null) {
+                continue;
+            }
             boolean unassigned = ticket.getPatientId() == null || ticket.getPatientId().isEmpty();
             boolean staffOnDuty = todaysDoctors.containsValue(ticket.getStaffId());
             if (unassigned && staffOnDuty) {
@@ -315,7 +409,9 @@ public class PatientManagement implements CRUD {
     }
 
     private void clearTicketQueueAssignment(String ticketNumber) {
-        if (ticketNumber == null || ticketNumber.isEmpty()) return;
+        if (ticketNumber == null || ticketNumber.isEmpty()) {
+            return;
+        }
         Object[] tkKeys = Master.getTicketQueue().getAllKeys();
         for (int i = 0; i < tkKeys.length; i++) {
             String tkKey = (String) tkKeys[i];
@@ -331,20 +427,6 @@ public class PatientManagement implements CRUD {
     private boolean isSameDay(Date a, Date b) {
         java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyyMMdd");
         return f.format(a).equals(f.format(b));
-    }
-
-    public void reportsModule() {
-        while (true) {
-            PatientManagementUI.displayAverageQueueMenu();
-            int ch = ui.promptQueueReportMenuOption();
-            switch (ch) {
-                case 1 -> reportTimelineByDateRange();
-                case 2 -> reportTimelineByDayOfWeek();
-                case 3 -> reportTimelineHeatmapAllData();
-                case 4 -> { return; }
-                default -> ui.displayInvalidChoice();
-            }
-        }
     }
 
     private void reportTimelineByDateRange() {
@@ -364,7 +446,10 @@ public class PatientManagement implements CRUD {
     private void reportTimelineByDayOfWeek() {
         ui.displayDayOfWeekMenu();
         int day = ui.promptDayOfWeek();
-        if (day < 1 || day > 7) { ui.displayInvalidChoice(); return; }
+        if (day < 1 || day > 7) {
+            ui.displayInvalidChoice();
+            return;
+        }
         int[] avg = computeHourlyAvg(null, null, day);
         PatientManagementUI.printHourlyTimeline(8, 18, avg);
     }
@@ -380,23 +465,36 @@ public class PatientManagement implements CRUD {
         Iterator<Patient> it = patientMap.getIterator();
         while (it.hasNext()) {
             Patient p = it.next();
-            if (p == null || p.getVisitCount() == 0) continue;
+            if (p == null || p.getVisitCount() == 0) {
+                continue;
+            }
             Visit[] vs = p.getVisits();
             for (int i = 0; i < p.getVisitCount(); i++) {
                 Visit v = vs[i];
-                if (v == null || v.getQueueStart() == null || v.getQueueEnd() == null) continue;
+                if (v == null || v.getQueueStart() == null || v.getQueueEnd() == null) {
+                    continue;
+                }
                 Date qs = v.getQueueStart();
-                if (start != null && end != null && (qs.before(startOfDay(start)) || qs.after(endOfDay(end)))) continue;
-                if (dayOfWeek != -1 && toMon1Sun7(qs) != dayOfWeek) continue;
+                if (start != null && end != null && (qs.before(startOfDay(start)) || qs.after(endOfDay(end)))) {
+                    continue;
+                }
+                if (dayOfWeek != -1 && toMon1Sun7(qs) != dayOfWeek) {
+                    continue;
+                }
                 int h = hour(qs);
                 if (h >= START && h < END) {
                     int mins = (int) ((v.getQueueEnd().getTime() - qs.getTime()) / 60000);
-                    if (mins > 0) { sum[h - START] += mins; cnt[h - START]++; }
+                    if (mins > 0) {
+                        sum[h - START] += mins;
+                        cnt[h - START]++;
+                    }
                 }
             }
         }
         int[] avg = new int[SLOTS];
-        for (int s = 0; s < SLOTS; s++) avg[s] = cnt[s] > 0 ? sum[s] / cnt[s] : 0;
+        for (int s = 0; s < SLOTS; s++) {
+            avg[s] = cnt[s] > 0 ? sum[s] / cnt[s] : 0;
+        }
         return avg;
     }
 
@@ -407,21 +505,32 @@ public class PatientManagement implements CRUD {
         Iterator<Patient> it = patientMap.getIterator();
         while (it.hasNext()) {
             Patient p = it.next();
-            if (p == null || p.getVisitCount() == 0) continue;
+            if (p == null || p.getVisitCount() == 0) {
+                continue;
+            }
             Visit[] vs = p.getVisits();
             for (int i = 0; i < p.getVisitCount(); i++) {
                 Visit v = vs[i];
-                if (v == null || v.getQueueStart() == null || v.getQueueEnd() == null) continue;
+                if (v == null || v.getQueueStart() == null || v.getQueueEnd() == null) {
+                    continue;
+                }
                 int d = toMon1Sun7(v.getQueueStart()) - 1;
                 int h = hour(v.getQueueStart());
                 if (h >= START && h < END) {
                     int mins = (int) ((v.getQueueEnd().getTime() - v.getQueueStart().getTime()) / 60000);
-                    if (mins > 0) { sum[d][h - START] += mins; cnt[d][h - START]++; }
+                    if (mins > 0) {
+                        sum[d][h - START] += mins;
+                        cnt[d][h - START]++;
+                    }
                 }
             }
         }
         int[][] avg = new int[DAYS][SLOTS];
-        for (int d = 0; d < DAYS; d++) for (int s = 0; s < SLOTS; s++) avg[d][s] = cnt[d][s] > 0 ? sum[d][s] / cnt[d][s] : 0;
+        for (int d = 0; d < DAYS; d++) {
+            for (int s = 0; s < SLOTS; s++) {
+                avg[d][s] = cnt[d][s] > 0 ? sum[d][s] / cnt[d][s] : 0;
+            }
+        }
         return avg;
     }
 
@@ -458,23 +567,16 @@ public class PatientManagement implements CRUD {
         return (dw == java.util.Calendar.SUNDAY) ? 7 : (dw - 1);
     }
 
-    public void patientReport() {
-        ui.displayDemographicsHeader();
-        int choice = ui.promptDemographicsMenuOption();
-        switch (choice) {
-            case 1 -> groupByGender();
-            case 2 -> groupByAge();
-            case 3 -> { return; }
-            default -> ui.displayInvalidChoice();
-        }
-    }
-
     private void groupByGender() {
         int male = 0, female = 0;
         Iterator<Patient> iterator = patientMap.getIterator();
         while (iterator.hasNext()) {
             Patient p = iterator.next();
-            if (p.getPatient_gender().equalsIgnoreCase("Male")) male++; else female++;
+            if (p.getPatient_gender().equalsIgnoreCase("Male")) {
+                male++;
+            } else {
+                female++;
+            }
         }
         ui.displayGenderDemographics(patientMap.size(), male, female);
     }
@@ -485,9 +587,13 @@ public class PatientManagement implements CRUD {
         while (iterator.hasNext()) {
             Patient p = iterator.next();
             int age = p.getAge();
-            if (age <= 35) young++;
-            else if (age <= 55) middle++;
-            else senior++;
+            if (age <= 35) {
+                young++;
+            } else if (age <= 55) {
+                middle++;
+            } else {
+                senior++;
+            }
         }
         ui.displayAgeDemographics(patientMap.size(), young, middle, senior);
     }
@@ -497,58 +603,43 @@ public class PatientManagement implements CRUD {
         return IDGenerator.generateNextID(lastId);
     }
 
-    public void patientManagementModule() {
-        int choice;
-        while (true) {
-            choice = ui.displayPatientManagementMenu();
-            switch (choice) {
-                case 1 -> readInstance();
-                case 2 -> updateInstance();
-                case 3 -> deleteInstance();
-                case 4 -> reportsModule();
-                case 5 -> getTicket();
-                case 6 -> patientReport();
-                case 7 -> undo();
-                case 8 -> { return; }
-                default -> ui.displayInvalidChoice();
-            }
-            if (patientWasDeleted) return;
-        }
-    }
-
     // Find today's visit that already has a ticket.
-private Visit findTodaysTicketedVisit(Patient p) {
-    if (p == null || p.getVisitCount() == 0) return null;
-
-    Date today = new Date();
-    Visit[] vs = p.getVisits();
-    for (int i = 0; i < p.getVisitCount(); i++) {
-        Visit v = vs[i];
-        if (v != null
-                && v.getQueueStart() != null && isSameDay(v.getQueueStart(), today)
-                && v.getTicket() != null && !v.getTicket().isEmpty()) {
-            return v;
+    private Visit findTodaysTicketedVisit(Patient p) {
+        if (p == null || p.getVisitCount() == 0) {
+            return null;
         }
+
+        Date today = new Date();
+        Visit[] vs = p.getVisits();
+        for (int i = 0; i < p.getVisitCount(); i++) {
+            Visit v = vs[i];
+            if (v != null
+                    && v.getQueueStart() != null && isSameDay(v.getQueueStart(), today)
+                    && v.getTicket() != null && !v.getTicket().isEmpty()) {
+                return v;
+            }
+        }
+        return null;
     }
-    return null;
-}
 
 // Find a today's visit without a ticket (to attach a newly issued ticket).
-private Visit findTodaysUnticketedVisit(Patient p) {
-    if (p == null || p.getVisitCount() == 0) return null;
-
-    Date today = new Date();
-    Visit[] vs = p.getVisits();
-    for (int i = 0; i < p.getVisitCount(); i++) {
-        Visit v = vs[i];
-        if (v != null
-                && v.getQueueStart() != null && isSameDay(v.getQueueStart(), today)
-                && (v.getTicket() == null || v.getTicket().isEmpty())) {
-            return v;
+    private Visit findTodaysUnticketedVisit(Patient p) {
+        if (p == null || p.getVisitCount() == 0) {
+            return null;
         }
+
+        Date today = new Date();
+        Visit[] vs = p.getVisits();
+        for (int i = 0; i < p.getVisitCount(); i++) {
+            Visit v = vs[i];
+            if (v != null
+                    && v.getQueueStart() != null && isSameDay(v.getQueueStart(), today)
+                    && (v.getTicket() == null || v.getTicket().isEmpty())) {
+                return v;
+            }
+        }
+        return null;
     }
-    return null;
-}
 
     private void saveHistory(Patient patient, String action) {
         historyPatient.put(historyKey, copyPatient(patient));
@@ -557,7 +648,9 @@ private Visit findTodaysUnticketedVisit(Patient p) {
     }
 
     private Patient copyPatient(Patient src) {
-        if (src == null) return null;
+        if (src == null) {
+            return null;
+        }
         Patient patientCopy = new Patient();
         patientCopy.setPatient_id(src.getPatient_id());
         patientCopy.setPatient_name(src.getPatient_name());
@@ -566,13 +659,17 @@ private Visit findTodaysUnticketedVisit(Patient p) {
         patientCopy.setPatient_gender(src.getPatient_gender());
         patientCopy.setAge(src.getAge());
         Date reg = src.getRegistration_date();
-        if (reg != null) patientCopy.setRegistration_date(new Date(reg.getTime()));
+        if (reg != null) {
+            patientCopy.setRegistration_date(new Date(reg.getTime()));
+        }
         Visit[] vs = src.getVisits();
         int count = src.getVisitCount();
         if (vs != null && count > 0) {
             for (int i = 0; i < count; i++) {
                 Visit v = vs[i];
-                if (v == null) continue;
+                if (v == null) {
+                    continue;
+                }
                 Date qs = v.getQueueStart() == null ? null : new Date(v.getQueueStart().getTime());
                 Date qe = v.getQueueEnd() == null ? null : new Date(v.getQueueEnd().getTime());
                 String tk = v.getTicket();
