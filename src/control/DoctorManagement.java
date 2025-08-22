@@ -168,7 +168,7 @@ public class DoctorManagement implements CRUD {
             case 9:
                 undo();
             case 10:
-                //call main menu()
+                logout();
                 break;
             default:
                 staffmenu.printInvalidInput();
@@ -326,7 +326,7 @@ public class DoctorManagement implements CRUD {
                 undoDeletion(lastDeletedStaff);
             }
             staffmenu.logOutMsg();
-
+            //call main menu();
         } else {
             staffmenu.doctorManagementMenu(staffFound);
         }
@@ -657,5 +657,14 @@ public class DoctorManagement implements CRUD {
         } else {
             staffmenu.printInvalidInput();
         }
+    }
+
+    public void logout() {
+        if (staffFound != null) {
+            staffmenu.logOutMsg();
+        }
+        staffFound = null;
+        Master.setCurrentStaffId("");
+        //call main menu()
     }
 }
