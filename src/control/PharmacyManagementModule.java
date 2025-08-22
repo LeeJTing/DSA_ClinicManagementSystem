@@ -53,6 +53,17 @@ public class PharmacyManagementModule implements CRUD {
         consultationMap = Master.getConsultationMap();
         prescriptionMap = Master.getPrescriptionMap();
     }
+    
+    public static void main(String[] args) {
+        Master.initializer();
+        medicineMap = Master.getMedicineMap();
+        paymentMap = Master.getPaymentMap();
+        treatmentMap = Master.getTreatmentMap();
+        consultationMap = Master.getConsultationMap();
+        prescriptionMap = Master.getPrescriptionMap();
+        PharmacyManagementModule pmm = new PharmacyManagementModule();
+        pmm.pharmacyMenu();
+    }
 
     public void pharmacyMenu() {
         boolean exit = false;
@@ -698,6 +709,7 @@ public class PharmacyManagementModule implements CRUD {
                     medicineMap.put(lastMed.getMedicineID(), lastMed); // Replace / Restore the editted and removed medicine
                 }
                 Master.setMedicineMap(medicineMap);
+                medicineMap.keyReverseSorting();
                 PharmacyUI.displayOperationSuccessfullyMessage(action + " Operation restored");
             }
         } else {
