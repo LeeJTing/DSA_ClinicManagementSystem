@@ -32,8 +32,8 @@ public class ConsultationManagement implements CRUD {
     private static MapInterface<String, String> timeSlotMap = new ChainBucket<>();
 
     private static final ConsultationUI consultUI = new ConsultationUI();
-    private static final String currentPatientId = Master.getCurrentPatientId();
-    private static final String currentStaffId = Master.getCurrentStaffId();
+    private static String currentPatientId = Master.getCurrentPatientId();
+    private static String currentStaffId = Master.getCurrentStaffId();
     private static MapInterface<String, Consultation> consultationRecordHistory = new ChainBucket<>();
     private static MapInterface<String, String> actionHistory = new ChainBucket<>();
 
@@ -64,8 +64,8 @@ public class ConsultationManagement implements CRUD {
     }
 
     public void consultationMenu() {
-//        String currentPatientId = Master.getCurrentPatientId();
-//        String currentStaffId = Master.getCurrentStaffId();
+        currentPatientId = Master.getCurrentPatientId();
+        currentStaffId = Master.getCurrentStaffId();
         int choice = 0;
 
         do {

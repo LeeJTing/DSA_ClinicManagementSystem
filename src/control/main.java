@@ -47,6 +47,10 @@ public class main {
                             case 3:
                                 pharmacy.pharmacyMenu();
                                 break;
+                            case 4:
+                                // consultation for walk-in
+                                
+                                break;
                             default:
                                 choice = 5;
                                 break;
@@ -60,14 +64,14 @@ public class main {
                         selection = menu.consultationMenu();
                         switch (selection) {
                             case 1:
-                                String staffId = menu.askStaffID();
-                                staffId = staffId.toUpperCase();
-                                Master.setCurrentStaffId(staffId);
-                                break;
-                            case 2:
                                 String patientId = menu.askPatientID();
                                 patientId = patientId.toUpperCase();
                                 Master.setCurrentPatientId(patientId);
+                                break;
+                            case 2:
+                                String staffId = menu.askStaffID();
+                                staffId = staffId.toUpperCase();
+                                Master.setCurrentStaffId(staffId);
                                 break;
                             default:
                                 selection = 3;

@@ -39,7 +39,8 @@ public class menu {
         System.out.println("\t\t\t\t|       1. Doctor Management Module                 |");
         System.out.println("\t\t\t\t|       2. Medical Treatment Management Module      |");
         System.out.println("\t\t\t\t|       3. Pharmacy Management Module               |");
-        System.out.println("\t\t\t\t|       4. Exit                                     |");
+        System.out.println("\t\t\t\t|       4. Consultation for Walk-in                 |");
+        System.out.println("\t\t\t\t|       5. Exit                                     |");
         System.out.println("\t\t\t\t=====================================================");
         do{
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
