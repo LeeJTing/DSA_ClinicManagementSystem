@@ -87,6 +87,7 @@ public class PatientManagement implements CRUD {
                 case 7 ->
                     undo();
                 case 8 -> {
+                    Master.setCurrentPatientId("");
                     return;
                 }
                 default ->

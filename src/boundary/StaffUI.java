@@ -34,7 +34,7 @@ public class StaffUI {
             System.out.println("        =         7. Performance Summary Report         =");
             System.out.println("        =         8. Experience Level Report            =");
             System.out.println("        =         9. Undo Operation                     =");
-            System.out.println("        =         10.Back                               =");
+            System.out.println("        =         10.Logout                             =");
             System.out.println("        =================================================");
             System.out.print("\n\tEnter yout choice > ");
             doctorManagementChoice = scanner.nextInt();

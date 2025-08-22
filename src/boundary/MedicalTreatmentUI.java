@@ -319,7 +319,6 @@ public class MedicalTreatmentUI {
     }
 
     public void showUpdatedTreatment(Treatment treatment, Prescription prescription, String staffName, String patientName) {
-        System.out.println("\n          The Treatment have been updateds!!");
         displaySpecificTreatmentRecord(treatment, prescription, staffName, patientName);
     }
 
