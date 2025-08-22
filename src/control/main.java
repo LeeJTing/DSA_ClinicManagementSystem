@@ -49,7 +49,7 @@ public class main {
                                 break;
                             case 4:
                                 // consultation for walk-in
-                                
+                                consult.addWalkInAppoinment();
                                 break;
                             default:
                                 choice = 5;

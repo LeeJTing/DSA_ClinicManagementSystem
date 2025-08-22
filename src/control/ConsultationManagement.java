@@ -138,30 +138,30 @@ public class ConsultationManagement implements CRUD {
             }
         } while (choice != 10);
     }
-
-    public static void addAppointmentMenu() {
-        int choice = 0;
-        do {
-            choice = consultUI.addAppointmentMenu();
-            switch (choice) {
-                case 1 -> // online
-                    addOnlineAppoinment();
-                case 2 -> // walk in
-                    addWalkInAppoinment();
-                case 3 -> {
-                    consultUI.displayBackMsg();
-                }
-                default ->
-                    consultUI.displayInvalidOptionMsg();
-            }
-            // back
-        } while (choice != 3);
-    }
+//
+//    public static void addAppointmentMenu() {
+//        int choice = 0;
+//        do {
+//            choice = consultUI.addAppointmentMenu();
+//            switch (choice) {
+//                case 1 -> // online
+//                    addOnlineAppoinment();
+//                case 2 -> // walk in
+//                    addWalkInAppoinment();
+//                case 3 -> {
+//                    consultUI.displayBackMsg();
+//                }
+//                default ->
+//                    consultUI.displayInvalidOptionMsg();
+//            }
+//            // back
+//        } while (choice != 3);
+//    }
 
     @Override
     public void createNewInstance() {
         if (currentPatientId != null && !currentPatientId.isEmpty()) {
-            addAppointmentMenu();
+            addOnlineAppoinment();
         } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
             addFlwUpAppoinment();
         } else {
@@ -210,7 +210,6 @@ public class ConsultationManagement implements CRUD {
         } else {
             consultUI.displayConsultationNotFound(consultationID);
         }
-
     }
 
     public static void viewPatientAppoinment(Object[] consulations, String patientID) { // current Patient (today appoinment)
@@ -374,7 +373,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    public static void addWalkInAppoinment() {
+    public void addWalkInAppoinment() {
         viewConsultationSchedule();
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -410,6 +409,7 @@ public class ConsultationManagement implements CRUD {
             consultationMap.put(newConsultationID, newConsultation);
             consultationRecordHistory.put(newConsultationID, newConsultation);
             actionHistory.put(newConsultationID, "Create");
+            Master.setConsultationMap(consultationMap);
             consultUI.displayConsultationOperationMsg(newConsultationID, "Create Walk-in", "successfully");
             consultUI.displayConsultationWalkInNumber(num);
             mt.consultationToTreatment(newConsultationID);
