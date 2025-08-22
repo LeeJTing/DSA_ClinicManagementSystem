@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.function.Function;
 import utility.IDGenerator;
 import utility.Input;
@@ -380,6 +379,7 @@ public class ConsultationManagement implements CRUD {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String num = Master.getCurrentTicket();
+        MedicalTreatmentManagement mt = new MedicalTreatmentManagement();
         Object[] staff = staffMap.getAllValues();
 
         Date newAppoinmentDate = null;
@@ -411,6 +411,7 @@ public class ConsultationManagement implements CRUD {
             actionHistory.put(newConsultationID, "Create");
             consultUI.displayConsultationOperationMsg(newConsultationID, "Create Walk-in", "successfully");
             consultUI.displayConsultationWalkInNumber(num);
+            mt.consultationToTreatment(newConsultationID);
         } else {
             consultUI.displayFailedMsg("Create Appoinment ");
         }
@@ -713,6 +714,7 @@ public class ConsultationManagement implements CRUD {
             }
             case "Delete" -> {
                 consultationMap.put(lastId, lastConsult);
+                consultationMap.keyReverseSorting();
                 consultUI.displaySuccessfullyMsg(lastId, " Undo Delete");
             }
         }

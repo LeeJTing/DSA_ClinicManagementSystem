@@ -278,9 +278,11 @@ public class ConsultationUI {
     }
 
     public void consultationScheduleUI() {
-        System.out.println("\t\t ===============================================");
-        System.out.println("\t\t |     Consultation Schedule (Next 3 Days)     |");
-        System.out.println("\t\t ===============================================");
+        int tableWidth = 178; // total width including borders
+        String border = "=".repeat(tableWidth);
+        System.out.println("\t\t " + border);
+        System.out.println("\t\t |                                                                      Consultation Schedule (Next 3 Days)                                                                       |");
+        System.out.println("\t\t " + border);
     }
 
     public void appointmentFieldUI() {
