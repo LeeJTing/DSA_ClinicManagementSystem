@@ -566,6 +566,7 @@ public class ConsultationManagement implements CRUD {
                 consultUI.displayLine();
                 // move to the next day
             }
+            consultUI.displayspace();
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
     }

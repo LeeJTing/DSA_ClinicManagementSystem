@@ -31,7 +31,7 @@ public class ConsultationUI {
 
         int choice;
 
-        System.out.println("\n\t\t =================================================");
+        System.out.println("\t\t =================================================");
         System.out.println("\t\t =              Consultation Menu                =");
         System.out.println("\t\t =================================================");
         System.out.println("\t\t =         1. View Appointment                   =");
@@ -346,6 +346,10 @@ public class ConsultationUI {
         System.out.printf("\t\t | %-25s | %-19s |\n", "Type", consultation.getType());
         System.out.printf("\t\t | %-25s | %-19s |\n", "Staff ID", consultation.getStaff_Id());
         System.out.println("\t\t " + border);
+    }
+    
+    public void displayspace(){
+        System.out.println("");
     }
 
     // promptUI
