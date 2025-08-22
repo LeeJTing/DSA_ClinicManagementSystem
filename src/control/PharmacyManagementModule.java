@@ -54,16 +54,16 @@ public class PharmacyManagementModule implements CRUD {
         prescriptionMap = Master.getPrescriptionMap();
     }
     
-    public static void main(String[] args) {
-        Master.initializer();
-        medicineMap = Master.getMedicineMap();
-        paymentMap = Master.getPaymentMap();
-        treatmentMap = Master.getTreatmentMap();
-        consultationMap = Master.getConsultationMap();
-        prescriptionMap = Master.getPrescriptionMap();
-        PharmacyManagementModule pmm = new PharmacyManagementModule();
-        pmm.pharmacyMenu();
-    }
+//    public static void main(String[] args) {
+//        Master.initializer();
+//        medicineMap = Master.getMedicineMap();
+//        paymentMap = Master.getPaymentMap();
+//        treatmentMap = Master.getTreatmentMap();
+//        consultationMap = Master.getConsultationMap();
+//        prescriptionMap = Master.getPrescriptionMap();
+//        PharmacyManagementModule pmm = new PharmacyManagementModule();
+//        pmm.pharmacyMenu();
+//    }
 
     public void pharmacyMenu() {
         boolean exit = false;

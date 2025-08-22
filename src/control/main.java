@@ -59,26 +59,27 @@ public class main {
                 case 3:
                     // consultation
                     int selection = 0;
-                    while(selection != 3){
-                    selection = menu.consultationMenu();
-                    switch(selection){
-                        case 1:
-                            String staffId = menu.askStaffID();
-                            staffId = staffId.toUpperCase();
-                            Master.setCurrentStaffId(staffId);
-                            
-                            break;
-                        case 2:
-                            String patientId = menu.askPatientID();
-                            patientId = patientId.toUpperCase();
-                            Master.setCurrentPatientId(patientId);
-                            
-                            break;
-                        default:
-                            selection = 3;
-                            break;
-                    }
-                    break;
+                    while (selection != 3) {
+                        selection = menu.consultationMenu();
+                        switch (selection) {
+                            case 1:
+                                String staffId = menu.askStaffID();
+                                staffId = staffId.toUpperCase();
+                                Master.setCurrentStaffId(staffId);
+
+                                break;
+                            case 2:
+                                String patientId = menu.askPatientID();
+                                patientId = patientId.toUpperCase();
+                                Master.setCurrentPatientId(patientId);
+
+                                break;
+                            default:
+                                selection = 3;
+                                break;
+                        }
+
+                        break;
                     }
                 default:
                     // exit
