@@ -46,8 +46,14 @@ public class PatientManagement implements CRUD {
         return patientId != null && Master.getPatientMap().getValue(patientId) != null;
     }
 
-    
-     public void patientManagementModule() {
+//    public void login(){
+//        ui.displayUserPageMenu();
+//        String enteredId = ui.promptLoginId();
+//        patientWasDeleted = false;
+//                        Master.setCurrentPatientId(enteredId.toUpperCase());
+//                        handlePatientMenu();
+//    }
+    public void patientManagementModule() {
         int choice;
         while (true) {
             choice = ui.displayPatientManagementMenu();
@@ -77,8 +83,9 @@ public class PatientManagement implements CRUD {
             }
         }
     }
-     
-         public void reportsModule() {
+
+    
+    public void reportsModule() {
         while (true) {
             PatientManagementUI.displayAverageQueueMenu();
             int ch = ui.promptQueueReportMenuOption();
@@ -97,8 +104,8 @@ public class PatientManagement implements CRUD {
             }
         }
     }
-         
-          public void patientReport() {
+
+    public void patientReport() {
         ui.displayDemographicsHeader();
         int choice = ui.promptDemographicsMenuOption();
         switch (choice) {
@@ -113,7 +120,7 @@ public class PatientManagement implements CRUD {
                 ui.displayInvalidChoice();
         }
     }
-         
+
     @Override
     public void createNewInstance() {
         ui.displayCreateHeader();
@@ -128,6 +135,7 @@ public class PatientManagement implements CRUD {
                 new Date()
         );
         patientMap.put(id, patient);
+
         saveHistory(patient, "Create");
         ui.displayCreateSuccess(id);
     }
@@ -136,6 +144,7 @@ public class PatientManagement implements CRUD {
     public void readInstance() {
         String currentPatientId = Master.getCurrentPatientId();
         Patient patient = Master.getPatientMap().getValue(currentPatientId);
+        String[] visitDates = new String[patient.getVisitCount()];
         if (patient == null) {
             ui.displayNotFound("Patient record");
             return;
@@ -145,8 +154,8 @@ public class PatientManagement implements CRUD {
             PatientManagementUI.displayProfile(patient, patient.getVisits()[0]);
             return;
         }
+//        }
         ui.displayMultipleVisitsFound();
-        String[] visitDates = new String[patient.getVisitCount()];
         for (int i = 0; i < patient.getVisitCount(); i++) {
             visitDates[i] = patient.getDateFormat().format(patient.getVisits()[i].getQueueStart());
         }

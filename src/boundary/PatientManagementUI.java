@@ -391,6 +391,7 @@ public class PatientManagementUI {
         return b.toString();
     }
 
+    public String promptLoginId(){return Input.getStringInput("\t\t\t\tEnter your patient ID: ");}
     public String promptPatientName()    { return Input.getStringInput ("\t\t\t\tEnter Patient Name: "); }
     public String promptPatientContact() { return Input.getStringInput ("\t\t\t\tEnter Contact Number: "); }
     public String promptPatientEmail()   { return Input.getStringInput ("\t\t\t\tEnter Email: "); }
