@@ -264,9 +264,9 @@ public class StaffUI {
     }
 
     public void printScheduleHeader() {
-        System.out.println("\t---------------------------------------------------------------------------------------------------------");
-        System.out.println("\t| Day           | Doctor on Duty                                                                         |");
-        System.out.println("\t---------------------------------------------------------------------------------------------------------");
+        System.out.println("\t-----------------------------------------------------------------------------------------------");
+        System.out.println("\t| Day              | Doctor on Duty                                                           |");
+        System.out.println("\t-----------------------------------------------------------------------------------------------");
     }
 
     public void printLine() {
@@ -275,7 +275,7 @@ public class StaffUI {
 
     public void printDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-        System.out.printf("\t| %-12s |", date.format(formatter));
+        System.out.printf("\t| %-16s |", date.format(formatter));
 
     }
 
@@ -284,7 +284,7 @@ public class StaffUI {
     }
 
     public void printSceduleFooter() {
-        System.out.println("\t---------------------------------------------------------------------------------------------------------");
+        System.out.println("\t-----------------------------------------------------------------------------------------------");
     }
 
     public int displayPerformanceReportMenu() {
@@ -376,6 +376,21 @@ public class StaffUI {
                 break;
         }
 
+    }
+
+    public void displayNotificationMsg(String shift, Staff staff) {
+        switch (shift) {
+            case "first":
+                System.out.println("\n\tHello, Dr " + staff.getStaffName() + ", you are the FIRST(Slot 1) doctor on duty today");
+                break;
+            case "middle":
+                System.out.println("\n\tHello, Dr " + staff.getStaffName() + ", you are the MIDDLE(Slot 2) doctor on duty today");
+                break;
+            case "last":
+                System.out.println("\n\tHello, Dr " + staff.getStaffName() + ", you are the LAST(Slot 3) doctor on duty today");
+                break;
+
+        }
     }
 
 }

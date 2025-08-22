@@ -3,7 +3,6 @@ package control;
 import adt.LinkedHashMap;
 import adt.MapInterface;
 import boundary.StaffUI;
-import dao.Initializer;
 import dao.Master;
 import entity.Consultation;
 import entity.Medicine;
@@ -11,7 +10,6 @@ import entity.Payment;
 import entity.Prescription;
 import entity.Staff;
 import entity.Treatment;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
@@ -72,6 +70,24 @@ public class DoctorManagement implements CRUD {
         }
     }
 
+    public void notifyDoctor() {
+        LocalDate today = LocalDate.now();
+        var doctorsOnDuty = dutyScheduleMap.getValue(today);
+        String staffId = staffFound.getStaffID();
+
+        // Check if this doctor is first or last on duty
+        String firstDoctorId = doctorsOnDuty.getFront();
+        String lastDoctorId = doctorsOnDuty.getLast();
+
+        if (staffId.equals(firstDoctorId)) {
+            staffmenu.displayNotificationMsg("first", staffFound);
+        } else if (staffId.equals(lastDoctorId)) {
+            staffmenu.displayNotificationMsg("last", staffFound);
+        } else {
+            staffmenu.displayNotificationMsg("middle", staffFound);
+        }
+    }
+
     public void updateDutyStatus() {
         LocalDate today = LocalDate.now();
         var doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
@@ -110,6 +126,7 @@ public class DoctorManagement implements CRUD {
                 if (staffFound.getStaffPassword().equals(password)) {
                     Master.setCurrentStaffId(staffId);
                     staffmenu.printWelcomeMsg(staffFound.getStaffName());
+                    notifyDoctor();
                     authenticated = true;
                 } else {
                     staffmenu.printInvalidInput();
@@ -611,6 +628,8 @@ public class DoctorManagement implements CRUD {
                 doctorsOnDuty.put(slotNumber, prevStaff.getStaffID());
                 staffFound = prevStaff;
                 staffmenu.printUndoMsg("leave");
+                dutyScheduleMap.put(leaveDate, doctorsOnDuty);
+                Master.setDutyScheduleMap(dutyScheduleMap);
             }
             viewDutySchedule();
 
@@ -618,6 +637,7 @@ public class DoctorManagement implements CRUD {
             staffMap.put(prevStaff.getStaffID(), prevStaff);
             staffFound = prevStaff;
             staffmenu.printUndoMsg("update");
+            Master.setStaffMap(staffMap);
             displayProfile();
         } else {
             staffmenu.printInvalidInput();
@@ -631,6 +651,8 @@ public class DoctorManagement implements CRUD {
 
             staffmenu.printUndoMsg("delete");
             staffmenu.doctorManagementMenu(staffFound);
+            staffMap.keyReverseSorting();
+            Master.setStaffMap(staffMap);
             lastDeletedStaff = null;
         } else {
             staffmenu.printInvalidInput();
