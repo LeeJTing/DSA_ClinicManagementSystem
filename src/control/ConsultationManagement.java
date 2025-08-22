@@ -136,7 +136,7 @@ public class ConsultationManagement implements CRUD {
                 default ->
                     consultUI.displayInvalidOptionMsg();
             }
-        } while (choice != 8);
+        } while (choice != 10);
     }
 
     public static void addAppointmentMenu() {
