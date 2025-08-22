@@ -4,6 +4,7 @@
  */
 package control;
 
+import adt.LinkedHashMap;
 import adt.MapInterface;
 import boundary.ConsultationUI;
 import dao.Master;
@@ -12,9 +13,12 @@ import entity.Staff;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.function.Function;
 import utility.IDGenerator;
 import utility.Input;
+import utility.MessageUI;
 
 /**
  *
@@ -22,20 +26,47 @@ import utility.Input;
  */
 public class ConsultationManagement implements CRUD {
 
+    private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
+    private static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
+    private static MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
+    private static MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
+    private static MapInterface<String, String> timeSlotMap = new LinkedHashMap<>();
+
+    private static final ConsultationUI consultUI = new ConsultationUI();
+//    private static final String currentPatientId = Master.getCurrentPatientId();
+    private static final String currentStaffId = Master.getCurrentStaffId();
+    private static MapInterface<String, Consultation> consultationRecordHistory = new LinkedHashMap<>();
+    private static MapInterface<String, String> actionHistory = new LinkedHashMap<>();
+
+    private static final String currentPatientId = "P000001";
+//    private static final String currentStaffId = "S000001";
+
     public static void main(String[] args) {
         Master.initializer();
+        consultationMap = Master.getConsultationMap();
+        staffMap = Master.getStaffMap();
+        doctorAMap = Master.getDoctorAMap();
+        doctorBMap = Master.getDoctorBMap();
+        timeSlotMap = Master.getTimeSlotMap();
+
         ConsultationManagement c = new ConsultationManagement();
-        c.mainMenu();
+        c.consultationMenu();
     }
 
-    public void mainMenu() {
-        Master.initializer();
-        String currentPatientId = Master.getCurrentPatientId();
-        String currentStaffId = Master.getCurrentStaffId();
+//    public ConsultationManagement() {
+//        getAllMap();
+//    }
+//    private void getAllMap() {
+//        Master.initializer();
+//        consulationMap = Master.getConsultationMap();
+//    }
+    public void consultationMenu() {
+//        String currentPatientId = Master.getCurrentPatientId();
+//        String currentStaffId = Master.getCurrentStaffId();
         int choice = 0;
 
         do {
-            choice = ConsultationUI.consultationMenu();
+            choice = consultUI.consultationMenu();
             switch (choice) {
                 case 1 -> // view Appointment (Patient and docktor)
                     readInstance();
@@ -46,7 +77,7 @@ public class ConsultationManagement implements CRUD {
 //                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
 //                        searchAppoinment();
 //                    } else {
-//                        System.out.println("\t\t No user is currently logged in.");
+//            consultUI.displayCurrentUserMsg();
 //                    }
                 }
                 case 3 -> // add appoinment (walk in / online)
@@ -58,7 +89,8 @@ public class ConsultationManagement implements CRUD {
 //                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
 //                        System.out.println("\t\t The Staff not avaliable update appoinment");
 //                    } else {
-//                        System.out.println("\t\t No user is currently logged in.");
+//            consultUI.displayCurrentUserMsg();
+
 //                    }
                 }
                 case 5 -> { // update Appointment (patient)
@@ -68,7 +100,8 @@ public class ConsultationManagement implements CRUD {
 //                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
 //                        System.out.println("\t\t The Staff not avaliable update appoinment");
 //                    } else {
-//                        System.out.println("\t\t No user is currently logged in.");
+//            consultUI.displayCurrentUserMsg();
+
 //                    }
                 }
                 case 6 -> // view consultation schedule (Patient)
@@ -80,7 +113,8 @@ public class ConsultationManagement implements CRUD {
 //                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
 //                        viewConsultationFlwUpReport();
 //                    } else {
-//                        System.out.println("\t\t No user is currently logged in.");
+//            consultUI.displayCurrentUserMsg();
+
 //                    }
                 }
                 case 8 -> { // view Consultation Valume Report
@@ -90,32 +124,35 @@ public class ConsultationManagement implements CRUD {
 //                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
 //                        viewConsultationValumeReport();
 //                    } else {
-//                        System.out.println("\t\t No user is currently logged in.");
+//                    consultUI.displayCurrentUserMsg();
 //                    }
                 }
-                case 9 -> {        // back
-
+                case 9 -> {        // undo
+                    undo();
+                }
+                case 10 -> {        // back
+                    consultUI.displayExitMsg();
                 }
                 default ->
-                    throw new AssertionError();
+                    consultUI.displayInvalidOptionMsg();
             }
         } while (choice != 8);
     }
 
     public static void addAppointmentMenu() {
         int choice = 0;
-
         do {
-            choice = ConsultationUI.addAppointmentMenu();
+            choice = consultUI.addAppointmentMenu();
             switch (choice) {
                 case 1 -> // online
                     addOnlineAppoinment();
                 case 2 -> // walk in
                     addWalkInAppoinment();
                 case 3 -> {
+                    consultUI.displayBackMsg();
                 }
                 default ->
-                    throw new AssertionError();
+                    consultUI.displayInvalidOptionMsg();
             }
             // back
         } while (choice != 3);
@@ -123,39 +160,27 @@ public class ConsultationManagement implements CRUD {
 
     @Override
     public void createNewInstance() {
-//        String currentPatientId = "P000001";
-        String currentStaffId = "S000001";
-        String currentPatientId = Master.getCurrentPatientId();
-//        String currentStaffId = Master.getCurrentStaffId();
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        Object[] consulations = consulationMap.getAllValues();
-
         if (currentPatientId != null && !currentPatientId.isEmpty()) {
             addAppointmentMenu();
         } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
             addFlwUpAppoinment();
         } else {
-            System.out.println("\t\t No user is currently logged in.");
+            consultUI.displayCurrentUserMsg();
         }
     }
 
     @Override
     public void readInstance() {
-        String currentPatientId = "P000001";
-//        String currentStaffId = "S000001";
-//        String currentPatientId = Master.getCurrentPatientId();
-        String currentStaffId = Master.getCurrentStaffId();
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        Object[] consulations = consulationMap.getAllValues();
-
+        Consultation.setCompare("appointmentStatus");
+        consultationMap.sorting();
+        Object[] consulations = consultationMap.getAllValues();
         if (currentPatientId != null && !currentPatientId.isEmpty()) {
             viewPatientAppoinment(consulations, currentPatientId);
         } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
             viewTodayAppoinment(consulations, currentStaffId);
         } else {
-            System.out.println("\t\t No user is currently logged in.");
+            consultUI.displayCurrentUserMsg();
         }
-
     }
 
     @Override
@@ -166,126 +191,196 @@ public class ConsultationManagement implements CRUD {
     @Override
     public void deleteInstance() {
         boolean confirm;
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        ConsultationUI.deleteAppoinmentUI();
-        String consultationID = ConsultationUI.promptConsultationID();
-        Consultation consultationFound = consulationMap.getValue(consultationID);
+        consultUI.deleteAppoinmentUI();
+        String consultationID = consultUI.promptConsultationID();
+        Consultation consultationFound = consultationMap.getValue(consultationID);
 
-        ConsultationUI.patientViewAppoinmentUI();
-        ConsultationUI.displayAppoinment(consultationFound);
-        confirm = Input.getBooleanInput("\t\t Are you sure you want to delete this consultation? ");
-        if (confirm) {
-            consulationMap.remove(consultationID);
-            System.out.println("\t\t Consultation with ID " + consultationID + " deleted successfully.");
+        if (consultationMap.size() != 0) {
+            consultUI.patientViewAppoinmentUI();
+            consultUI.displayAppoinment(consultationFound);
+            confirm = consultUI.promptDeteleMsg();
+            if (confirm) {
+                consultationRecordHistory.put(consultationID, consultationFound);
+                actionHistory.put(consultationID, "Delete");
+                consultationMap.remove(consultationID);
+                consultUI.displaySuccessfullyMsg(consultationID, "deleted");
+            } else {
+                consultUI.displayConsultationOperationMsg(consultationID, "Delete", "failed");
+            }
+        } else {
+            consultUI.displayConsultationNotFound(consultationID);
         }
-//        else{
-//            
-//        }
 
     }
 
     public static void viewPatientAppoinment(Object[] consulations, String patientID) { // current Patient (today appoinment)
-        ConsultationUI.patientViewAppoinmentUI();
-        for (Object c : consulations) {
-            Consultation consultation = (Consultation) c;
-            if (consultation.getPatient_Id().equals(patientID)) {
-                ConsultationUI.displayAppoinment(consultation);
+        if (!consultationMap.isEmpty()) {
+            Consultation.setCompare("appointmentStatus");
+            consultationMap.sorting();
+            consultUI.patientViewAppoinmentUI();
+            for (Object c : consulations) {
+                Consultation consultation = (Consultation) c;
+                if (consultation.getPatient_Id().equals(patientID)) {
+                    consultUI.displayAppoinment(consultation);
+                }
             }
+        } else {
+            consultUI.displayConsultationNotFound();
         }
     }
 
     public static void viewTodayAppoinment(Object[] consulations, String staffID) { // current staff (how many patient staff need to see)
-
-        ConsultationUI.staffViewAppoinmentUI();
-        ConsultationUI.appointmentFieldUI();
-        for (Object c : consulations) {
-            Consultation consultation = (Consultation) c;
-            if (consultation.getStaff_Id().equals(staffID)) {
-                System.out.println(consultation.toStaffString());
-            }
-        }
-
-    }
-
-    public static void viewTodayAppoinment(Object[] consulations) { // current staff (how many patient staff need to see)
-        ConsultationUI.appointmentFieldUI();
-        for (Object c : consulations) {
-            Consultation consultation = (Consultation) c;
-            System.out.println(consultation.toStaffString());
-        }
-    }
-
-    public static void searchAppoinment() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
-        int choice = ConsultationUI.searchAppointmentMenu();
-        switch (choice) {
-            case 1 -> {
-                String consultationId = ConsultationUI.promptConsultationID();
-                Consultation consultationFound = consultationMap.getValue(consultationId);
-                if (consultationFound != null) {
-                    ConsultationUI.staffSearchAppointmentUI();
-                    ConsultationUI.displayAppoinment(consultationFound);
-                } else {
-                    System.out.println("\t\t No consultation found with ID: " + consultationId);
-                }
-            }
-            case 2 -> {
-                String patientId = ConsultationUI.promptPatientID();
-                ConsultationUI.staffSearchAppointmentUI();
-
-                Object[] values = consultationMap.getAllValues();
-                for (Object obj : values) {
-                    Consultation c = (Consultation) obj;
-                    if (c.getPatient_Id().equalsIgnoreCase(patientId)) {
-                        ConsultationUI.displayAppoinment(c);
-                    }
-                }
-            }
-            case 3 -> {
-                Date consultationDate = ConsultationUI.promptConsultationDate();
-                consultationMap.sorting();
-                Object[] values = consultationMap.getAllValues();
-                ConsultationUI.staffSearchAppointmentUI();
-                ConsultationUI.appointmentFieldUI2();
-                for (Object obj : values) {
-                    Consultation c = (Consultation) obj;
-                    if (dateFormat.format(c.getConsultation_date()).equals(dateFormat.format(consultationDate))) {
-                        System.out.println(c.toAllString());
-                    }
-                }
-            }
-            default ->
-                throw new AssertionError();
-        }
-    }
-
-    public static void addOnlineAppoinment() {
         Date currentDate = new Date();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // format only date part
+        String todayStr = sdf.format(currentDate);
+        if (!consultationMap.isEmpty()) {
+            Consultation.setCompare("appointmentStatus");
+            consultationMap.sorting();
+            consultUI.staffViewAppoinmentUI();
+            consultUI.appointmentFieldUI();
+            for (Object c : consulations) {
+                Consultation consultation = (Consultation) c;
+                if (consultation.getStaff_Id().equals(staffID) && consultation.getConsultation_date().equals(todayStr)) {
+                    consultUI.displayConsultationToString(consultation);
+                }
+            }
+        } else {
+            consultUI.displayConsultationNotFound();
+        }
+    }
 
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
+    public static void viewTodayAppoinment(Object[] consulations) { // how many patient staff need to see
+        if (!consultationMap.isEmpty()) {
+            Consultation.setCompare("appointmentStatus");
+            consultationMap.sorting();
+            consultUI.appointmentFieldUI();
+            for (Object c : consulations) {
+                Consultation consultation = (Consultation) c;
+                consultUI.displayConsultationToString(consultation);
+            }
+        } else {
+            consultUI.displayConsultationNotFound();
+        }
+    }
+
+    public void searchAppoinment() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        int choice = 0;
+
+        do {
+            choice = consultUI.searchAppointmentMenu();
+            switch (choice) {
+                case 1 -> {
+                    String consultationId = consultUI.promptConsultationID();
+                    findConsultation(consultationId, Consultation::getConsultation_Id);
+
+//                    Consultation consultationFound = consultationMap.getValue(consultationId);
+//                    if (consultationFound != null) {
+//                        consultUI.staffSearchAppointmentUI();
+//                        consultUI.displayAppoinment(consultationFound);
+//                    } else {
+//                        consultUI.displayConsultationNotFound(consultationId);
+//                    }
+                }
+                case 2 -> {
+                    String patientId = consultUI.promptPatientID();
+                    consultUI.staffSearchAppointmentUI();
+                    findConsultation(patientId, Consultation::getPatient_Id);
+//                    Object[] values = consultationMap.getAllValues();
+//                    for (Object obj : values) {
+//                        Consultation c = (Consultation) obj;
+//                        if (c.getPatient_Id().equalsIgnoreCase(patientId)) {
+//                            consultUI.displayAppoinment(c);
+//                        }
+//                    }
+                }
+                case 3 -> {
+                    Date consultationDate = consultUI.promptConsultationDate();
+                    Consultation.setCompare("consultation_date");
+                    consultationMap.sorting();
+                    Object[] values = consultationMap.getAllValues();
+                    consultUI.staffSearchAppointmentUI();
+                    consultUI.appointmentFieldUI2();
+                    findConsultation(dateFormat.format(consultationDate), c -> dateFormat.format(c.getConsultation_date()));
+//                    for (Object obj : values) {
+//                        Consultation c = (Consultation) obj;
+//                        if (dateFormat.format(c.getConsultation_date()).equals(dateFormat.format(consultationDate))) {
+//                            consultUI.displayConsultationToString(c);
+//                        }
+//                    }
+                }
+                case 4 -> {
+                    consultUI.displayBackMsg();
+                }
+                default ->
+                    consultUI.displayInvalidOptionMsg();
+            }
+        } while (choice != 4);
+    }
+
+    private void findConsultation(String value, Function<Consultation, String> getter) {
+        Iterator<Consultation> iterator = consultationMap.getIterator();
+        while (iterator.hasNext()) {
+            Consultation consult = iterator.next();
+            if (getter.apply(consult).equals(value)) {
+                consultUI.displayAppoinment(consult);
+            }
+
+        }
+    }
+
+    //*
+    public static void addOnlineAppoinment() {
+        viewConsultationSchedule();
+        Date currentDate = new Date();
+        boolean valid = false;
+        Date newConsultStartTime = null;
+        Date newConsultEndTime = null;
+        String staffID = "";
 
         String newConsultationID = generateNextConsultationId();
         Date newAppoinmentDate = currentDate;
-        Date newConsultationDate = ConsultationUI.promptConsultationDate();
-        Date newConsultStartTime = ConsultationUI.promptConsultationStartTime();
-        Date newConsultEndTime = ConsultationUI.promptConsultationEndTime();
-        String staffID = ConsultationUI.promptStaffID();
-//        String currentPatientID = Master.getCurrentPatientId();
-        String currentPatientID = "P000001";
+        Date newConsultationDate = consultUI.promptConsultationDate();
 
-        Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, newConsultEndTime, "Pending", "Online", currentPatientID, staffID);
-        consultationMap.put(newConsultationID, newConsultation);
-        System.out.println("\t\t Online Appointment created successfully: " + newConsultationID);
+        do {
+            newConsultStartTime = consultUI.promptConsultationStartTime();
+            newConsultEndTime = consultUI.promptConsultationEndTime();
+            if (newConsultStartTime.after(newConsultEndTime)) {
+                consultUI.displayFailedMsg("End time");
+            } else {
+                valid = true;
+            }
+        } while (!valid);
+
+        do {
+            staffID = consultUI.promptStaffID();
+            Object staff = staffMap.getValue(staffID);
+            Staff s = (Staff) staff;
+            if (s.getDutyStatus().equalsIgnoreCase("Leave")) {
+                consultUI.displayStaffLeave();
+            } else {
+                valid = true;
+            }
+        } while (!valid);
+
+        Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, newConsultEndTime, "Pending", "Online", currentPatientId, staffID);
+        if (newConsultation != null) {
+            consultationMap.put(newConsultationID, newConsultation);
+            consultationRecordHistory.put(newConsultationID, newConsultation);
+            actionHistory.put(newConsultationID, "Create");
+            consultUI.displayConsultationOperationMsg(newConsultationID, "Create online", "successfully");
+        } else {
+            consultUI.displayFailedMsg("Create Appoinment ");
+        }
     }
 
     public static void addWalkInAppoinment() {
+        viewConsultationSchedule();
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
         String num = Master.getCurrentTicket();
+        Object[] staff = staffMap.getAllValues();
 
         Date newAppoinmentDate = null;
         Date newConsultationDate = null;
@@ -299,81 +394,122 @@ public class ConsultationManagement implements CRUD {
         } catch (Exception e) {
             System.out.println(e);
         }
-        String currentPatientID = ConsultationUI.promptPatientID();
-        String staffID = ConsultationUI.promptStaffID();
+        String currentPatientID = consultUI.promptPatientID();
+        String staffID = consultUI.promptStaffID();
+        for (Object obj : staff) {
+            Staff s = (Staff) obj;
+            if (s.getDutyStatus().equalsIgnoreCase("Leave")) {
+                consultUI.displayStaffLeave();
+            }
+        }
 
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, null, "Pending", "Walk-in", currentPatientID, staffID);
-        consultationMap.put(newConsultationID, newConsultation);
-        System.out.println("\t\t Walk-in Appointment created successfully: " + newConsultationID);
-        System.out.println("\t\t This is your Walk-in number: " + num);
+
+        if (newConsultation != null) {
+            consultationMap.put(newConsultationID, newConsultation);
+            consultationRecordHistory.put(newConsultationID, newConsultation);
+            actionHistory.put(newConsultationID, "Create");
+            consultUI.displayConsultationOperationMsg(newConsultationID, "Create Walk-in", "successfully");
+            consultUI.displayConsultationWalkInNumber(num);
+        } else {
+            consultUI.displayFailedMsg("Create Appoinment ");
+        }
     }
 
     public static void addFlwUpAppoinment() {
         Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
+        boolean valid = false;
+        Date newConsultStartTime = null;
+        Date newConsultEndTime = null;
+        String staffID = "";
 
         String newConsultationID = generateNextConsultationId();
         Date newAppoinmentDate = currentDate;
-        Date newConsultationDate = ConsultationUI.promptConsultationDate();
-        Date newConsultStartTime = ConsultationUI.promptConsultationStartTime();
-        Date newConsultEndTime = ConsultationUI.promptConsultationEndTime();
+        Date newConsultationDate = consultUI.promptConsultationDate();
+
+        do {
+            newConsultStartTime = consultUI.promptConsultationStartTime();
+            newConsultEndTime = consultUI.promptConsultationEndTime();
+            if (newConsultStartTime.after(newConsultEndTime)) {
+                consultUI.displayFailedMsg("End time");
+            } else {
+                valid = true;
+            }
+        } while (!valid);
+
         String currentStaffID = Master.getCurrentStaffId();
-        String staffID = currentStaffID;
-        String patientID = ConsultationUI.promptPatientID();
+        staffID = currentStaffID;
+        String patientID = consultUI.promptPatientID();
 
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, newConsultEndTime, "Pending", "Flw-up", patientID, staffID);
-        consultationMap.put(newConsultationID, newConsultation);
-        System.out.println("\t\t Follow Up Appointment created successfully: " + newConsultationID);
-        System.err.println("\t\t Next Consultation Date is" + dateFormat.format(newConsultationDate) + "Time is" + timeFormat.format(newConsultStartTime) + "-" + timeFormat.format(newConsultEndTime));
+
+        if (newConsultation != null) {
+            consultationMap.put(newConsultationID, newConsultation);
+            consultationRecordHistory.put(newConsultationID, newConsultation);
+            actionHistory.put(newConsultationID, "Create");
+            consultUI.displayConsultationOperationMsg(newConsultationID, "Create follow up", "successfully");
+            consultUI.displayNextConsultationDate(newConsultationDate, newConsultStartTime, newConsultEndTime);
+        } else {
+            consultUI.displayFailedMsg("Create Appoinment ");
+        }
     }
 
     public static void updateAppoinment() {
-        String consultationID = ConsultationUI.promptConsultationID();
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
-        Consultation consultationFound = consultationMap.getValue(consultationID);
-        ConsultationUI.editAppoinmentUI();
-        ConsultationUI.displayAppoinment(consultationFound);
+        String consultationID = consultUI.promptConsultationID();
+        int choice = 0;
 
-        int choice = ConsultationUI.editAppoinmentOptionMenu();
-        switch (choice) {
-            case 1 -> {
-                Date consultationNewDate = ConsultationUI.promptConsultationDate();
-                consultationFound.setConsultation_date(consultationNewDate);
-            }
-            case 2 -> {
-                Date consultationNewStartTime = ConsultationUI.promptConsultationStartTime();
-                consultationFound.setConsultation_start_time(consultationNewStartTime);
-            }
-            case 3 -> {
-                Date consultationNewEndTime = ConsultationUI.promptConsultationEndTime();
-                consultationFound.setConsultation_end_time(consultationNewEndTime);
-            }
-            case 4 -> {
-                String newStaffID = ConsultationUI.promptStaffID();
-                consultationFound.setStaff_Id(newStaffID);
-            }
-            default ->
-                throw new AssertionError();
+        Consultation consultationFound = consultationMap.getValue(consultationID);
+        if (!consultationFound.getAppointmentStatus().equalsIgnoreCase("Pending")) {
+            consultUI.displayConsultationNotFound();
+            return;
         }
-        consultationMap.put(consultationID, consultationFound);
-        System.out.println("Update Successfully");
+        consultUI.editAppoinmentUI();
+        consultUI.displayAppoinment(consultationFound);
+        Consultation consultBackup = new Consultation(consultationFound.getConsultation_Id(), consultationFound.getAppointment_date(), consultationFound.getConsultation_date(), consultationFound.getConsultation_start_time(), consultationFound.getConsultation_end_time(), consultationFound.getAppointmentStatus(), consultationFound.getType(), consultationFound.getPatient_Id(), consultationFound.getStaff_Id());
+
+        do {
+            choice = consultUI.editAppoinmentOptionMenu();
+            switch (choice) {
+                case 1 -> {
+                    Date consultationNewDate = consultUI.promptConsultationDate();
+                    consultationFound.setConsultation_date(consultationNewDate);
+                }
+                case 2 -> {
+                    Date consultationNewStartTime = consultUI.promptConsultationStartTime();
+                    consultationFound.setConsultation_start_time(consultationNewStartTime);
+                }
+                case 3 -> {
+                    Date consultationNewEndTime = consultUI.promptConsultationEndTime();
+                    consultationFound.setConsultation_end_time(consultationNewEndTime);
+                }
+                case 4 -> {
+                    String newStaffID = consultUI.promptStaffID();
+                    consultationFound.setStaff_Id(newStaffID);
+                }
+                case 5 -> {
+
+                }
+                default ->
+                    consultUI.displayInvalidOptionMsg();
+            }
+
+            consultationMap.put(consultationID, consultationFound);
+            consultationRecordHistory.put(consultationID, consultBackup);
+            actionHistory.put(consultationID, "Update");
+
+            consultUI.displayConsultationOperationMsg(consultationID, "Update", "successfully");
+            consultUI.displayAppoinment(consultationFound);
+        } while (choice != 5);
     }
 
     public static void viewConsultationSchedule() {
-        MapInterface<String, Consultation> consultationMap = Master.getConsultationMap();
-        MapInterface<String, Staff> staffMap = Master.getStaffMap();
-        MapInterface<Integer, String> doctorAMap = Master.getDoctorAMap();
-        MapInterface<Integer, String> doctorBMap = Master.getDoctorBMap();
-        MapInterface<String, String> timeSlotMap = Master.getTimeSlotMap();
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         consultationMap.sorting();
 
-        ConsultationUI.consultationScheduleUI();
+        consultUI.consultationScheduleUI();
 
         for (int i = 0; i < 3; i++) {
             int year = c.get(Calendar.YEAR);
@@ -383,8 +519,8 @@ public class ConsultationManagement implements CRUD {
             // Odd day = Doctor A, Even day = Doctor B
             MapInterface<Integer, String> doctorMap = (day % 2 != 0) ? doctorAMap : doctorBMap;
 
-            System.out.printf("\n\t\t Date: %02d-%02d-%04d (%s)\n", day, month, year, c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH));
-            ConsultationUI.consultationScheduleUI(timeSlotMap);
+            consultUI.displayConsultationSchedulefield(day, month, year, c);
+            consultUI.consultationScheduleUI(timeSlotMap);
 
             Object[] keys = doctorMap.getAllKeys();
             for (Object key : keys) {
@@ -393,7 +529,7 @@ public class ConsultationManagement implements CRUD {
 
                 if (staffMap.containsKey(staffID)) {
                     Staff staffData = staffMap.getValue(staffID);
-                    System.out.printf("\n\t\t %s %-6s %s %-12s %s", "|", staffID, "|", staffData.getStaffName(), "|");
+                    consultUI.displayConsultationScheduleStaff(staffID, staffData);
                 }
 
                 Object[] timeSlots = timeSlotMap.getAllKeys();
@@ -414,34 +550,30 @@ public class ConsultationManagement implements CRUD {
                                 Date start = consult.getConsultation_start_time();
                                 Date end = consult.getConsultation_end_time();
 
-                                if (!slotTime.before(start) && slotTime.before(end)) {
+                                if (!slotTime.before(start) && slotTime.before(end) && "Pending".equalsIgnoreCase(consult.getAppointmentStatus())) {
                                     booked = true;
                                     break;
                                 }
                             } catch (Exception e) {
-                                System.out.println(e);
+                                consultUI.displayCatchError(e);
                             }
-
                         }
                     }
-                    System.out.printf("%-6s %s", booked ? "   X" : "", "|");
-
+                    consultUI.displayConsultationScheduleX(booked);
                 }
+                consultUI.displayLine();
+                // move to the next day
             }
-            System.out.println("\n\t\t ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-
-            // move to the next day
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
     public static void viewConsultationFlwUpReport() {
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        Object[] consultations = consulationMap.getAllValues();
+        Object[] consultations = consultationMap.getAllValues();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        ConsultationUI.staffReportAppoinmentFlwUI();
-        ConsultationUI.appointmentFieldUI3();
+        consultUI.staffReportAppoinmentFlwUI();
+        consultUI.appointmentFieldUI3();
         for (int i = 0; i < consultations.length; i++) {
             Consultation c1 = (Consultation) consultations[i];
 
@@ -469,8 +601,7 @@ public class ConsultationManagement implements CRUD {
                 }
 
                 if (!print) {
-
-                    ConsultationUI.displayFlwUpReport(date, staffID, count);
+                    consultUI.displayFlwUpReport(date, staffID, count);
                 }
 
             }
@@ -479,31 +610,31 @@ public class ConsultationManagement implements CRUD {
     }
 
     public static void viewConsultationValumeReport() {
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        Object[] consultations = consulationMap.getAllValues();
+        Object[] consultations = consultationMap.getAllValues();
 
         boolean running = true;
         while (running) {
-            ConsultationUI.staffReportAppoinmentUI();
+            consultUI.staffReportAppoinmentUI();
             viewTodayAppoinment(consultations);
 
-            int choice = ConsultationUI.consultationFlwUpMenu();
-            switch (choice) {
-                case 1 ->
-                    filterConsultation(consultations, "year");
-                case 2 ->
-                    filterConsultation(consultations, "month");
-                case 3 ->
-                    filterConsultation(consultations, "day");
-                case 4 -> {
-                    System.out.println("\t\t Returning to main menu...");
-                    running = false;
-                }
-                default -> {
-                    System.out.println("\t\t Invalid option. Returning to menu...");
-                }
+            int choice = consultUI.consultationFlwUpMenu();
+            do {
+                switch (choice) {
+                    case 1 ->
+                        filterConsultation(consultations, "year");
+                    case 2 ->
+                        filterConsultation(consultations, "month");
+                    case 3 ->
+                        filterConsultation(consultations, "day");
+                    case 4 -> {
+                        consultUI.displayBackMsg();
+                        running = false;
+                    }
+                    default -> {
 
-            }
+                    }
+                }
+            } while (choice != 4);
         }
     }
 
@@ -515,27 +646,27 @@ public class ConsultationManagement implements CRUD {
             case "year" -> {
                 sdf = new SimpleDateFormat("yyyy");
                 currentDate = sdf.format(new Date());
-                System.out.println("\n\t\t Consultation for current" + type + " (" + currentDate + "):");
-                ConsultationUI.staffReportYearAppoinmentUI();
+                consultUI.displayFilterConsultation(type, currentDate);
+                consultUI.staffReportYearAppoinmentUI();
             }
             case "month" -> {
                 sdf = new SimpleDateFormat("yyyy-MM");
                 currentDate = sdf.format(new Date());
-                System.out.println("\n\t\t Consultation for current" + type + " (" + currentDate + "):");
-                ConsultationUI.staffReportMonthAppoinmentUI();
+                consultUI.displayFilterConsultation(type, currentDate);
+                consultUI.staffReportMonthAppoinmentUI();
             }
             case "day" -> {
                 sdf = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = sdf.format(new Date());
-                System.out.println("\n\t\t Consultation for current" + type + " (" + currentDate + "):");
-                ConsultationUI.staffReportDayAppoinmentUI();
+                consultUI.displayFilterConsultation(type, currentDate);
+                consultUI.staffReportDayAppoinmentUI();
             }
             default -> {
                 return;
             }
         }
 
-        ConsultationUI.appointmentFieldUI();
+        consultUI.appointmentFieldUI();
         for (Object obj : consultations) {
             Consultation c = (Consultation) obj;
             String date = sdf.format(c.getConsultation_date());
@@ -546,21 +677,45 @@ public class ConsultationManagement implements CRUD {
             }
         }
         if (count > 0) {
-            System.out.println("\t\t Total Consultation Volume is: " + count);
+            consultUI.displayTotalVolume(count);
         } else {
-            System.out.println("\t\t No Consultation found for " + currentDate);
+            consultUI.displayNotFoundCurrentDate(currentDate);
         }
 
     }
 
     public static String generateNextConsultationId() {
-        MapInterface<String, Consultation> consulationMap = Master.getConsultationMap();
-        String lastID = consulationMap.getLastKey();
+        String lastID = consultationMap.getLastKey();
 
         if (lastID == null || lastID.isEmpty()) {
             lastID = "C000000";
         }
         return IDGenerator.generateNextID(lastID);
+    }
+
+    private void undo() {
+        if (actionHistory.isEmpty()) {
+            consultUI.displayFailedMsg("No history to undo");
+            return;
+        }
+        String lastAction = actionHistory.removeLast();
+        String lastId = consultationRecordHistory.getLastKey();
+        Consultation lastConsult = consultationRecordHistory.removeLast();
+
+        switch (lastAction) {
+            case "Create" -> {
+                consultationMap.remove(lastId);
+                consultUI.displaySuccessfullyMsg(lastId, " Undo Create");
+            }
+            case "Update" -> {
+                consultationMap.put(lastId, lastConsult);
+                consultUI.displaySuccessfullyMsg(lastId, " Undo Update");
+            }
+            case "Delete" -> {
+                consultationMap.put(lastId, lastConsult);
+                consultUI.displaySuccessfullyMsg(lastId, " Undo Delete");
+            }
+        }
     }
 
 }

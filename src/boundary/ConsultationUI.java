@@ -7,11 +7,15 @@ package boundary;
 import adt.MapInterface;
 import dao.Master;
 import entity.Consultation;
+import entity.Staff;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import utility.Input;
+import static utility.MessageUI.RED;
+import static utility.MessageUI.RESET;
 
 /**
  *
@@ -23,11 +27,11 @@ public class ConsultationUI {
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     //Menu
-    public static int consultationMenu() {
+    public int consultationMenu() {
 
         int choice;
 
-        System.out.println("\t\t =================================================");
+        System.out.println("\n\t\t =================================================");
         System.out.println("\t\t =              Consultation Menu                =");
         System.out.println("\t\t =================================================");
         System.out.println("\t\t =         1. View Appointment                   =");
@@ -38,14 +42,15 @@ public class ConsultationUI {
         System.out.println("\t\t =         6. View Consultation schedule         =");
         System.out.println("\t\t =         7. view Consultation Flw Up Report    =");
         System.out.println("\t\t =         8. view Consultation Valume Report    =");
-        System.out.println("\t\t =         9. back                               =");
+        System.out.println("\t\t =         9. Undo                               =");
+        System.out.println("\t\t =        10. Exit                               =");
         System.out.println("\t\t =================================================");
 
         choice = Input.getIntegerInput("\t\t Enter your choice > ");
         return choice;
     }
 
-    public static int addAppointmentMenu() {
+    public int addAppointmentMenu() {
 
         int choice = 0;
 
@@ -61,7 +66,7 @@ public class ConsultationUI {
         return choice;
     }
 
-    public static int searchAppointmentMenu() {
+    public int searchAppointmentMenu() {
 
         int choice = 0;
 
@@ -78,7 +83,7 @@ public class ConsultationUI {
         return choice;
     }
 
-    public static int consultationFlwUpMenu() {
+    public int consultationFlwUpMenu() {
         int choice = 0;
         System.out.println("\t\t =================================================");
         System.out.println("\t\t =              Report Options                   =");
@@ -93,7 +98,7 @@ public class ConsultationUI {
         return choice;
     }
 
-    public static int editAppoinmentOptionMenu() {
+    public int editAppoinmentOptionMenu() {
         int choice = 0;
         System.out.println("\t\t =================================================");
         System.out.println("\t\t |              Update Options                   |");
@@ -110,20 +115,109 @@ public class ConsultationUI {
 
     }
 
+    public void displayExitMsg() {
+        System.out.println("\n\t\tExiting Consultation Module.\n");
+    }
+
+    public void displayBackMsg() {
+        System.out.println("\n\t\tBack Consultation Menu.\n");
+    }
+
+    public void displayCurrentUserMsg() {
+        System.out.println("\t\t No user is currently logged in.");
+    }
+
+    public void displaySuccessfullyMsg(String id, String type) {
+        System.out.println("\t\t Consultation with ID " + id + type + " successfully.");
+    }
+
+    public void displayFailedMsg(String type) {
+        System.out.println("\t\t " + type + "Failed.");
+    }
+
+    public void displayConsultationNotFound() {
+        System.out.printf("\t\t%s%s%s\n", RED, "No Consultation data found.", RESET);
+    }
+
+    public void displayConsultationNotFound(String consultationId) {
+        System.out.printf("\t\t%s%s%s%s\n", RED, "No consultation found with ID: ", consultationId, RESET);
+    }
+
+    public void displayConsultationToString(Consultation consult) {
+        System.out.println(consult.toStaffString());
+    }
+
+    public void displayConsultationOperationMsg(String id, String type1, String type2) {
+        System.out.println("\t\t " + type1 + " Appointment " + type2 + ": " + id);
+    }
+
+    public void displayConsultationWalkInNumber(String num) {
+        System.out.println("\t\t This is your Walk-in number: " + num);
+
+    }
+
+    public void displayNextConsultationDate(Date newConsultationDate, Date newConsultStartTime, Date newConsultEndTime) {
+        System.err.println("\t\t Next Consultation Date is" + dateFormat.format(newConsultationDate) + "Time is" + timeFormat.format(newConsultStartTime) + "-" + timeFormat.format(newConsultEndTime));
+    }
+
+    public void displayConsultationSchedulefield(int day, int month, int year, Calendar c) {
+        System.out.printf("\n\t\t Date: %02d-%02d-%04d (%s)\n", day, month, year, c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH));
+    }
+
+    public void displayConsultationScheduleStaff(String staffID, Staff staffData) {
+        System.out.printf("\n\t\t %s %-6s %s %-12s %s", "|", staffID, "|", staffData.getStaffName(), "|");
+    }
+
+    public void displayConsultationScheduleX(boolean booked) {
+        System.out.printf("%-6s %s", booked ? "   X" : "", "|");
+    }
+
+    public void displayCatchError(Exception e) {
+        System.out.println(e);
+    }
+
+    public void displayFilterConsultation(String type, String currentDate) {
+        System.out.println("\n\t\t Consultation for current" + type + " (" + currentDate + "):");
+    }
+
+    public void displayTotalVolume(int count) {
+        System.out.println("\t\t Total Consultation Volume is: " + count);
+    }
+
+    public void displayNotFoundCurrentDate(String currentDate) {
+        System.out.println("\t\t No Consultation found for " + currentDate);
+    }
+
+    public void displayInvalidOptionMsg() {
+        System.out.println("\t\tInvalid choice, please try again.\n");
+    }
+
+    public void displayStaffLeave() {
+        System.out.println("\t\t Today Staff have been leave. Please choice other staff\n");
+    }
+
+    public void displayLine() {
+        System.out.print("\n\t\t ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
     // UI
-    public static void staffViewAppoinmentUI() {
-        System.out.println("\t\t =================================================");
-        System.out.println("\t\t |              Today Appoinment                 |");
-        System.out.println("\t\t =================================================");
+    public void staffViewAppoinmentUI() {
+        int tableWidth = 110; // total width including borders
+        String border = "=".repeat(tableWidth);
+        System.out.println("\t\t " + border);
+        System.out.println("\t\t |                                                 Today Appoinment                                           |");
+        System.out.println("\t\t " + border);
     }
 
-    public static void patientViewAppoinmentUI() {
-        System.out.println("\t\t ===================================================");
-        System.out.println("\t\t |              Appoinment Details                 |");
-        System.out.println("\t\t ===================================================");
+    public void patientViewAppoinmentUI() {
+        int tableWidth = 51; // total width including borders
+        String border = "=".repeat(tableWidth);
+        System.out.println("\t\t " + border);
+        System.out.println("\t\t |               Appoinment Details                |");
+        System.out.println("\t\t " + border);
     }
 
-    public static void staffReportAppoinmentUI() {
+    public void staffReportAppoinmentUI() {
         int tableWidth = 110; // total width including borders
         String border = "=".repeat(tableWidth);
 
@@ -132,7 +226,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void staffReportYearAppoinmentUI() {
+    public void staffReportYearAppoinmentUI() {
         int tableWidth = 110; // total width including borders
         String border = "=".repeat(tableWidth);
 
@@ -141,7 +235,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void staffReportMonthAppoinmentUI() {
+    public void staffReportMonthAppoinmentUI() {
         int tableWidth = 110; // total width including borders
         String border = "=".repeat(tableWidth);
 
@@ -150,7 +244,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void staffReportDayAppoinmentUI() {
+    public void staffReportDayAppoinmentUI() {
         int tableWidth = 110; // total width including borders
         String border = "=".repeat(tableWidth);
 
@@ -159,37 +253,37 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void staffReportAppoinmentFlwUI() {
+    public void staffReportAppoinmentFlwUI() {
         System.out.println("\t\t =================================================");
         System.out.println("\t\t |              All Follow Up Report             |");
         System.out.println("\t\t =================================================");
     }
 
-    public static void staffSearchAppointmentUI() {
+    public void staffSearchAppointmentUI() {
         System.out.println("\t\t =================================================");
         System.out.println("\t\t |              Search Appoinment                |");
         System.out.println("\t\t =================================================");
     }
 
-    public static void editAppoinmentUI() {
+    public void editAppoinmentUI() {
         System.out.println("\t\t =================================================");
         System.out.println("\t\t |              Edit Appoinment                  |");
         System.out.println("\t\t =================================================");
     }
 
-    public static void deleteAppoinmentUI() {
+    public void deleteAppoinmentUI() {
         System.out.println("\t\t =================================================");
         System.out.println("\t\t |              Delete Appoinment                |");
         System.out.println("\t\t =================================================");
     }
 
-    public static void consultationScheduleUI() {
+    public void consultationScheduleUI() {
         System.out.println("\t\t ===============================================");
         System.out.println("\t\t |     Consultation Schedule (Next 3 Days)     |");
         System.out.println("\t\t ===============================================");
     }
 
-    public static void appointmentFieldUI() {
+    public void appointmentFieldUI() {
         int tableWidth = 110; // total width including borders
         String border = "-".repeat(tableWidth);
 
@@ -198,7 +292,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void appointmentFieldUI2() {
+    public void appointmentFieldUI2() {
         int tableWidth = 122; // total width including borders
         String border = "-".repeat(tableWidth);
 
@@ -207,7 +301,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void appointmentFieldUI3() {
+    public void appointmentFieldUI3() {
         int tableWidth = 57; // total width including borders
         String border = "-".repeat(tableWidth);
 
@@ -216,7 +310,7 @@ public class ConsultationUI {
         System.out.println("\t\t " + border);
     }
 
-    public static void consultationScheduleUI(MapInterface<String, String> timeSlotMap) {
+    public void consultationScheduleUI(MapInterface<String, String> timeSlotMap) {
         int tableWidth = 178; // total width including borders
         String border = "-".repeat(tableWidth);
         System.out.println("\t\t " + border);
@@ -229,14 +323,14 @@ public class ConsultationUI {
         System.out.print("\n\t\t " + border);
     }
 
-    public static void displayFlwUpReport(String date, String staffID, int count) {
+    public void displayFlwUpReport(String date, String staffID, int count) {
         int tableWidth = 57; // total width including borders
         String border = "-".repeat(tableWidth);
         System.out.printf("\t\t | %-17s | %-10s | %-20d |\n", date, staffID, count);
         System.out.println("\t\t " + border);
     }
 
-    public static void displayAppoinment(Consultation consultation) {
+    public void displayAppoinment(Consultation consultation) {
         int tableWidth = 51; // total width including borders
         String border = "=".repeat(tableWidth);
 
@@ -253,7 +347,7 @@ public class ConsultationUI {
     }
 
     // promptUI
-    public static String promptConsultationID() {
+    public String promptConsultationID() {
         boolean valid = false;
         String consultationID = "";
         while (!valid) {
@@ -261,13 +355,13 @@ public class ConsultationUI {
             if (Master.getConsultationMap().containsKey(consultationID)) {
                 valid = true;
             } else {
-                System.out.println("\t\t Invalid COnsultation Id. Please try agian.");
+                System.out.println("\t\t Invalid Consultation Id. Please try agian.");
             }
         }
         return consultationID;
     }
 
-    public static Date promptConsultationDate() {
+    public Date promptConsultationDate() {
         Date consultatiDate = null;
         boolean valid = false;
         while (!valid) {
@@ -290,7 +384,7 @@ public class ConsultationUI {
         return consultatiDate;
     }
 
-    public static Date promptConsultationStartTime() {
+    public Date promptConsultationStartTime() {
         Date consultationStartTime = null;
         boolean valid = false;
         while (!valid) {
@@ -315,7 +409,7 @@ public class ConsultationUI {
         return consultationStartTime;
     }
 
-    public static Date promptConsultationEndTime() {
+    public Date promptConsultationEndTime() {
         Date consultationEndTime = null;
         boolean valid = false;
         while (!valid) {
@@ -339,7 +433,7 @@ public class ConsultationUI {
         return consultationEndTime;
     }
 
-    public static String promptPatientID() {
+    public String promptPatientID() {
 
         boolean valid = false;
         String patientID = "";
@@ -354,7 +448,7 @@ public class ConsultationUI {
         return patientID;
     }
 
-    public static String promptStaffID() {
+    public String promptStaffID() {
         boolean valid = false;
         String staffID = "";
         while (!valid) {
@@ -366,6 +460,11 @@ public class ConsultationUI {
             }
         }
         return staffID;
+    }
+
+    public Boolean promptDeteleMsg() {
+        boolean confirm = Input.getBooleanInput("\t\t Are you sure you want to delete this consultation? ");
+        return confirm;
     }
 
 }

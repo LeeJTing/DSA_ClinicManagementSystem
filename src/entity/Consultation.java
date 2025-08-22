@@ -28,6 +28,7 @@ public class Consultation implements Comparable<Consultation> {
     private String type;
     private String patient_Id;
     private String staff_Id;
+    private static String compare = "appointmentStatus";
 
     public Consultation() {
         this.consultation_Id = "";
@@ -97,6 +98,10 @@ public class Consultation implements Comparable<Consultation> {
         return staff_Id;
     }
 
+    public static String getCompare() {
+        return compare;
+    }
+
     public void setConsultation_Id(String consultation_Id) {
         this.consultation_Id = consultation_Id;
     }
@@ -131,6 +136,10 @@ public class Consultation implements Comparable<Consultation> {
 
     public void setStaff_Id(String staff_Id) {
         this.staff_Id = staff_Id;
+    }
+
+    public static void setCompare(String compare) {
+        Consultation.compare = compare;
     }
 
     public int calculationDurationTimeInMinutes() {
@@ -190,12 +199,40 @@ public class Consultation implements Comparable<Consultation> {
 
     @Override
     public int compareTo(Consultation other) {
-        int dateCompare = other.consultation_date.compareTo(this.consultation_date);
-        if (dateCompare != 0) {
-            return dateCompare; // different dates, sort by date
+
+        if (this.compare.equals("appointmentStatus")) {
+            int th = this.getStatusRank(this.appointmentStatus);
+            int ot = other.getStatusRank(other.getAppointmentStatus());
+            return Integer.compare(ot, th);
+            
+//            return th - ot;
+        } else if (this.compare.equals("consultation_date")) {
+            int dateCompare = other.consultation_date.compareTo(this.consultation_date);
+            if (dateCompare != 0) {
+                return dateCompare; // different dates, sort by date
+            }
+            // Same date → compare by start time
+            return other.consultation_start_time.compareTo(this.consultation_start_time);
+        } else {
+            return 0;
         }
-        // Same date → compare by start time
-        return other.consultation_start_time.compareTo(this.consultation_start_time);
     }
 
+    public int getStatusRank(String status) {
+        if (status == null) {
+            return 4;
+        } else {
+            return status.length();
+        }
+//        switch (status) {
+//            case "Completed":
+//                return 1;
+//            case "On-going":
+//                return 2;
+//            case "Pending":
+//                return 3;
+//            default:
+//                return 4;
+//        }
+    }
 }
