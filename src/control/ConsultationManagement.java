@@ -33,33 +33,36 @@ public class ConsultationManagement implements CRUD {
     private static MapInterface<String, String> timeSlotMap = new LinkedHashMap<>();
 
     private static final ConsultationUI consultUI = new ConsultationUI();
-//    private static final String currentPatientId = Master.getCurrentPatientId();
+    private static final String currentPatientId = Master.getCurrentPatientId();
     private static final String currentStaffId = Master.getCurrentStaffId();
     private static MapInterface<String, Consultation> consultationRecordHistory = new LinkedHashMap<>();
     private static MapInterface<String, String> actionHistory = new LinkedHashMap<>();
 
-    private static final String currentPatientId = "P000001";
+//    private static final String currentPatientId = "P000001";
 //    private static final String currentStaffId = "S000001";
 
-    public static void main(String[] args) {
-        Master.initializer();
+//    public static void main(String[] args) {
+////        Master.initializer();
+//        consultationMap = Master.getConsultationMap();
+//        staffMap = Master.getStaffMap();
+//        doctorAMap = Master.getDoctorAMap();
+//        doctorBMap = Master.getDoctorBMap();
+//        timeSlotMap = Master.getTimeSlotMap();
+//
+//        ConsultationManagement c = new ConsultationManagement();
+//        c.consultationMenu();
+//    }
+
+    public ConsultationManagement() {
+        getAllMap();
+    }
+    private void getAllMap() {
         consultationMap = Master.getConsultationMap();
         staffMap = Master.getStaffMap();
         doctorAMap = Master.getDoctorAMap();
         doctorBMap = Master.getDoctorBMap();
         timeSlotMap = Master.getTimeSlotMap();
-
-        ConsultationManagement c = new ConsultationManagement();
-        c.consultationMenu();
     }
-
-//    public ConsultationManagement() {
-//        getAllMap();
-//    }
-//    private void getAllMap() {
-//        Master.initializer();
-//        consulationMap = Master.getConsultationMap();
-//    }
     public void consultationMenu() {
 //        String currentPatientId = Master.getCurrentPatientId();
 //        String currentStaffId = Master.getCurrentStaffId();

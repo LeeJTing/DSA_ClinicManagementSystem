@@ -155,7 +155,7 @@ public class MedicalTreatmentManagement implements CRUD {
 
     }
 
-    // consultation to Treatment
+    // called if patient was walk-in consultation to Treatment
     public void consultationToTreatment(String consultationId) {
         getAllMap();
         // find which consultation, patient and staff
@@ -271,7 +271,7 @@ public class MedicalTreatmentManagement implements CRUD {
         saveHistory(treatment, prescription, "Create");
 
         // call payment method to generate payment
-        prescriptionToPayment(prescription);
+//        prescriptionToPayment(prescription);
     }
     
     public void prescriptionToPayment(Prescription prescription){
@@ -513,7 +513,7 @@ public class MedicalTreatmentManagement implements CRUD {
         }
     }
 
-    public void diseaseAnalysisReport() {
+    private void diseaseAnalysisReport() {
 
         treatmentMap = Master.getTreatmentMap();
         patientMap = Master.getPatientMap();
@@ -640,7 +640,7 @@ public class MedicalTreatmentManagement implements CRUD {
         scanner.nextLine();
     }
 
-    public void diseasePredictionAndRelationshipReport() {
+    private void diseasePredictionAndRelationshipReport() {
 
         MapInterface<String, Treatment> treatmentTempMap;
         //Hypertension
@@ -685,7 +685,7 @@ public class MedicalTreatmentManagement implements CRUD {
         //Asthma intersect Fracture
         MapInterface<String, Patient> intersectAsthmaAndFracture = asthmaMap.intersect(fractureMap);
 
-        // find the probability P(will X it have Y) = (X intersect Y) / total Y
+        // find the probability P(will X if have Y) = (X intersect Y) / total Y
         MapInterface<String, Double> hyperRelationship = new LinkedHashMap<>();
         MapInterface<String, Double> diabetesRelationship = new LinkedHashMap<>();
         MapInterface<String, Double> covidRelationship = new LinkedHashMap<>();
