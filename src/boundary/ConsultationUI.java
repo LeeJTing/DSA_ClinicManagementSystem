@@ -157,7 +157,7 @@ public class ConsultationUI {
     }
 
     public void displayNextConsultationDate(Date newConsultationDate, Date newConsultStartTime, Date newConsultEndTime) {
-        System.err.println("\t\t Next Consultation Date is" + dateFormat.format(newConsultationDate) + " Time is" + timeFormat.format(newConsultStartTime) + "-" + timeFormat.format(newConsultEndTime));
+        System.err.println("\t\t Next Consultation Date is " + dateFormat.format(newConsultationDate) + " Time is " + timeFormat.format(newConsultStartTime) + "-" + timeFormat.format(newConsultEndTime));
     }
 
     public void displayConsultationSchedulefield(int day, int month, int year, Calendar c) {
