@@ -42,9 +42,9 @@ public class menu {
         System.out.println("\t\t\t\t|       4. Pharmacy Management Module               |");
         System.out.println("\t\t\t\t|       5. Exit                                     |");
         System.out.println("\t\t\t\t=====================================================");
-        while (choice < 0 || choice > 5) {
+        do{
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        }
+        }while (choice < 0 || choice > 5);
         return choice;
     }
 

@@ -66,21 +66,21 @@ public class main {
                                 String staffId = menu.askStaffID();
                                 staffId = staffId.toUpperCase();
                                 Master.setCurrentStaffId(staffId);
-
                                 break;
                             case 2:
                                 String patientId = menu.askPatientID();
                                 patientId = patientId.toUpperCase();
                                 Master.setCurrentPatientId(patientId);
-
                                 break;
                             default:
                                 selection = 3;
                                 break;
                         }
-
-                        break;
+                        consult.consultationMenu();
+                        Master.setCurrentStaffId("");
+                        Master.setCurrentPatientId("");
                     }
+                    break;
                 default:
                     // exit
                     option = 3;
