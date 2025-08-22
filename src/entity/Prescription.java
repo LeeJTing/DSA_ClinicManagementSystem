@@ -2,7 +2,7 @@ package entity;
 
 import utility.IDGenerator;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import utility.IDGenerator;
 
@@ -26,7 +26,7 @@ public class Prescription {
     public Prescription() {
         this.prescription_id = "PH000001";
         this.medicine_total_cost = 0.0;
-        this.medicineList = new LinkedHashMap<>();
+        this.medicineList = new ChainBucket<>();
         this.staff_id = "";
         this.patient_id = "";
         this.treatment_id = "";

@@ -4,7 +4,7 @@
  */
 package entity;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import java.time.LocalDate;
 
@@ -24,7 +24,7 @@ public class DutySchedule {
         this.dutyDate = dutyDate;
         this.doctorA = doctorA;
         this.doctorB = doctorB;
-        this.dutySchedule = new LinkedHashMap<>();
+        this.dutySchedule = new ChainBucket<>();
     }
 
     //getter

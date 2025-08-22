@@ -37,14 +37,13 @@ public class menu {
         System.out.println("\t\t\t\t          WELCOME TO HOSPITAL MANAGEMENT SYSTEM     ");
         System.out.println("\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|       1. Doctor Management Module                 |");
-        System.out.println("\t\t\t\t|       2. Consultation Management Module           |");
-        System.out.println("\t\t\t\t|       3. Medical Treatment Management Module      |");
-        System.out.println("\t\t\t\t|       4. Pharmacy Management Module               |");
-        System.out.println("\t\t\t\t|       5. Exit                                     |");
+        System.out.println("\t\t\t\t|       2. Medical Treatment Management Module      |");
+        System.out.println("\t\t\t\t|       3. Pharmacy Management Module               |");
+        System.out.println("\t\t\t\t|       4. Exit                                     |");
         System.out.println("\t\t\t\t=====================================================");
         do{
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        }while (choice < 0 || choice > 5);
+        }while (choice < 0 || choice > 4);
         return choice;
     }
 
@@ -55,7 +54,8 @@ public class menu {
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t|  1. Patient                                       |");
         System.out.println("\t\t\t\t|  2. Staff                                         |");
-        System.out.println("\t\t\t\t|  3. Exit                                          |");
+        System.out.println("\t\t\t\t|  3. Consultation                                  |");
+        System.out.println("\t\t\t\t|  4. Exit                                          |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect option: ");

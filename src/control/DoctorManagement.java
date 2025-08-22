@@ -1,6 +1,6 @@
 package control;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import boundary.StaffUI;
 import dao.Master;
@@ -28,16 +28,16 @@ import java.util.function.Function;
  */
 public class DoctorManagement implements CRUD {
 
-    private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
-    private static MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
-    private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
-    public static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
-    public static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
-    private static MapInterface<String, Staff> doctorReportMap = new LinkedHashMap<>();
-    private static MapInterface<Integer, Staff> staffRecordHistory = new LinkedHashMap<>();
-    private static MapInterface<Integer, String> actionHistory = new LinkedHashMap<>();
+    private static MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
+    private static MapInterface<String, Payment> paymentMap = new ChainBucket<>();
+    private static MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
+    private static MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private static MapInterface<String, Prescription> prescriptionMap = new ChainBucket<>();
+    public static MapInterface<String, Staff> staffMap = new ChainBucket<>();
+    public static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new ChainBucket<>();
+    private static MapInterface<String, Staff> doctorReportMap = new ChainBucket<>();
+    private static MapInterface<Integer, Staff> staffRecordHistory = new ChainBucket<>();
+    private static MapInterface<Integer, String> actionHistory = new ChainBucket<>();
 
     public static StaffUI staffmenu = new StaffUI();
     public static final Master Master = new Master();

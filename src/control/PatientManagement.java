@@ -5,7 +5,7 @@
 package control;
 
 import adt.MapInterface;
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import boundary.PatientManagementUI;
 import dao.Master;
 import entity.Consultation;
@@ -22,13 +22,13 @@ import java.util.Iterator;
 
 public class PatientManagement implements CRUD {
 
-    private MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
-    private MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
-    private MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
-    private MapInterface<Integer, Patient> historyPatient = new LinkedHashMap<>();
-    private MapInterface<Integer, String> historyAction = new LinkedHashMap<>();
+    private MapInterface<String, Patient> patientMap = new ChainBucket<>();
+    private MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
+    private MapInterface<String, Payment> paymentMap = new ChainBucket<>();
+    private MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
+    private MapInterface<Integer, Patient> historyPatient = new ChainBucket<>();
+    private MapInterface<Integer, String> historyAction = new ChainBucket<>();
     private int historyKey = 1;
     public boolean patientWasDeleted = false;
     private final PatientManagementUI ui;

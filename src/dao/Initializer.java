@@ -6,7 +6,7 @@ package dao;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import entity.*;
 import java.text.ParseException;
@@ -23,7 +23,7 @@ public class Initializer {
     public MapInterface<String, Treatment> medicalTreatmentInitializer() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-        MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
+        MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
         try {
             // String previousTreatmentID,String disease, String treatment_advice, Date treatment_date, String staff_id, boolean isScan, String remark
             treatmentMap.put("T000001", new Treatment("T000001", "C000001", "Hypertension", "Reduce salt intake, daily morning walk, medication prescribed",
@@ -74,13 +74,13 @@ public class Initializer {
     }
 
     public MapInterface<String, Prescription> prescriptionInitializer() {
-        MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
+        MapInterface<String, Prescription> prescriptionMap = new ChainBucket<>();
 
-        MapInterface<String, Medicine> medicineMap1 = new LinkedHashMap<>();
-        MapInterface<String, Medicine> medicineMap2 = new LinkedHashMap<>();
-        MapInterface<String, Medicine> medicineMap3 = new LinkedHashMap<>();
-        MapInterface<String, Medicine> medicineMap4 = new LinkedHashMap<>();
-        MapInterface<String, Medicine> medicineMap5 = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap1 = new ChainBucket<>();
+        MapInterface<String, Medicine> medicineMap2 = new ChainBucket<>();
+        MapInterface<String, Medicine> medicineMap3 = new ChainBucket<>();
+        MapInterface<String, Medicine> medicineMap4 = new ChainBucket<>();
+        MapInterface<String, Medicine> medicineMap5 = new ChainBucket<>();
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -128,7 +128,7 @@ public class Initializer {
 
     // initialize the medicine dummy data
     public MapInterface<String, Medicine> medicineInitializer() {
-        MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             Date expiryDate = sdf.parse("10-10-2030");
@@ -153,7 +153,7 @@ public class Initializer {
 
     // initialize the payment dummy data
     public MapInterface<String, Payment> paymentInitializer() {
-        MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
+        MapInterface<String, Payment> paymentMap = new ChainBucket<>();
         MapInterface<String, Prescription> prescriptionMap = prescriptionInitializer();
         MapInterface<String, Consultation> consultationMap = consultationInitializer();
         MapInterface<String, Treatment> treatmentMap = medicalTreatmentInitializer();
@@ -230,7 +230,7 @@ public class Initializer {
 
     //initialize the patient dummy data
    public MapInterface<String, Patient> patientInitializer() {
-        MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
+        MapInterface<String, Patient> patientMap = new ChainBucket<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
         try {
@@ -294,7 +294,7 @@ public class Initializer {
 
     //initialize the Consultation dummy data 
     public MapInterface<String, Consultation> consultationInitializer() {
-        MapInterface<String, Consultation> consultMap = new LinkedHashMap<>();
+        MapInterface<String, Consultation> consultMap = new ChainBucket<>();
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
 
@@ -337,7 +337,7 @@ public class Initializer {
     }
 
     public MapInterface<String, Staff> staffInitializer() {
-        MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
+        MapInterface<String, Staff> staffMap = new ChainBucket<>();
 
         // staff_id, staff_password, staff_name, staff_position, staff_contact, staff_email,
         // education_level, service_duration, dutyStatus, joined_date, pendingLeaveDate
@@ -353,7 +353,7 @@ public class Initializer {
     }
 
     public MapInterface<Integer, String> doctorA_Initializer() {
-        MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
+        MapInterface<Integer, String> doctorAMap = new ChainBucket<>();
         doctorAMap.put(1, "S000001");
         doctorAMap.put(2, "S000002");
         doctorAMap.put(3, "S000003");
@@ -362,7 +362,7 @@ public class Initializer {
     }
 
     public MapInterface<Integer, String> doctorB_Initializer() {
-        MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
+        MapInterface<Integer, String> doctorBMap = new ChainBucket<>();
         doctorBMap.put(1, "S000004");
         doctorBMap.put(2, "S000005");
         doctorBMap.put(3, "S000006");
@@ -371,7 +371,7 @@ public class Initializer {
     }
 
     public MapInterface<LocalDate, MapInterface<Integer, String>> dutySchedule_Initializer() {
-        MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
+        MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new ChainBucket<>();
 
         int year = 2025;
         int month = 8; // August
@@ -391,7 +391,7 @@ public class Initializer {
     }
 
     public MapInterface<String, String> timeSlotInitializer() {
-        MapInterface<String, String> timeSlots = new LinkedHashMap<>();
+        MapInterface<String, String> timeSlots = new ChainBucket<>();
 
         timeSlots.put("09:00", "09:00");
         timeSlots.put("09:30", "09:30");
@@ -416,7 +416,7 @@ public class Initializer {
         return timeSlots;
     }
  public MapInterface<String, Ticket> ticketInitializer() {
-    MapInterface<String, Ticket> ticketMap = new LinkedHashMap<>();
+    MapInterface<String, Ticket> ticketMap = new ChainBucket<>();
 
     // Group A Doctors (S000001, S000002, S000003) - Tickets 1-9
     ticketMap.put("TK001", new Ticket("TK001", "", "S000001"));

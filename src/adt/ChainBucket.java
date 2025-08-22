@@ -10,14 +10,14 @@ import java.util.Iterator;
  *
  * @author User
  */
-public class LinkedHashMap<K, V> implements MapInterface<K, V> {
+public class ChainBucket<K, V> implements MapInterface<K, V> {
 
     private Entry<K, V>[] entries;
     private int size;
     private final int CAPACITY = 16;
     private Entry<K, V> head, tail;
 
-    public LinkedHashMap() {
+    public ChainBucket() {
         entries = new Entry[CAPACITY];
         size = 0;
         head = null;
@@ -428,7 +428,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
     @Override
     public MapInterface<K, V> intersect(MapInterface<K, V> map) {
-        MapInterface<K, V> intersectMap = new LinkedHashMap<>();
+        MapInterface<K, V> intersectMap = new ChainBucket<>();
         if (isEmpty()) {
             return null;
         } else {
@@ -456,7 +456,7 @@ public class LinkedHashMap<K, V> implements MapInterface<K, V> {
 
     @Override
     public MapInterface<K, V> groupBy(V value) {
-        MapInterface<K, V> group = new LinkedHashMap<>();
+        MapInterface<K, V> group = new ChainBucket<>();
 
         if (!isEmpty()) {
             Entry<K, V> current = head;

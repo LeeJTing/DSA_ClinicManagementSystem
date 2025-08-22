@@ -42,12 +42,9 @@ public class main {
                                 doctor.doctorManagementOuter();
                                 break;
                             case 2:
-                                consult.consultationMenu();
-                                break;
-                            case 3:
                                 medical.treatmentMenu();
                                 break;
-                            case 4:
+                            case 3:
                                 pharmacy.pharmacyMenu();
                                 break;
                             default:

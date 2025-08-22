@@ -8,7 +8,7 @@ import dao.Master;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import utility.*;
 import entity.*;
@@ -24,19 +24,19 @@ import java.util.Scanner;
 public class MedicalTreatmentManagement implements CRUD {
 
     private final MedicalTreatmentUI UI = new MedicalTreatmentUI();
-    private MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
-    private MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
-    private MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
-    private MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
-    private MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
-    private MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
+    private MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
+    private MapInterface<String, Patient> patientMap = new ChainBucket<>();
+    private MapInterface<String, Staff> staffMap = new ChainBucket<>();
+    private MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
+    private MapInterface<String, Prescription> prescriptionMap = new ChainBucket<>();
+    private MapInterface<String, Payment> paymentMap = new ChainBucket<>();
+    private MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new ChainBucket<>();
 
     private static int historyKey = 1;
-    private MapInterface<Integer, Treatment> treatmentRecordHistory = new LinkedHashMap<>();
-    private MapInterface<Integer, Prescription> prescriptionRecordHistory = new LinkedHashMap<>();
-    private MapInterface<Integer, String> actionHistory = new LinkedHashMap();
+    private MapInterface<Integer, Treatment> treatmentRecordHistory = new ChainBucket<>();
+    private MapInterface<Integer, Prescription> prescriptionRecordHistory = new ChainBucket<>();
+    private MapInterface<Integer, String> actionHistory = new ChainBucket();
 
     Scanner scanner = new Scanner(System.in);
 
@@ -212,13 +212,13 @@ public class MedicalTreatmentManagement implements CRUD {
     private void treatmentToPrescription(Treatment treatment) {
         String prescription_id = prescriptionMap.getLastKey();
         prescription_id = IDGenerator.generateNextID(prescription_id);
-        MapInterface<String, Medicine> medicineList = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicineList = new ChainBucket<>();
         String staff_id = treatment.getStaff_id();
         String patient_id = treatment.getPatient_id();
         String treatment_id = treatment.getTreatment_id();
 
         Iterator<Medicine> iterMedicine = medicineMap.getIterator();
-        MapInterface<String, Medicine> medicine = new LinkedHashMap<>();
+        MapInterface<String, Medicine> medicine = new ChainBucket<>();
         while (iterMedicine.hasNext()) {
             Medicine m = iterMedicine.next();
             String medicineName = m.getMedicineName();
@@ -406,10 +406,10 @@ public class MedicalTreatmentManagement implements CRUD {
                     break;
                 case 6:
                     String prescription_id = prescription.getPrescription_id();
-                    MapInterface<String, Medicine> medicineList = new LinkedHashMap<>();
+                    MapInterface<String, Medicine> medicineList = new ChainBucket<>();
 
                     Iterator<Medicine> iterMedicine = medicineMap.getIterator();
-                    MapInterface<String, Medicine> medicine = new LinkedHashMap<>();
+                    MapInterface<String, Medicine> medicine = new ChainBucket<>();
                     while (iterMedicine.hasNext()) {
                         Medicine m = iterMedicine.next();
                         String medicineName = m.getMedicineName();
@@ -518,9 +518,9 @@ public class MedicalTreatmentManagement implements CRUD {
         treatmentMap = Master.getTreatmentMap();
         patientMap = Master.getPatientMap();
 
-        MapInterface<String, Integer> diseaseMap = new LinkedHashMap<>();
-        MapInterface<String, Integer> ageRangeMap = new LinkedHashMap<>();
-        MapInterface<String, Integer> caseCountMap = new LinkedHashMap<>();
+        MapInterface<String, Integer> diseaseMap = new ChainBucket<>();
+        MapInterface<String, Integer> ageRangeMap = new ChainBucket<>();
+        MapInterface<String, Integer> caseCountMap = new ChainBucket<>();
 
         ageRangeMap.put("0-9", 0);
         ageRangeMap.put("10-19", 0);
@@ -686,11 +686,11 @@ public class MedicalTreatmentManagement implements CRUD {
         MapInterface<String, Patient> intersectAsthmaAndFracture = asthmaMap.intersect(fractureMap);
 
         // find the probability P(will X if have Y) = (X intersect Y) / total Y
-        MapInterface<String, Double> hyperRelationship = new LinkedHashMap<>();
-        MapInterface<String, Double> diabetesRelationship = new LinkedHashMap<>();
-        MapInterface<String, Double> covidRelationship = new LinkedHashMap<>();
-        MapInterface<String, Double> asthmaRelationship = new LinkedHashMap<>();
-        MapInterface<String, Double> fractureRelationship = new LinkedHashMap<>();
+        MapInterface<String, Double> hyperRelationship = new ChainBucket<>();
+        MapInterface<String, Double> diabetesRelationship = new ChainBucket<>();
+        MapInterface<String, Double> covidRelationship = new ChainBucket<>();
+        MapInterface<String, Double> asthmaRelationship = new ChainBucket<>();
+        MapInterface<String, Double> fractureRelationship = new ChainBucket<>();
 
         // hyper
         hyperRelationship.put("Diabetes Type 2", ralationshipBetweenDisease(hypertensionMap.size(), intersectHypertensionAndDiabetes.size()));
@@ -742,7 +742,7 @@ public class MedicalTreatmentManagement implements CRUD {
     }
 
     private MapInterface<String, Patient> getPatientByDiseaseMap(MapInterface<String, Treatment> treatment) {
-        MapInterface<String, Patient> patient = new LinkedHashMap<>();
+        MapInterface<String, Patient> patient = new ChainBucket<>();
 
         Iterator<Treatment> iter = treatment.getIterator();
         while (iter.hasNext()) {

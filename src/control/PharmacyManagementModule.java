@@ -4,7 +4,7 @@
  */
 package control;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import boundary.PaymentUI;
 import boundary.PharmacyUI;
@@ -29,16 +29,16 @@ import utility.MessageUI;
  */
 public class PharmacyManagementModule implements CRUD {
 
-    private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
-    private static MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
-    private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
-    private static final MapInterface<String, Medicine> medicineDispensedMap = new LinkedHashMap<>();
-    private static final MapInterface<Integer, String> alertMap = new LinkedHashMap<>();
-    private static final MapInterface<String, Medicine> medicineStatusMap = new LinkedHashMap<>();
-    private static final MapInterface<String, Medicine> actionHistory = new LinkedHashMap<>();
-    private static final MapInterface<Integer, Medicine> expiredMedicine = new LinkedHashMap<>();
+    private static MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
+    private static MapInterface<String, Payment> paymentMap = new ChainBucket<>();
+    private static MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
+    private static MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private static MapInterface<String, Prescription> prescriptionMap = new ChainBucket<>();
+    private static final MapInterface<String, Medicine> medicineDispensedMap = new ChainBucket<>();
+    private static final MapInterface<Integer, String> alertMap = new ChainBucket<>();
+    private static final MapInterface<String, Medicine> medicineStatusMap = new ChainBucket<>();
+    private static final MapInterface<String, Medicine> actionHistory = new ChainBucket<>();
+    private static final MapInterface<Integer, Medicine> expiredMedicine = new ChainBucket<>();
     private static final PharmacyUI PharmacyUI = new PharmacyUI();
     private static final PaymentUI PaymentUI = new PaymentUI();
 
@@ -507,7 +507,7 @@ public class PharmacyManagementModule implements CRUD {
 
     // Display the total medicine dispensed for each category
     private void groupMedicineDispensedByCategory() {
-        MapInterface<String, Medicine> categoryMedicineDispensedMap = new LinkedHashMap<>();
+        MapInterface<String, Medicine> categoryMedicineDispensedMap = new ChainBucket<>();
 
         String[] categories = {
             "Analgesics (Painkillers)", "Antibiotics", "Antipyretics (Fever Reducers)",
@@ -738,7 +738,7 @@ public class PharmacyManagementModule implements CRUD {
 
     // Get the available medicine details
     public MapInterface<String, Medicine> getAvailableMedicine(MapInterface<String, Medicine> medicineNeeded) {
-        MapInterface<String, Medicine> availableMedicine = new LinkedHashMap<>();
+        MapInterface<String, Medicine> availableMedicine = new ChainBucket<>();
 
         // Avoid dispensing medicine that expiry within 2 weeks
         LocalDate threshold = LocalDate.now().plusWeeks(2);

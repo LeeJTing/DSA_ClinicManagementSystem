@@ -4,7 +4,7 @@
  */
 package control;
 
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import adt.MapInterface;
 import boundary.ConsultationUI;
 import dao.Master;
@@ -25,17 +25,17 @@ import utility.MessageUI;
  */
 public class ConsultationManagement implements CRUD {
 
-    private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
-    private static MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
-    private static MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
-    private static MapInterface<String, String> timeSlotMap = new LinkedHashMap<>();
+    private static MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private static MapInterface<String, Staff> staffMap = new ChainBucket<>();
+    private static MapInterface<Integer, String> doctorAMap = new ChainBucket<>();
+    private static MapInterface<Integer, String> doctorBMap = new ChainBucket<>();
+    private static MapInterface<String, String> timeSlotMap = new ChainBucket<>();
 
     private static final ConsultationUI consultUI = new ConsultationUI();
     private static final String currentPatientId = Master.getCurrentPatientId();
     private static final String currentStaffId = Master.getCurrentStaffId();
-    private static MapInterface<String, Consultation> consultationRecordHistory = new LinkedHashMap<>();
-    private static MapInterface<String, String> actionHistory = new LinkedHashMap<>();
+    private static MapInterface<String, Consultation> consultationRecordHistory = new ChainBucket<>();
+    private static MapInterface<String, String> actionHistory = new ChainBucket<>();
 
 //    private static final String currentPatientId = "P000001";
 //    private static final String currentStaffId = "S000001";

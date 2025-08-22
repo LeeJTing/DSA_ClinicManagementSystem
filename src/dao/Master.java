@@ -7,7 +7,7 @@ package dao;
 import dao.Initializer;
 import entity.*;
 import adt.MapInterface;
-import adt.LinkedHashMap;
+import adt.ChainBucket;
 import java.time.LocalDate;
 
 /**
@@ -17,22 +17,22 @@ import java.time.LocalDate;
 public class Master {
 
     // <Instance ID, Instance>
-    private static MapInterface<String, Treatment> treatmentMap = new LinkedHashMap<>();
-    private static MapInterface<String, Patient> patientMap = new LinkedHashMap<>();
-    private static MapInterface<String, Staff> staffMap = new LinkedHashMap<>();
-    private static MapInterface<String, Consultation> consultationMap = new LinkedHashMap<>();
-    private static MapInterface<String, Medicine> medicineMap = new LinkedHashMap<>();
-    private static MapInterface<String, Prescription> prescriptionMap = new LinkedHashMap<>();
-    private static MapInterface<String, Payment> paymentMap = new LinkedHashMap<>();
-    private static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new LinkedHashMap<>();
-    private static MapInterface<Integer, String> doctorAMap = new LinkedHashMap<>();
-    private static MapInterface<Integer, String> doctorBMap = new LinkedHashMap<>();
-    private static MapInterface<String, String> timeSlotMap = new LinkedHashMap<>();
+    private static MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
+    private static MapInterface<String, Patient> patientMap = new ChainBucket<>();
+    private static MapInterface<String, Staff> staffMap = new ChainBucket<>();
+    private static MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
+    private static MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
+    private static MapInterface<String, Prescription> prescriptionMap = new ChainBucket<>();
+    private static MapInterface<String, Payment> paymentMap = new ChainBucket<>();
+    private static MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new ChainBucket<>();
+    private static MapInterface<Integer, String> doctorAMap = new ChainBucket<>();
+    private static MapInterface<Integer, String> doctorBMap = new ChainBucket<>();
+    private static MapInterface<String, String> timeSlotMap = new ChainBucket<>();
     private static String currentPatientId = "";
     private static String currentStaffId = "";
     private static String currentTicket = "";
     private static final Initializer INITIALIZER = new Initializer();
-    private static MapInterface<String, Ticket> ticketQueue = new LinkedHashMap<>();
+    private static MapInterface<String, Ticket> ticketQueue = new ChainBucket<>();
 
     public Master() {
 
