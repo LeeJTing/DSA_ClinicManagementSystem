@@ -39,9 +39,8 @@ public class ConsultationManagement implements CRUD {
 
 //    private static final String currentPatientId = "P000001";
 //    private static final String currentStaffId = "S000001";
-
 //    public static void main(String[] args) {
-////        Master.initializer();
+    ////        Master.initializer();
 //        consultationMap = Master.getConsultationMap();
 //        staffMap = Master.getStaffMap();
 //        doctorAMap = Master.getDoctorAMap();
@@ -55,6 +54,7 @@ public class ConsultationManagement implements CRUD {
     public ConsultationManagement() {
         getAllMap();
     }
+
     private void getAllMap() {
         consultationMap = Master.getConsultationMap();
         staffMap = Master.getStaffMap();
@@ -62,6 +62,7 @@ public class ConsultationManagement implements CRUD {
         doctorBMap = Master.getDoctorBMap();
         timeSlotMap = Master.getTimeSlotMap();
     }
+
     public void consultationMenu() {
 //        String currentPatientId = Master.getCurrentPatientId();
 //        String currentStaffId = Master.getCurrentStaffId();
@@ -73,61 +74,58 @@ public class ConsultationManagement implements CRUD {
                 case 1 -> // view Appointment (Patient and docktor)
                     readInstance();
                 case 2 -> { // search appointment (patient)
-                    searchAppoinment();
-//                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
-//                        System.out.println("\t\t The Patient not avaliable search appoinment");
-//                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-//                        searchAppoinment();
-//                    } else {
-//            consultUI.displayCurrentUserMsg();
-//                    }
+//                    searchAppoinment();
+                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
+                        System.out.println("\t\t The Patient not avaliable search appoinment");
+                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
+                        searchAppoinment();
+                    } else {
+                        consultUI.displayCurrentUserMsg();
+                    }
                 }
                 case 3 -> // add appoinment (walk in / online)
                     createNewInstance();
                 case 4 -> {// update Appointment (patient)
-                    updateAppoinment();
-//                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
-//                        updateAppoinment();
-//                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-//                        System.out.println("\t\t The Staff not avaliable update appoinment");
-//                    } else {
-//            consultUI.displayCurrentUserMsg();
-
-//                    }
+//                    updateAppoinment();
+                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
+                        updateAppoinment();
+                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
+                        System.out.println("\t\t The Staff not avaliable update appoinment");
+                    } else {
+                        consultUI.displayCurrentUserMsg();
+                    }
                 }
                 case 5 -> { // update Appointment (patient)
-                    deleteInstance();
-//                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
-//                        deleteInstance();
-//                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-//                        System.out.println("\t\t The Staff not avaliable update appoinment");
-//                    } else {
-//            consultUI.displayCurrentUserMsg();
-
-//                    }
+//                    deleteInstance();
+                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
+                        deleteInstance();
+                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
+                        System.out.println("\t\t The Staff not avaliable update appoinment");
+                    } else {
+                        consultUI.displayCurrentUserMsg();
+                    }
                 }
                 case 6 -> // view consultation schedule (Patient)
                     viewConsultationSchedule();
                 case 7 -> {// view Consultation Flw Up Report 
-                    viewConsultationFlwUpReport();
-//                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
-//                        System.out.println("\t\t The patient not avaliable view report");
-//                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-//                        viewConsultationFlwUpReport();
-//                    } else {
-//            consultUI.displayCurrentUserMsg();
-
-//                    }
+//                    viewConsultationFlwUpReport();
+                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
+                        System.out.println("\t\t The patient not avaliable view report");
+                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
+                        viewConsultationFlwUpReport();
+                    } else {
+                        consultUI.displayCurrentUserMsg();
+                    }
                 }
                 case 8 -> { // view Consultation Valume Report
-                    viewConsultationValumeReport();
-//                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
-//                        System.out.println("\t\t The patient not avaliable view report");
-//                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-//                        viewConsultationValumeReport();
-//                    } else {
-//                    consultUI.displayCurrentUserMsg();
-//                    }
+//                    viewConsultationValumeReport();
+                    if (currentPatientId != null && !currentPatientId.isEmpty()) {
+                        System.out.println("\t\t The patient not avaliable view report");
+                    } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
+                        viewConsultationValumeReport();
+                    } else {
+                        consultUI.displayCurrentUserMsg();
+                    }
                 }
                 case 9 -> {        // undo
                     undo();
