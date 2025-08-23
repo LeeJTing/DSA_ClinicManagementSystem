@@ -143,8 +143,16 @@ public class ConsultationUI {
         System.out.printf("\t\t\t\t%s%s%s%s\n", RED, "No consultation found with ID: ", consultationId, RESET);
     }
 
-    public void displayConsultationToString(Consultation consult) {
-        System.out.println(consult.toStaffString());
+    public void displayConsultationToString(Consultation c) {
+        int tableWidth = 122; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+        String consultationTime = String.format("%s-%s",
+                timeFormat.format(c.getConsultation_start_time()),
+                timeFormat.format(c.getConsultation_end_time())
+        );
+
+        System.out.printf("\t\t | %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s | %7s | %7s   | \n\t\t %s\n", c.getConsultation_Id(), dateFormat.format(c.getAppointment_date()), dateFormat.format(c.getConsultation_date()), consultationTime, c.getAppointmentStatus(), c.getType(), c.getPatient_Id(), c.getStaff_Id(), border);
     }
 
     public void displayConsultationOperationMsg(String id, String type1, String type2) {
@@ -254,9 +262,11 @@ public class ConsultationUI {
     }
 
     public void staffReportAppoinmentFlwUI() {
-        System.out.println("\t\t\t\t=================================================");
-        System.out.println("\t\t\t\t|              All Follow Up Report             |");
-        System.out.println("\t\t\t\t=================================================");
+        int tableWidth = 57; // total width including borders
+        String border = "=".repeat(tableWidth);
+        System.out.println("\t\t\t\t" + border);
+        System.out.println("\t\t\t\t|                  All Follow Up Report                 |");
+        System.out.println("\t\t\t\t" + border);
     }
 
     public void staffSearchAppointmentUI() {
@@ -328,8 +338,8 @@ public class ConsultationUI {
     public void displayFlwUpReport(String date, String staffID, int count) {
         int tableWidth = 57; // total width including borders
         String border = "-".repeat(tableWidth);
-        System.out.printf("\t\t\t\t| %-17s | %-10s | %-20d |\n", date, staffID, count);
-        System.out.println("\t\t\t\t" + border);
+        System.out.printf("\t\t\t\t| %-17s | %-10s |           %-10d |\n", date, staffID, count);
+        System.out.println("\t\t " + border);
     }
 
     public void displayAppoinment(Consultation consultation) {
@@ -347,8 +357,8 @@ public class ConsultationUI {
         System.out.printf("\t\t\t\t| %-25s | %-19s |\n", "Staff ID", consultation.getStaff_Id());
         System.out.println("\t\t\t\t" + border);
     }
-    
-    public void displayspace(){
+
+    public void displayspace() {
         System.out.println("");
     }
 
