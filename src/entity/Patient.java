@@ -52,9 +52,9 @@ public class Patient {
         }
     }
 
-    public void addVisit(Date queueStart, Date queueEnd, String ticket) {
+    public void addVisit(Date queueStart, Date queueEnd) {
         if (visitCount < visits.length) {
-            visits[visitCount++] = new Visit(queueStart, queueEnd, ticket);
+            visits[visitCount++] = new Visit(queueStart, queueEnd);
         }
     }
 

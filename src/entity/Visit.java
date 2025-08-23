@@ -14,12 +14,10 @@ public class Visit {
 
     private Date queueStart;
     private Date queueEnd;
-    private String ticket;
 
-    public Visit(Date queueStart, Date queueEnd, String ticket) {
+    public Visit(Date queueStart, Date queueEnd) {
         this.queueStart = queueStart;
         this.queueEnd = queueEnd;
-        this.ticket = ticket;
     }
 
     public Date getQueueStart() {
@@ -38,16 +36,9 @@ public class Visit {
         this.queueEnd = queueEnd;
     }
 
-    public String getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(String ticket) {
-        this.ticket = ticket;
-    }
-
     @Override
     public String toString() {
-        return "Visit{" + "queueStart=" + queueStart + ", queueEnd=" + queueEnd + ", ticket=" + ticket + '}';
+        return "Visit{" + "queueStart=" + queueStart + ", queueEnd=" + queueEnd + '}';
     }
+
 }
