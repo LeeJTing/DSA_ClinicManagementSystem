@@ -15,6 +15,12 @@ public class Ticket implements Comparable<Ticket> {
     private String ticketStatus;
     private Date queueStart;
     private Date queueEnd;
+    private String patientID;
+    
+    public Ticket() {
+    }
+    
+    
 
     public Ticket(String ticketNumber, String ticketStatus, Date queueStart, Date queueEnd) {
         this.ticketNumber = ticketNumber;
@@ -38,6 +44,16 @@ public class Ticket implements Comparable<Ticket> {
     public void setTicketStatus(String ticketStatus) {
         this.ticketStatus = ticketStatus;
     }
+
+    public String getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+    
+    
 
     @Override
     public int compareTo(Ticket other) {

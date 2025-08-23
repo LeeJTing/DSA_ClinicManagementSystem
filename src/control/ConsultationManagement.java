@@ -10,6 +10,7 @@ import boundary.ConsultationUI;
 import dao.Master;
 import entity.Consultation;
 import entity.Staff;
+import entity.Ticket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,13 +25,13 @@ import utility.MessageUI;
  * @author Tan Kok Hong
  */
 public class ConsultationManagement implements CRUD {
-
+    
     private static MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
     private static MapInterface<String, Staff> staffMap = new ChainBucket<>();
     private static MapInterface<Integer, String> doctorAMap = new ChainBucket<>();
     private static MapInterface<Integer, String> doctorBMap = new ChainBucket<>();
     private static MapInterface<String, String> timeSlotMap = new ChainBucket<>();
-
+    
     private static final ConsultationUI consultUI = new ConsultationUI();
     private static String currentPatientId = Master.getCurrentPatientId();
     private static String currentStaffId = Master.getCurrentStaffId();
@@ -54,7 +55,7 @@ public class ConsultationManagement implements CRUD {
     public ConsultationManagement() {
         getAllMap();
     }
-
+    
     private void getAllMap() {
         consultationMap = Master.getConsultationMap();
         staffMap = Master.getStaffMap();
@@ -62,12 +63,12 @@ public class ConsultationManagement implements CRUD {
         doctorBMap = Master.getDoctorBMap();
         timeSlotMap = Master.getTimeSlotMap();
     }
-
+    
     public void consultationMenu() {
         currentPatientId = Master.getCurrentPatientId();
         currentStaffId = Master.getCurrentStaffId();
         int choice = 0;
-
+        
         do {
             choice = consultUI.consultationMenu();
             switch (choice) {
@@ -100,7 +101,7 @@ public class ConsultationManagement implements CRUD {
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
                         deleteInstance();
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-                        System.out.println("\t\t The Staff not avaliable update appoinment");
+                        System.out.println("\t\t The Staff not avaliable deleted appoinment");
                     } else {
                         consultUI.displayCurrentUserMsg();
                     }
@@ -168,7 +169,7 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayCurrentUserMsg();
         }
     }
-
+    
     @Override
     public void readInstance() {
         Consultation.setCompare("appointmentStatus");
@@ -182,19 +183,19 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayCurrentUserMsg();
         }
     }
-
+    
     @Override
     public void updateInstance() {
         updateAppoinment();
     }
-
+    
     @Override
     public void deleteInstance() {
         boolean confirm;
         consultUI.deleteAppoinmentUI();
         String consultationID = consultUI.promptConsultationID();
         Consultation consultationFound = consultationMap.getValue(consultationID);
-
+        
         if (consultationMap.size() != 0) {
             consultUI.patientViewAppoinmentUI();
             consultUI.displayAppoinment(consultationFound);
@@ -211,7 +212,7 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayConsultationNotFound(consultationID);
         }
     }
-
+    
     public static void viewPatientAppoinment(Object[] consulations, String patientID) { // current Patient (today appoinment)
         if (!consultationMap.isEmpty()) {
             Consultation.setCompare("appointmentStatus");
@@ -227,7 +228,7 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayConsultationNotFound();
         }
     }
-
+    
     public static void viewTodayAppoinment(Object[] consulations, String staffID) { // current staff (how many patient staff need to see)
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // format only date part
@@ -268,7 +269,9 @@ public class ConsultationManagement implements CRUD {
 //        if (!consultationMap.isEmpty()) {
 //            Consultation.setCompare("appointmentStatus");
 //            consultationMap.sorting();
-////            consultUI.staffViewAppoinmentUI();
+    
+
+    ////            consultUI.staffViewAppoinmentUI();
 //            consultUI.appointmentFieldUI();
 //            for (Object c : consulations) {
 //                Consultation consultation = (Consultation) c;
@@ -284,13 +287,13 @@ public class ConsultationManagement implements CRUD {
     public void searchAppoinment() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         int choice = 0;
-
+        
         do {
             choice = consultUI.searchAppointmentMenu();
             switch (choice) {
                 case 1 -> {
                     String consultationId = consultUI.promptConsultationID();
-                    findConsultation(consultationId, Consultation::getConsultation_Id);
+                    findConsultation1(consultationId, Consultation::getConsultation_Id);
 
 //                    Consultation consultationFound = consultationMap.getValue(consultationId);
 //                    if (consultationFound != null) {
@@ -303,7 +306,7 @@ public class ConsultationManagement implements CRUD {
                 case 2 -> {
                     String patientId = consultUI.promptPatientID();
                     consultUI.staffSearchAppointmentUI();
-                    findConsultation(patientId, Consultation::getPatient_Id);
+                    findConsultation1(patientId, Consultation::getPatient_Id);
 //                    Object[] values = consultationMap.getAllValues();
 //                    for (Object obj : values) {
 //                        Consultation c = (Consultation) obj;
@@ -319,7 +322,7 @@ public class ConsultationManagement implements CRUD {
                     Object[] values = consultationMap.getAllValues();
                     consultUI.staffSearchAppointmentUI();
                     consultUI.appointmentFieldUI2();
-                    findConsultation(dateFormat.format(consultationDate), c -> dateFormat.format(c.getConsultation_date()));
+                    findConsultation2(dateFormat.format(consultationDate), c -> dateFormat.format(c.getConsultation_date()));
 //                    for (Object obj : values) {
 //                        Consultation c = (Consultation) obj;
 //                        if (dateFormat.format(c.getConsultation_date()).equals(dateFormat.format(consultationDate))) {
@@ -335,15 +338,26 @@ public class ConsultationManagement implements CRUD {
             }
         } while (choice != 4);
     }
-
-    private void findConsultation(String value, Function<Consultation, String> getter) {
+    
+    private void findConsultation1(String value, Function<Consultation, String> getter) {
         Iterator<Consultation> iterator = consultationMap.getIterator();
         while (iterator.hasNext()) {
             Consultation consult = iterator.next();
             if (getter.apply(consult).equals(value)) {
                 consultUI.displayAppoinment(consult);
             }
-
+            
+        }
+    }
+    
+    private void findConsultation2(String value, Function<Consultation, String> getter) {
+        Iterator<Consultation> iterator = consultationMap.getIterator();
+        while (iterator.hasNext()) {
+            Consultation consult = iterator.next();
+            if (getter.apply(consult).equals(value)) {
+                consultUI.displayConsultationToString(consult);
+            }
+            
         }
     }
 
@@ -355,11 +369,11 @@ public class ConsultationManagement implements CRUD {
         Date newConsultStartTime = null;
         Date newConsultEndTime = null;
         String staffID = "";
-
+        
         String newConsultationID = generateNextConsultationId();
         Date newAppoinmentDate = currentDate;
         Date newConsultationDate = consultUI.promptConsultationDate();
-
+        
         do {
             newConsultStartTime = consultUI.promptConsultationStartTime();
             newConsultEndTime = consultUI.promptConsultationEndTime();
@@ -369,7 +383,7 @@ public class ConsultationManagement implements CRUD {
                 valid = true;
             }
         } while (!valid);
-
+        
         do {
             staffID = consultUI.promptStaffID();
             Object staff = staffMap.getValue(staffID);
@@ -380,7 +394,7 @@ public class ConsultationManagement implements CRUD {
                 valid = true;
             }
         } while (!valid);
-
+        
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, newConsultEndTime, "Pending", "Online", currentPatientId, staffID);
         if (newConsultation != null) {
             consultationMap.put(newConsultationID, newConsultation);
@@ -391,7 +405,7 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayFailedMsg("Create Appoinment ");
         }
     }
-
+    
     public void addWalkInAppoinment() {
         viewConsultationSchedule();
         Date currentDate = new Date();
@@ -399,14 +413,15 @@ public class ConsultationManagement implements CRUD {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String num = Master.getCurrentTicket();
         MedicalTreatmentManagement mt = new MedicalTreatmentManagement();
+        Ticket t = new Ticket();
         Object[] staff = staffMap.getAllValues();
         boolean valid = false;
         String staffID = "";
-
+        
         Date newAppoinmentDate = null;
         Date newConsultationDate = null;
         Date newConsultStartTime = null;
-
+        
         String newConsultationID = generateNextConsultationId();
         try {
             newAppoinmentDate = dateFormat.parse(dateFormat.format(currentDate));
@@ -427,14 +442,17 @@ public class ConsultationManagement implements CRUD {
                 }
             }
         } while (!valid);
-
+        
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, null, "Pending", "Walk-in", currentPatientID, staffID);
-
+        
         if (newConsultation != null) {
             consultationMap.put(newConsultationID, newConsultation);
             consultationRecordHistory.put(newConsultationID, newConsultation);
             actionHistory.put(newConsultationID, "Create");
             Master.setConsultationMap(consultationMap);
+            t.setTicketStatus("Completed");
+            t.setQueueEnd(currentDate);
+            t.setPatientID(currentPatientID);
             consultUI.displayConsultationOperationMsg(newConsultationID, "Create Walk-in", "successfully");
             consultUI.displayConsultationWalkInNumber(num);
             mt.consultationToTreatment(newConsultationID);
@@ -450,11 +468,11 @@ public class ConsultationManagement implements CRUD {
         Date newConsultStartTime = null;
         Date newConsultEndTime = null;
         String staffID = "";
-
+        
         String newConsultationID = generateNextConsultationId();
         Date newAppoinmentDate = currentDate;
         Date newConsultationDate = consultUI.promptConsultationDate();
-
+        
         do {
             newConsultStartTime = consultUI.promptConsultationStartTime();
             newConsultEndTime = consultUI.promptConsultationEndTime();
@@ -464,13 +482,13 @@ public class ConsultationManagement implements CRUD {
                 valid = true;
             }
         } while (!valid);
-
+        
         String currentStaffID = Master.getCurrentStaffId();
         staffID = currentStaffID;
         String patientID = consultUI.promptPatientID();
-
+        
         Consultation newConsultation = new Consultation(newConsultationID, newAppoinmentDate, newConsultationDate, newConsultStartTime, newConsultEndTime, "Pending", "Flw-up", patientID, staffID);
-
+        
         if (newConsultation != null) {
             consultationMap.put(newConsultationID, newConsultation);
             consultationRecordHistory.put(newConsultationID, newConsultation);
@@ -481,11 +499,11 @@ public class ConsultationManagement implements CRUD {
             consultUI.displayFailedMsg("Create Appoinment ");
         }
     }
-
+    
     public static void updateAppoinment() {
         String consultationID = consultUI.promptConsultationID();
         int choice = 0;
-
+        
         Consultation consultationFound = consultationMap.getValue(consultationID);
         if (!consultationFound.getAppointmentStatus().equalsIgnoreCase("Pending")) {
             consultUI.displayConsultationNotFound();
@@ -494,7 +512,7 @@ public class ConsultationManagement implements CRUD {
         consultUI.editAppoinmentUI();
         consultUI.displayAppoinment(consultationFound);
         Consultation consultBackup = new Consultation(consultationFound.getConsultation_Id(), consultationFound.getAppointment_date(), consultationFound.getConsultation_date(), consultationFound.getConsultation_start_time(), consultationFound.getConsultation_end_time(), consultationFound.getAppointmentStatus(), consultationFound.getType(), consultationFound.getPatient_Id(), consultationFound.getStaff_Id());
-
+        
         do {
             choice = consultUI.editAppoinmentOptionMenu();
             switch (choice) {
@@ -515,30 +533,30 @@ public class ConsultationManagement implements CRUD {
                     consultationFound.setStaff_Id(newStaffID);
                 }
                 case 5 -> {
-
+                    
                 }
                 default ->
                     consultUI.displayInvalidOptionMsg();
             }
-
+            
             consultationMap.put(consultationID, consultationFound);
             consultationRecordHistory.put(consultationID, consultBackup);
             actionHistory.put(consultationID, "Update");
-
+            
             consultUI.displayConsultationOperationMsg(consultationID, "Update", "successfully");
             consultUI.displayAppoinment(consultationFound);
         } while (choice != 5);
     }
-
+    
     public static void viewConsultationSchedule() {
-
+        
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         consultationMap.sorting();
-
+        
         consultUI.consultationScheduleUI();
-
+        
         for (int i = 0; i < 3; i++) {
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH) + 1;
@@ -546,38 +564,38 @@ public class ConsultationManagement implements CRUD {
 
             // Odd day = Doctor A, Even day = Doctor B
             MapInterface<Integer, String> doctorMap = (day % 2 != 0) ? doctorAMap : doctorBMap;
-
+            
             consultUI.displayConsultationSchedulefield(day, month, year, c);
             consultUI.consultationScheduleUI(timeSlotMap);
-
+            
             Object[] keys = doctorMap.getAllKeys();
             for (Object key : keys) {
                 Integer id = (Integer) key;
                 String staffID = doctorMap.getValue(id);
-
+                
                 if (staffMap.containsKey(staffID)) {
                     Staff staffData = staffMap.getValue(staffID);
                     consultUI.displayConsultationScheduleStaff(staffID, staffData);
                 }
-
+                
                 Object[] timeSlots = timeSlotMap.getAllKeys();
                 for (Object object : timeSlots) {
                     String slot = object.toString();
                     boolean booked = false;
-
+                    
                     Object[] consultations = consultationMap.getAllValues();
                     for (Object obj : consultations) {
                         Consultation consult = (Consultation) obj;
-
+                        
                         Calendar consultDate = Calendar.getInstance();
                         consultDate.setTime(consult.getConsultation_date());
-
+                        
                         if (consultDate.get(Calendar.YEAR) == year && (consultDate.get(Calendar.MONTH) + 1) == month && consultDate.get(Calendar.DAY_OF_MONTH) == day && consult.getStaff_Id().equals(staffID)) {
                             try {
                                 Date slotTime = timeFormat.parse(slot);
                                 Date start = consult.getConsultation_start_time();
                                 Date end = consult.getConsultation_end_time();
-
+                                
                                 if (!slotTime.before(start) && slotTime.before(end) && "Pending".equalsIgnoreCase(consult.getAppointmentStatus())) {
                                     booked = true;
                                     break;
@@ -601,12 +619,12 @@ public class ConsultationManagement implements CRUD {
     public static void viewConsultationFlwUpReport() {
         Object[] consultations = consultationMap.getAllValues();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
+        
         consultUI.staffReportAppoinmentFlwUI();
         consultUI.appointmentFieldUI3();
         for (int i = 0; i < consultations.length; i++) {
             Consultation c1 = (Consultation) consultations[i];
-
+            
             if ("Flw-up".equals(c1.getType())) {
                 int count = 0;
                 String date = dateFormat.format(c1.getConsultation_date());
@@ -629,45 +647,45 @@ public class ConsultationManagement implements CRUD {
                         break;
                     }
                 }
-
+                
                 if (!print) {
                     consultUI.displayFlwUpReport(date, staffID, count);
                 }
-
+                
             }
         }
-
+        
     }
-
+    
     public static void viewConsultationValumeReport() {
         Object[] consultations = consultationMap.getAllValues();
-
+        
         boolean running = true;
         while (running) {
             consultUI.staffReportAppoinmentUI();
             viewTodayAppoinment(consultations);
-
+            
             int choice = consultUI.consultationFlwUpMenu();
 //            do {
-                switch (choice) {
-                    case 1 ->
-                        filterConsultation(consultations, "year");
-                    case 2 ->
-                        filterConsultation(consultations, "month");
-                    case 3 ->
-                        filterConsultation(consultations, "day");
-                    case 4 -> {
-                        consultUI.displayBackMsg();
-                        running = false;
-                    }
-                    default -> {
-
-                    }
+            switch (choice) {
+                case 1 ->
+                    filterConsultation(consultations, "year");
+                case 2 ->
+                    filterConsultation(consultations, "month");
+                case 3 ->
+                    filterConsultation(consultations, "day");
+                case 4 -> {
+                    consultUI.displayBackMsg();
+                    running = false;
                 }
+                default -> {
+                    
+                }
+            }
 //            } while (choice != 4);
         }
     }
-
+    
     public static void filterConsultation(Object[] consultations, String type) {
         SimpleDateFormat sdf;
         String currentDate = "";
@@ -695,12 +713,12 @@ public class ConsultationManagement implements CRUD {
                 return;
             }
         }
-
+        
         consultUI.appointmentFieldUI();
         for (Object obj : consultations) {
             Consultation c = (Consultation) obj;
             String date = sdf.format(c.getConsultation_date());
-
+            
             if (date.equals(currentDate)) {
                 System.out.println(c.toStaffString());
                 count++;
@@ -711,18 +729,18 @@ public class ConsultationManagement implements CRUD {
         } else {
             consultUI.displayNotFoundCurrentDate(currentDate);
         }
-
+        
     }
-
+    
     public static String generateNextConsultationId() {
         String lastID = consultationMap.getLastKey();
-
+        
         if (lastID == null || lastID.isEmpty()) {
             lastID = "C000000";
         }
         return IDGenerator.generateNextID(lastID);
     }
-
+    
     private void undo() {
         if (actionHistory.isEmpty()) {
             consultUI.displayFailedMsg("No history to undo");
@@ -731,7 +749,7 @@ public class ConsultationManagement implements CRUD {
         String lastAction = actionHistory.removeLast();
         String lastId = consultationRecordHistory.getLastKey();
         Consultation lastConsult = consultationRecordHistory.removeLast();
-
+        
         switch (lastAction) {
             case "Create" -> {
                 consultationMap.remove(lastId);
@@ -748,5 +766,5 @@ public class ConsultationManagement implements CRUD {
             }
         }
     }
-
+    
 }
