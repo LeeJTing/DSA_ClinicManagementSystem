@@ -87,9 +87,10 @@ public class main {
                     break;
                 case 4:
                     patient.offlinePatientModule();
+                    break;
                 default:
                     // exit
-                    option = 0;
+                    option = 5;
                     break;
 
             }

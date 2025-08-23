@@ -59,7 +59,7 @@ public class menu {
         System.out.println("\t\t\t\t=====================================================");
         do {
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        } while (choice < 0 || choice > 4);
+        } while (choice < 0 || choice > 5);
         return choice;
     }
 
