@@ -81,7 +81,7 @@ public class PatientManagement implements CRUD {
                     deleteInstance();
                 case 4 ->
                     reportsModule();
-                case 5 ->{
+                case 5 -> {
                     System.out.println("under maintainance");
                 }
                 case 6 ->
@@ -92,7 +92,7 @@ public class PatientManagement implements CRUD {
                     Master.setCurrentPatientId("");
                     return;
                 }
-                default ->  
+                default ->
                     ui.displayInvalidChoice();
             }
             if (patientWasDeleted) {
@@ -101,7 +101,7 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void offlinePatientModule(){
+    public void offlinePatientModule() {
         int choice = ui.displayGetTicketMenu();
         switch (choice) {
             case 1:
@@ -114,6 +114,7 @@ public class PatientManagement implements CRUD {
         }
 
     }
+
     public void reportsModule() {
         while (true) {
             PatientManagementUI.displayAverageQueueMenu();
@@ -337,7 +338,7 @@ public class PatientManagement implements CRUD {
     public void getTicket() {
         MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
         Object[] ticketKeys = ticketQueue.getAllKeys();
-        Date currentDate  = new Date();
+        Date currentDate = new Date();
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
@@ -370,7 +371,6 @@ public class PatientManagement implements CRUD {
 
     private void displayCurrentQueue(MapInterface<String, Ticket> ticketQueue) {
         MapInterface<String, Ticket> queuedTickets = new ChainBucket<>();
-
         Object[] ticketKeys = ticketQueue.getAllKeys();
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
@@ -384,19 +384,20 @@ public class PatientManagement implements CRUD {
         ui.displayMessage("\n\t\t\t\tCurrent Queue : ");
         if (queuedTickets.isEmpty()) {
             ui.displayMessage("No tickets in queue.");
-        } else {
-            String lastTicket = "";
-            Object[] sortedTicketKeys = queuedTickets.getAllKeys();
-            String firstKey = (String) sortedTicketKeys[0];
-            Ticket firstTicket = queuedTickets.getValue(firstKey);
-            ui.displayMessage("Next Ticket to Be Serve: " + firstTicket.getTicketNumber());
-            for (int i = 1; i < sortedTicketKeys.length; i++) {
-                String ticketKey = (String) sortedTicketKeys[i];
-                Ticket ticket = queuedTickets.getValue(ticketKey);
-                ui.displayMessage("Ticket: " + ticket.getTicketNumber());
-            }
-            ui.displayMessage("Current waiting ticket: " + lastTicket);
+            return;
         }
+        Object[] sortedTicketKeys = queuedTickets.getAllKeys();
+        String firstKey = (String) sortedTicketKeys[sortedTicketKeys.length - 1];
+        Ticket firstTicket = queuedTickets.getValue(firstKey);
+        ui.displayMessage("Next Ticket to Be Serve: " + firstTicket.getTicketNumber());
+        int waitingCount = 0;
+        for (int i = sortedTicketKeys.length - 2; i >= 0; i--) {
+            String ticketKey = (String) sortedTicketKeys[i];
+            Ticket ticket = queuedTickets.getValue(ticketKey);
+            ui.displayMessage("Ticket: " + ticket.getTicketNumber());
+            waitingCount++;
+        }
+        ui.displayMessage("Current waiting ticket: " + waitingCount);
     }
 
     private void reportTimelineByDateRange() {
