@@ -10,7 +10,6 @@ import java.util.Iterator;
  *
  * @author User
  */
-//V extends Comparable<V>
 public interface MapInterface<K, V> {
 
     /**
