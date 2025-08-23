@@ -8,43 +8,39 @@ package entity;
  *
  * @author Lwin
  */
-public class Ticket {
+public class Ticket implements Comparable<Ticket> {
     private String ticketNumber;
-    private String patientId;
-    private String staffId;
+    private String status;
 
-    public Ticket(String ticketNumber, String patientId, String staffId) {
+    public Ticket(String ticketNumber, String status) {
         this.ticketNumber = ticketNumber;
-        this.patientId = patientId;
-        this.staffId = staffId;
-    }
-
-    public void setTicketNumber(String ticketNumber) {
-        this.ticketNumber = ticketNumber;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
+        this.status = status;
     }
 
     public String getTicketNumber() {
         return ticketNumber;
     }
 
-    public String getPatientId() {
-        return patientId;
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
-    public String getStaffId() {
-        return staffId;
+    public String getStatus() {
+        return status;
     }
-    
-     @Override
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    @Override
+    public int compareTo(Ticket other) {
+        return this.ticketNumber.compareTo(other.ticketNumber);
+    }
+
+    @Override
     public String toString() {
-        return "Ticket{" + "ticketNumber=" + ticketNumber + ", patientId=" + patientId + ", staffId=" + staffId + '}';
+        return "Ticket{" + "ticketNumber=" + ticketNumber + ", status=" + status + '}';
     }
 }

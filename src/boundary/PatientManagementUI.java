@@ -4,6 +4,7 @@
  */
 package boundary;
 
+import adt.MapInterface;
 import entity.Patient;
 import entity.Visit;
 import utility.Input;
@@ -42,11 +43,11 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t            MULTIPLE PATIENT RECORDS                ");
         System.out.println("\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|    This patient has multiple visit records.      |");
-        System.out.println("\t\t\t\t|         Please select a record to view:          |");
+        System.out.println("\t\t\t\t|    This patient has multiple visit records.       |");
+        System.out.println("\t\t\t\t|         Please select a record to view:           |");
         System.out.println("\t\t\t\t|                                                   |");
         for (int i = 0; i < visitDates.length; i++) {
-            System.out.printf("\t\t\t\t|  %d. Visit Date: %-31s |\n", i + 1, visitDates[i]);
+            System.out.printf("\t\t\t\t|  %d. Visit Date: %-31s   |\n", i + 1, visitDates[i]);
         }
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
@@ -174,9 +175,9 @@ public class PatientManagementUI {
     }
 
     public static void displayReportHeader() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t            QUEUE TIME ANALYSIS REPORT              ");
-        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\n\t\t\t\t==========================================================================================");
+        System.out.println("\t\t\t\t                             QUEUE TIME ANALYSIS REPORT              ");
+        System.out.println("\t\t\t\t==========================================================================================");
     }
 
     public static void displayReportTypeMenu() {
@@ -218,7 +219,8 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|  1. Group by Gender                               |");
         System.out.println("\t\t\t\t|  2. Group by Age Range                            |");
-        System.out.println("\t\t\t\t|  3. Back                                          |");
+        System.out.println("\t\t\t\t|  3. Group by Visit Frequency                      |");
+        System.out.println("\t\t\t\t|  4. Back                                          |");
         System.out.println("\t\t\t\t=====================================================");
     }
 
@@ -336,7 +338,7 @@ public class PatientManagementUI {
 
     public static void displayAverageQueueMenu() {
         System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t                   AVERAGE QUEUE TIME REPORT         ");
+        System.out.println("\t\t\t\t              AVERAGE QUEUE TIME REPORT         ");
         System.out.println("\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|  1. Selected Date Range                           |");
         System.out.println("\t\t\t\t|  2. Day of Week                                   |");
@@ -361,6 +363,7 @@ public class PatientManagementUI {
         String pad = "\t\t\t\t";
         int cells = (endHour - startHour) + 1;
         sep(pad, cells);
+        displayReportHeader();
         System.out.printf(pad + "| %-5s |", "Day");
         for (int h = startHour; h < endHour; h++) {
             System.out.printf(" %5s |", h + ":00");
@@ -566,5 +569,74 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|            Patient ID not found.                 |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public void displayQueueStatus(String message) {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t               QUEUE STATUS                         ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t" + message);
+        System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public void displayNoVisit() {
+        System.out.println("\n\t\t\t\t\tNO VISIT FOUND");
+    }
+
+    public static void displayVisitFrequencyTables(MapInterface<String, Patient> newPatients, MapInterface<String, Patient> returningPatients) {
+        System.out.println("\n\t\t\t\t=====================================================\t\t\t				|=====================================================");
+        System.out.println("\t\t\t\t              NEW PATIENTS (0 VISITS)                \t\t\t 				|          RETURNING PATIENTS (1+ VISITS)            |");
+        System.out.println("\t\t\t\t=====================================================\t\t\t				======================================================");
+        System.out.printf("\t\t\t\t| Total: %-43d |\t\t\t				|| Total: %-42d |\n",
+                newPatients.size(), returningPatients.size());
+        System.out.println("\t\t\t\t-----------------------------------------------------\t\t\t				|-----------------------------------------------------");
+        Object[] newPatientValues = newPatients.getAllValues();
+        Object[] returnPatientValues = returningPatients.getAllValues();
+
+        int maxRows = Math.max(newPatientValues.length, returnPatientValues.length);
+
+        for (int i = 0; i < maxRows; i++) {
+            String leftLine = "\t\t\t\t|                                                     |";
+            String rightLine = "\t\t\t\t|                                                    |";
+            if (i < newPatientValues.length) {
+                Patient patient = (Patient) newPatientValues[i];
+                leftLine = String.format("\t\t\t\t| %-8s | %-20s | %2d visits        |",
+                        patient.getPatient_id(),
+                        truncateName(patient.getPatient_name(), 20),
+                        patient.getVisitCount());
+            }
+            if (i < returnPatientValues.length) {
+                Patient patient = (Patient) returnPatientValues[i];
+                rightLine = String.format("\t\t\t\t| %-8s | %-20s | %2d visits        |",
+                        patient.getPatient_id(),
+                        truncateName(patient.getPatient_name(), 20),
+                        patient.getVisitCount());
+            }
+
+            System.out.println(leftLine + "\t\t\t" + rightLine);
+        }
+        System.out.println("\t\t\t\t=====================================================\t\t\t				|=====================================================");
+        displayVisitFrequencySummary(newPatients.size(), returningPatients.size());
+    }
+
+    public static void displayVisitFrequencySummary(int newPatientCount, int returningPatientCount) {
+        int total = newPatientCount + returningPatientCount;
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t                      SUMMARY                         ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.printf("\t\t\t\t| Total Patients: %-33d |\n", total);
+        System.out.printf("\t\t\t\t| New Patients (0 visits): %-24d |\n", newPatientCount);
+        System.out.printf("\t\t\t\t| Returning Patients (1+ visits): %-17d |\n", returningPatientCount);
+        System.out.println("\t\t\t\t=====================================================");
+    }
+
+    private static String truncateName(String name, int maxLength) {
+        if (name == null) {
+            return "";
+        }
+        if (name.length() <= maxLength) {
+            return name;
+        }
+        return name.substring(0, maxLength - 3) + "...";
     }
 }

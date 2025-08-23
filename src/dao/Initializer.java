@@ -418,27 +418,24 @@ public class Initializer {
  public MapInterface<String, Ticket> ticketInitializer() {
     MapInterface<String, Ticket> ticketMap = new ChainBucket<>();
 
-    // Group A Doctors (S000001, S000002, S000003) - Tickets 1-9
-    ticketMap.put("TK001", new Ticket("TK001", "", "S000001"));
-    ticketMap.put("TK002", new Ticket("TK002", "", "S000002"));
-    ticketMap.put("TK003", new Ticket("TK003", "", "S000003"));
-    ticketMap.put("TK004", new Ticket("TK004", "", "S000001"));
-    ticketMap.put("TK005", new Ticket("TK005", "", "S000002"));
-    ticketMap.put("TK006", new Ticket("TK006", "", "S000003"));
-    ticketMap.put("TK007", new Ticket("TK007", "", "S000001"));
-    ticketMap.put("TK008", new Ticket("TK008", "", "S000002"));
-    ticketMap.put("TK009", new Ticket("TK009", "", "S000003"));
+    ticketMap.put("TK001", new Ticket("TK001", ""));
+    ticketMap.put("TK002", new Ticket("TK002", ""));
+    ticketMap.put("TK003", new Ticket("TK003", ""));
+    ticketMap.put("TK004", new Ticket("TK004", ""));
+    ticketMap.put("TK005", new Ticket("TK005", ""));
+    ticketMap.put("TK006", new Ticket("TK006", ""));
+    ticketMap.put("TK007", new Ticket("TK007", ""));
+    ticketMap.put("TK008", new Ticket("TK008", ""));
+    ticketMap.put("TK009", new Ticket("TK009", ""));
 
-    // Group B Doctors (S000004, S000005, S000006) - Tickets 10-18
-    ticketMap.put("TK010", new Ticket("TK010", "", "S000004"));
-    ticketMap.put("TK011", new Ticket("TK011", "", "S000005"));
-    ticketMap.put("TK012", new Ticket("TK012", "", "S000006"));
-    ticketMap.put("TK013", new Ticket("TK013", "", "S000004"));
-    ticketMap.put("TK014", new Ticket("TK014", "", "S000005"));
-    ticketMap.put("TK015", new Ticket("TK015", "", "S000006"));
-    ticketMap.put("TK016", new Ticket("TK016", "", "S000004"));
-    ticketMap.put("TK017", new Ticket("TK017", "", "S000005"));
-    ticketMap.put("TK018", new Ticket("TK018", "", "S000006"));
+    ticketMap.put("TK010", new Ticket("TK010", ""));
+    ticketMap.put("TK011", new Ticket("TK011", ""));
+    ticketMap.put("TK012", new Ticket("TK012", ""));
+    ticketMap.put("TK013", new Ticket("TK013", ""));
+    ticketMap.put("TK014", new Ticket("TK014", ""));
+    ticketMap.put("TK016", new Ticket("TK016", ""));
+    ticketMap.put("TK017", new Ticket("TK017", ""));
+    ticketMap.put("TK018", new Ticket("TK018", ""));
 
     return ticketMap;
 }
