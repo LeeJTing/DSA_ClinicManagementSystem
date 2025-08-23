@@ -24,17 +24,17 @@ public class PaymentUI {
         double totalCost = consultationCost + prescription.getMedicine_total_cost();
         Date currentDate = new Date();
         System.out.println("");
-        System.out.println("\t\t==================================================================");
-        System.out.println("\t\t|                           Payment                              |");
-        System.out.println("\t\t==================================================================");
-        System.out.printf("\t\t%35s     %-15.2f     |\n", "|   Consultation cost (RM) :        |   ", consultationCost);
-        System.out.printf("\t\t%35s     %-15.2f     |\n", "|   Medicine cost(RM) :             |   ", prescription.getMedicine_total_cost());
-        System.out.println("\t\t==================================================================");
-        System.out.printf("\t\t%35s     %-15.2f     |\n", "|   Total cost(RM) :                |   ", totalCost);
-        System.out.println("\t\t==================================================================");
+        System.out.println("\t\t\t\t==================================================================");
+        System.out.println("\t\t\t\t|                           Payment                              |");
+        System.out.println("\t\t\t\t==================================================================");
+        System.out.printf("\t\t\t\t%35s     %-15.2f     |\n", "|   Consultation cost (RM) :        |   ", consultationCost);
+        System.out.printf("\t\t\t\t%35s     %-15.2f     |\n", "|   Medicine cost(RM) :             |   ", prescription.getMedicine_total_cost());
+        System.out.println("\t\t\t\t==================================================================");
+        System.out.printf("\t\t\t\t%35s     %-15.2f     |\n", "|   Total cost(RM) :                |   ", totalCost);
+        System.out.println("\t\t\t\t==================================================================");
 
         do {
-            System.out.print("\t\tDo you want to pay?(y/n): ");
+            System.out.print("\t\t\t\tDo you want to pay?(y/n): ");
             pay = scanner.nextLine().charAt(0);
         } while (pay != 'y' && pay != 'Y');
 
@@ -42,7 +42,7 @@ public class PaymentUI {
     }
 
     public void displaySuccessfulMsg() {
-        System.out.println("\n\t\tPaid successfully, take good care!");
+        System.out.println("\n\t\t\t\tPaid successfully, take good care!");
     }
 
     public void displayPaymentToString(Payment pm) {

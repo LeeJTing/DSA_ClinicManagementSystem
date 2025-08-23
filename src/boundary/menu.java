@@ -4,10 +4,6 @@
  */
 package boundary;
 
-import control.PatientManagement;
-import static control.PatientManagement.getCurrentPatient;
-import dao.Master;
-import entity.Patient;
 import utility.Input;
 
 /**
@@ -18,14 +14,14 @@ import utility.Input;
 public class menu {
     
     public static String askStaffID() {
-        System.out.print("\n          Staff ID(e.s. S000001): ");
+        System.out.print("\n\t\t\t\tStaff ID(e.s. S000001): ");
         String input = Input.getStringInput();
 
         return input;
     }
 
     public static String askPatientID() {
-        System.out.print("\n          Patient ID(e.s. P000001): ");
+        System.out.print("\n\t\t\t\tPatient ID(e.s. P000001): ");
         String id = Input.getStringInput();
 
         return id;
@@ -44,11 +40,12 @@ public class menu {
         System.out.println("\t\t\t\t=====================================================");
         do{
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        }while (choice < 0 || choice > 4);
+        }while (choice < 0 || choice > 5);
         return choice;
     }
 
     public static int mainMenuUI() {
+        int choice = 0;
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t                   MAIN PAGE                         ");
         System.out.println("\t\t\t\t=====================================================");
@@ -59,7 +56,10 @@ public class menu {
         System.out.println("\t\t\t\t|  4. Exit                                          |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
-        return Input.getIntegerInput("\t\t\t\tSelect option: ");
+        do{
+            choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
+        }while (choice < 0 || choice > 4);
+        return choice;
     }
 
     public static int patientMenu() {
@@ -78,104 +78,6 @@ public class menu {
         return Input.getIntegerInput("\t\t\t\tSelect option: ");
     }
 
-    public static void displayMainMenu() {
-        while (true) {
-            int choice = AllMenu.mainMenuUI();
-
-            switch (choice) {
-                case 1 -> {
-                    System.out.println("\n\t\t\t\t=====================================================");
-                    System.out.println("\t\t\t\t              Entering User Portal                   ");
-                    System.out.println("\t\t\t\t=====================================================");
-                    handleUserPortal();
-                }
-                case 2 -> {
-                    System.out.println("\n\t\t\t\t=====================================================");
-                    System.out.println("\t\t\t\t              Entering Staff Portal                  ");
-                    System.out.println("\t\t\t\t=====================================================");
-                    handleStaffPortal();
-                }
-                case 3 -> {
-                    System.out.println("\n\t\t\t\t=====================================================");
-                    System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t|    Thank you for using Dental Management         |");
-                    System.out.println("\t\t\t\t|                   System!                         |");
-                    System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t|                   Goodbye!                        |");
-                    System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t=====================================================");
-                    System.exit(0);
-                }
-                default -> {
-                    System.out.println("\n\t\t\t\t=====================================================");
-                    System.out.println("\t\t\t\t|                    ERROR                          |");
-                    System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t|        Invalid option. Please select 1-3.        |");
-                    System.out.println("\t\t\t\t|                                                   |");
-                    System.out.println("\t\t\t\t=====================================================");
-                }
-            }
-        }
-    }
-
-    public static void handlePatientMenu() {
-        patientMenu();
-
-//        PatientManagement pm = new PatientManagement();
-//        while (!pm.patientWasDeleted) {
-//            int choice = AllMenu.patientMenu();
-//            Patient current = PatientManagement.getCurrentPatient();
-//            if (current == null) {
-//                break;
-//            }
-//
-//            switch (choice) {
-//                case 1 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t               My Patient                            ");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//                case 2 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t               My Consultations                      ");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//                case 3 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t                My Treatments                        ");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//                case 4 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t               My Prescriptions                      ");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//                case 5 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t                 My Medicines                        ");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//                case 6 -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t|               Logging out...                      |");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                    Master.setCurrentPatientId("");
-//                    return;
-//                }
-//                default -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t|                    ERROR                          |");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t|               Invalid option.                     |");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//            }
-//        }
-    }
-
     public static int consultationMenu() {
         int option;
         System.out.println("\n\t\t\t\t=====================================================");
@@ -191,49 +93,7 @@ public class menu {
         
         return option;
     }
-
-    public static void handleUserPortal() {
-
-        System.out.print("\n\t\t\t\t");
-
-//        while (true) {
-//            if (Master.getPatientMap().isEmpty()) {
-//                Master.initializer();
-//            }
-//            int choice = PatientManagementUI.displayUserPageMenu();
-//            switch (choice) {
-//                case 1 ->
-//                    patientManagement.createNewInstance();
-//                case 2 -> {
-//                    String enteredId = Input.getStringInput("\t\t\t\tEnter your Patient ID: ");
-//                    if (patientManagement.patientExists(enteredId)) {
-//                        patientManagement.patientWasDeleted = false;
-//                        Master.setCurrentPatientId(enteredId.toUpperCase());
-//                        handlePatientMenu();
-//                    } else {
-//                        System.out.println("\n\t\t\t\t=====================================================");
-//                        System.out.println("\t\t\t\t|                    ERROR                          |");
-//                        System.out.println("\t\t\t\t|                                                   |");
-//                        System.out.println("\t\t\t\t|            Patient ID not found.                 |");
-//                        System.out.println("\t\t\t\t|                                                   |");
-//                        System.out.println("\t\t\t\t=====================================================");
-//                    }
-//                }
-//                case 3 -> {
-//                    return;
-//                }
-//                default -> {
-//                    System.out.println("\n\t\t\t\t=====================================================");
-//                    System.out.println("\t\t\t\t|                    ERROR                          |");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t|               Invalid option.                     |");
-//                    System.out.println("\t\t\t\t|                                                   |");
-//                    System.out.println("\t\t\t\t=====================================================");
-//                }
-//            }
-//        }
-    }
-
+    
     public static void handleStaffPortal() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");

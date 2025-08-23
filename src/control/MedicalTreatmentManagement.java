@@ -93,38 +93,38 @@ public class MedicalTreatmentManagement implements CRUD {
     }
 
     public void undo() {
-        if(actionHistory.isEmpty()){
+        if (actionHistory.isEmpty()) {
             // no record UI
             UI.noRecord("History Record!!");
-        }else {
+        } else {
             Treatment treatment;
             Prescription prescription;
-            if(actionHistory.removeLast().equals("Create")){
+            if (actionHistory.removeLast().equals("Create")) {
                 // the treatment and prescription sould remove
                 treatment = treatmentRecordHistory.removeLast();
                 prescription = prescriptionRecordHistory.removeLast();
-                
+
                 prescriptionMap.remove(prescription.getPrescription_id());
                 treatmentMap.remove(treatment.getTreatment_id());
-                
+
                 String patientName = getPatientName(treatment.getPatient_id());
                 String staffName = getStaffName(treatment.getStaff_id());
-                
+
                 UI.removedTreatment(treatment, prescription, staffName, patientName);
-            }else{
+            } else {
                 // delete and update
                 treatment = treatmentRecordHistory.removeLast();
                 prescription = prescriptionRecordHistory.removeLast();
-                
+
                 treatmentMap.put(treatment.getTreatment_id(), treatment);
                 prescriptionMap.put(prescription.getPatient_id(), prescription);
-                
+
                 treatmentMap.keyReverseSorting();
                 prescriptionMap.keyReverseSorting();
-                
+
                 String patientName = getPatientName(treatment.getPatient_id());
                 String staffName = getStaffName(treatment.getStaff_id());
-                
+
                 UI.showUpdatedTreatment(treatment, prescription, staffName, patientName);
             }
             Master.setTreatmentMap(treatmentMap);
@@ -185,7 +185,27 @@ public class MedicalTreatmentManagement implements CRUD {
         UI.showDate(date);
 
         // get info
-        disease = UI.askDisease();
+        int input = UI.askDisease();
+        switch (input) {
+            case 1:
+                disease = "Hypertension";
+                break;
+            case 2:
+                disease = "Diabetes Type 2";
+                break;
+            case 3:
+                disease = "COVID-19";
+                break;
+            case 4:
+                disease = "Asthma";
+                break;
+            case 5:
+                disease = "Fracture";
+                break;
+            default:
+                disease = "Hypertension";
+                break;
+        }
         isScan = UI.askIsScan();
         advice = UI.askAdvice();
         remark = UI.askRemark();
@@ -267,15 +287,15 @@ public class MedicalTreatmentManagement implements CRUD {
         prescriptionMap.put(prescription_id, prescription);
         Master.setPrescriptionMap(prescriptionMap);
         medicineMap = Master.getMedicineMap();
-        
+
         saveHistory(treatment, prescription, "Create");
 
         // call payment method to generate payment
-//        prescriptionToPayment(prescription);
+        prescriptionToPayment(prescription);
     }
-    
-    public void prescriptionToPayment(Prescription prescription){
-        
+
+    public void prescriptionToPayment(Prescription prescription) {
+
         PharmacyManagementModule pharmacyManagementModule = new PharmacyManagementModule();
         pharmacyManagementModule.payment(prescription);
     }
@@ -373,11 +393,11 @@ public class MedicalTreatmentManagement implements CRUD {
         Treatment treatment = treatmentMap.getValue(treatmentId);
         Prescription prescription = getPrescription(treatmentId);
         //String treatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark
-        Treatment treatmentBackup = new Treatment(treatmentId, treatment.getConsultation_id(),treatment.getDisease(), treatment.getTreatment_advice(),treatment.getTreatment_date(),treatment.getStaff_id(),treatment.getPatient_id(), treatment.getIsScan(), treatment.getRemark());
+        Treatment treatmentBackup = new Treatment(treatmentId, treatment.getConsultation_id(), treatment.getDisease(), treatment.getTreatment_advice(), treatment.getTreatment_date(), treatment.getStaff_id(), treatment.getPatient_id(), treatment.getIsScan(), treatment.getRemark());
         //String prescription_id, MapInterface<String, Medicine> medicineList,
 //            String staff_id, String patient_id, String treatment_id
-        Prescription prescriptionBackup = new Prescription(prescription.getPrescription_id(), prescription.getMedicineList(), prescription.getStaff_id(),prescription.getPatient_id(), prescription.getTreatment_id());
-        
+        Prescription prescriptionBackup = new Prescription(prescription.getPrescription_id(), prescription.getMedicineList(), prescription.getStaff_id(), prescription.getPatient_id(), prescription.getTreatment_id());
+
         saveHistory(treatmentBackup, prescriptionBackup, "Update");
         UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId);
         boolean con = true;
@@ -389,7 +409,28 @@ public class MedicalTreatmentManagement implements CRUD {
                     treatment.setTreatment_advice(advice);
                     break;
                 case 2:
-                    String disease = UI.askDisease();
+                    String disease;
+                    int input = UI.askDisease();
+                    switch (input) {
+                        case 1:
+                            disease = "Hypertension";
+                            break;
+                        case 2:
+                            disease = "Diabetes Type 2";
+                            break;
+                        case 3:
+                            disease = "COVID-19";
+                            break;
+                        case 4:
+                            disease = "Asthma";
+                            break;
+                        case 5:
+                            disease = "Fracture";
+                            break;
+                        default:
+                            disease = "Hypertension";
+                            break;
+                    }
                     treatment.setDisease(disease);
                     break;
                 case 3:
@@ -452,7 +493,7 @@ public class MedicalTreatmentManagement implements CRUD {
                     // call PharmacyManagement function pass in MapInterface<String, Medicine>
 
                     MapInterface<String, Medicine> medicineDetialList = new PharmacyManagementModule().getAvailableMedicine(medicineList);
-                    
+
                     prescription.setMedicineList(medicineDetialList);
                     prescription.setMedicine_total_cost(prescription.calculateTotalCost());
 
@@ -466,7 +507,7 @@ public class MedicalTreatmentManagement implements CRUD {
             }
         } while (con);
         UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId);
-        
+
         treatmentMap.put(treatmentId, treatment);
 
         Master.setPrescriptionMap(prescriptionMap);

@@ -167,6 +167,7 @@ public class DoctorManagement implements CRUD {
                 break;
             case 9:
                 undo();
+                break;
             case 10:
                 logout();
                 break;
@@ -250,7 +251,16 @@ public class DoctorManagement implements CRUD {
     }
 
     public void displayProfile() {
-        staffmenu.displayProfileUI(staffFound, convertEducationLevel(staffFound.getEducationalLevel()));
+        if (staffFound == null) {
+            staffmenu.printInvalidInput(); // Or some specific message
+            return;
+        }
+
+        staffmenu.displayProfileUI(
+                staffFound,
+                convertEducationLevel(staffFound.getEducationalLevel())
+        );
+
         if (exitConfirmation()) {
             return;
         }
@@ -614,33 +624,35 @@ public class DoctorManagement implements CRUD {
             return;
         }
 
-        String lastAction = actionHistory.removeLast();
-        Staff prevStaff = staffRecordHistory.removeLast();
+        if (!actionHistory.isEmpty() && !staffRecordHistory.isEmpty()) {
+            String lastAction = actionHistory.removeLast();
+            Staff prevStaff = staffRecordHistory.removeLast();
 
-        if (lastAction.startsWith("Leave")) {
-            String[] parts = lastAction.split(":");
-            int slotNumber = Integer.parseInt(parts[1]);
-            LocalDate leaveDate = LocalDate.parse(parts[2]);
+            if (lastAction.startsWith("Leave")) {
+                String[] parts = lastAction.split(":");
+                int slotNumber = Integer.parseInt(parts[1]);
+                LocalDate leaveDate = LocalDate.parse(parts[2]);
 
-            MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
+                MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
 
-            if (doctorsOnDuty != null) {
-                doctorsOnDuty.put(slotNumber, prevStaff.getStaffID());
+                if (doctorsOnDuty != null) {
+                    doctorsOnDuty.put(slotNumber, prevStaff.getStaffID());
+                    staffFound = prevStaff;
+                    staffmenu.printUndoMsg("leave");
+                    dutyScheduleMap.put(leaveDate, doctorsOnDuty);
+                    Master.setDutyScheduleMap(dutyScheduleMap);
+                }
+                viewDutySchedule();
+
+            } else if (lastAction.equals("Update")) {
+                staffMap.put(prevStaff.getStaffID(), prevStaff);
                 staffFound = prevStaff;
-                staffmenu.printUndoMsg("leave");
-                dutyScheduleMap.put(leaveDate, doctorsOnDuty);
-                Master.setDutyScheduleMap(dutyScheduleMap);
+                staffmenu.printUndoMsg("update");
+                Master.setStaffMap(staffMap);
+                displayProfile();
+            } else {
+                staffmenu.printInvalidInput();
             }
-            viewDutySchedule();
-
-        } else if (lastAction.equals("Update")) {
-            staffMap.put(prevStaff.getStaffID(), prevStaff);
-            staffFound = prevStaff;
-            staffmenu.printUndoMsg("update");
-            Master.setStaffMap(staffMap);
-            displayProfile();
-        } else {
-            staffmenu.printInvalidInput();
         }
     }
 

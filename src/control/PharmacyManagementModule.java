@@ -41,6 +41,7 @@ public class PharmacyManagementModule implements CRUD {
     private static final MapInterface<Integer, Medicine> expiredMedicine = new ChainBucket<>();
     private static final PharmacyUI PharmacyUI = new PharmacyUI();
     private static final PaymentUI PaymentUI = new PaymentUI();
+    private static int alertSize;
 
     PharmacyManagementModule() {
         getAllMap();
@@ -56,14 +57,14 @@ public class PharmacyManagementModule implements CRUD {
 
     public void pharmacyMenu() {
         boolean exit = false;
-        alertMap.clear();
-        checkNearExpiryDate();
-        checkLowStock();
-        int alert = alertMap.size();
 
         while (!exit) {
             MessageUI.clearScreen();
-            int choice = PharmacyUI.getMainMenuChoice(alert);
+            alertMap.clear();
+            checkNearExpiryDate();
+            checkLowStock();
+            alertSize = alertMap.size();
+            int choice = PharmacyUI.getMainMenuChoice(alertSize);
 
             switch (choice) {
                 case 1:
@@ -291,6 +292,8 @@ public class PharmacyManagementModule implements CRUD {
                     break;
             }
         }
+        alertMap.clear();
+        checkNearExpiryDate();
 
     }
 
