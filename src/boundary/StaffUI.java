@@ -301,7 +301,7 @@ public class StaffUI {
     public void printExperienceReportHeader() {
         System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
         System.out.printf("\t\t\t\t| %-10s | %-20s | %-13s | %-13s | %-14s | %-15s |\n",
-                "Staff ID", "Name", "Clinic Years", "Industry Yrs", "Education", "Overall Score");
+                "Doctor ID", "Doctor Name", "Clinic Years", "Industry Yrs", "Education", "Overall Score");
         System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
     }
 

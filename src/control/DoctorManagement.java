@@ -66,7 +66,7 @@ public class DoctorManagement implements CRUD {
             do {
                 staffOption = staffmenu.doctorManagementMenu(staffFound);
                 switchDoctorMenu(staffOption);
-            } while (staffOption < 9 && staffFound != null);
+            } while (staffOption <= 9 && staffFound != null);
         }
     }
 
