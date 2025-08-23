@@ -24,7 +24,7 @@ public class main {
         PharmacyManagementModule pharmacy = new PharmacyManagementModule();
 
         int option = 0;
-        while (option != 4) {
+        while (option != 5) {
 
             option = menu.mainMenuUI();
             switch (option) {
@@ -77,16 +77,19 @@ public class main {
                                 selection = 3;
                                 break;
                         }
-                        if(selection != 3)
+                        if (selection != 3) {
                             consult.consultationMenu();
-                        
+                        }
+
                         Master.setCurrentStaffId("");
                         Master.setCurrentPatientId("");
                     }
                     break;
+                case 4:
+                    patient.offlinePatientModule();
                 default:
                     // exit
-                    option = 4;
+                    option = 0;
                     break;
 
             }

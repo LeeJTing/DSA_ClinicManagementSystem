@@ -12,7 +12,7 @@ import utility.Input;
  * @author Lwin
  */
 public class menu {
-    
+
     public static String askStaffID() {
         System.out.print("\n\t\t\t\tStaff ID(e.s. S000001): ");
         String input = Input.getStringInput();
@@ -38,9 +38,9 @@ public class menu {
         System.out.println("\t\t\t\t|       4. Consultation for Walk-in                 |");
         System.out.println("\t\t\t\t|       5. Exit                                     |");
         System.out.println("\t\t\t\t=====================================================");
-        do{
+        do {
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        }while (choice < 0 || choice > 5);
+        } while (choice < 0 || choice > 5);
         return choice;
     }
 
@@ -53,12 +53,13 @@ public class menu {
         System.out.println("\t\t\t\t|  1. Patient                                       |");
         System.out.println("\t\t\t\t|  2. Staff                                         |");
         System.out.println("\t\t\t\t|  3. Consultation                                  |");
-        System.out.println("\t\t\t\t|  4. Exit                                          |");
+        System.out.println("\t\t\t\t|  4. Get Ticket                                    |");
+        System.out.println("\t\t\t\t|  5. Exit                                          |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
-        do{
+        do {
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
-        }while (choice < 0 || choice > 4);
+        } while (choice < 0 || choice > 4);
         return choice;
     }
 
@@ -90,10 +91,10 @@ public class menu {
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
         option = Input.getIntegerInput("\t\t\t\tSelect option: ");
-        
+
         return option;
     }
-    
+
     public static void handleStaffPortal() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");

@@ -66,7 +66,6 @@ public class PatientManagement implements CRUD {
             default:
                 return;
         }
-
     }
 
     public void patientManagementModule() {
@@ -82,8 +81,9 @@ public class PatientManagement implements CRUD {
                     deleteInstance();
                 case 4 ->
                     reportsModule();
-                case 5 ->
-                    getTicket();
+                case 5 ->{
+                    System.out.println("under maintainance");
+                }
                 case 6 ->
                     patientReport();
                 case 7 ->
@@ -92,7 +92,7 @@ public class PatientManagement implements CRUD {
                     Master.setCurrentPatientId("");
                     return;
                 }
-                default ->
+                default ->  
                     ui.displayInvalidChoice();
             }
             if (patientWasDeleted) {
@@ -101,6 +101,19 @@ public class PatientManagement implements CRUD {
         }
     }
 
+    public void offlinePatientModule(){
+        int choice = ui.displayGetTicketMenu();
+        switch (choice) {
+            case 1:
+                getTicket();
+                break;
+            case 2:
+                return;
+            default:
+                return;
+        }
+
+    }
     public void reportsModule() {
         while (true) {
             PatientManagementUI.displayAverageQueueMenu();
@@ -322,21 +335,16 @@ public class PatientManagement implements CRUD {
     }
 
     public void getTicket() {
-        // Get current patient
-        Patient patient = patientMap.getValue(Master.getCurrentPatientId());
-        if (patient == null) {
-            ui.displayNotFound("patient");
-            return;
-        }
         MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
         Object[] ticketKeys = ticketQueue.getAllKeys();
-
+        Date currentDate  = new Date();
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
 
-            if (ticket != null && "complete".equals(ticket.getStatus())) {
-                ticket.setStatus("");
+            if (ticket != null && "complete".equals(ticket.getTicketStatus())) {
+                ticket.setTicketStatus("");
+                ticket.setQueueEnd(currentDate);
                 ticketQueue.put(ticketKey, ticket);
             }
         }
@@ -347,12 +355,10 @@ public class PatientManagement implements CRUD {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
 
-            if (ticket != null && (ticket.getStatus() == null || ticket.getStatus().isEmpty())) {
-                ticket.setStatus("queue");
+            if (ticket != null && (ticket.getTicketStatus() == null || ticket.getTicketStatus().isEmpty())) {
+                ticket.setQueueStart(currentDate);
+                ticket.setTicketStatus("queue");
                 ticketQueue.put(ticketKey, ticket);
-                Date currentTime = new Date();
-                patient.addVisit(currentTime, null, ticket.getTicketNumber());
-                patientMap.put(patient.getPatient_id(), patient);
                 Master.setCurrentTicket(ticket.getTicketNumber());
                 ui.displayTicketAssigned(ticket.getTicketNumber(), "System");
                 return;
@@ -370,7 +376,7 @@ public class PatientManagement implements CRUD {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
 
-            if (ticket != null && "queue".equals(ticket.getStatus())) {
+            if (ticket != null && "queue".equals(ticket.getTicketStatus())) {
                 queuedTickets.put(ticketKey, ticket);
             }
         }
@@ -379,157 +385,18 @@ public class PatientManagement implements CRUD {
         if (queuedTickets.isEmpty()) {
             ui.displayMessage("No tickets in queue.");
         } else {
+            String lastTicket = "";
             Object[] sortedTicketKeys = queuedTickets.getAllKeys();
-            for (int i = 0; i < sortedTicketKeys.length; i++) {
+            String firstKey = (String) sortedTicketKeys[0];
+            Ticket firstTicket = queuedTickets.getValue(firstKey);
+            ui.displayMessage("Next Ticket to Be Serve: " + firstTicket.getTicketNumber());
+            for (int i = 1; i < sortedTicketKeys.length; i++) {
                 String ticketKey = (String) sortedTicketKeys[i];
                 Ticket ticket = queuedTickets.getValue(ticketKey);
                 ui.displayMessage("Ticket: " + ticket.getTicketNumber());
             }
+            ui.displayMessage("Current waiting ticket: " + lastTicket);
         }
-    }
-
-    //
-    //    public void getTicket() {
-    //        Ticket[] tickets = ticketMap.getAllValues();
-    //        if(tickets == null | tickets.length==0){
-    //            ui.displayNotFound("ticket");
-    //            return;
-    //        }
-    //        String patientId = Master.getCurrentPatientId();
-    //        Patient patient = patientMap.getValue(patientId);
-    //        if (patient == null) {
-    //            ui.displayNotFound("Patient");
-    //            return;
-    //        }
-    //        boolean want = ui.confirmGetTicket();
-    //        if (!want) {
-    //            ui.displayNoTicketIssued();
-    //            return;
-    //        }
-    //
-    //        
-    //        freeTicketsCompletedByConsultation();
-    //        Visit ticketedToday = findTodaysTicketedVisit(patient);
-    //        if (ticketedToday != null && ticketedToday.getTicket() != null && !ticketedToday.getTicket().isEmpty()) {
-    //            ui.displayExistingTicket(ticketedToday.getTicket());
-    //            return;
-    //        }
-    //        String assignedTicket = assignAvailableTicketForDuty(patientId, todaysDoctors);
-    //        if (assignedTicket == null) {
-    //            ui.displayNoTicketsAvailable();
-    //            return;
-    //        }
-    //        saveHistory(patient, "TicketAssign:" + assignedTicket);
-    //        Visit attachTo = findTodaysUnticketedVisit(patient);
-    //        if (attachTo != null) {
-    //            if (attachTo.getQueueStart() == null) {
-    //                attachTo.setQueueStart(new Date());
-    //            }
-    //            attachTo.setTicket(assignedTicket);
-    //        } else {
-    //            patient.addVisit(new Date(), null, assignedTicket);
-    //        }
-    //        ui.displayTicketAssigned(assignedTicket, getAssignedDoctor(assignedTicket));
-    //    }
-    //
-    //    private void freeTicketsCompletedByConsultation() {
-    //        MapInterface<String, Consultation> consMap = Master.getConsultationMap();
-    //        if (consMap == null || consMap.isEmpty()) {
-    //            return;
-    //        }
-    //        Object[] consKeys = consMap.getAllKeys();
-    //        for (int i = 0; i < consKeys.length; i++) {
-    //            String cKey = (String) consKeys[i];
-    //            Consultation c = consMap.getValue(cKey);
-    //            if (c == null) {
-    //                continue;
-    //            }
-    //            String status = c.getAppointmentStatus() == null ? "" : c.getAppointmentStatus();
-    //            if (!"Completed".equalsIgnoreCase(status)) {
-    //                continue;
-    //            }
-    //            String pid = c.getPatient_Id() == null ? "" : c.getPatient_Id();
-    //            String sid = c.getStaff_Id() == null ? "" : c.getStaff_Id();
-    //            if (pid.isEmpty() || sid.isEmpty()) {
-    //                continue;
-    //            }
-    //            Object[] tkKeys = Master.getTicketQueue().getAllKeys();
-    //            for (int j = 0; j < tkKeys.length; j++) {
-    //                String tkKey = (String) tkKeys[j];
-    //                Ticket tk = Master.getTicketQueue().getValue(tkKey);
-    //                if (tk == null) {
-    //                    continue;
-    //                }
-    //                String tPid = tk.getPatientId() == null ? "" : tk.getPatientId();
-    //                String tSid = tk.getStaffId() == null ? "" : tk.getStaffId();
-    //                if (!tPid.isEmpty() && tPid.equals(pid) && tSid.equals(sid)) {
-    //                    Patient p = patientMap.getValue(pid);
-    //                    if (p != null && p.getVisitCount() > 0) {
-    //                        Visit[] vs = p.getVisits();
-    //                        for (int count = 0; count < p.getVisitCount(); count++) {
-    //                            Visit visit = vs[count];
-    //                            if (visit != null && tk.getTicketNumber().equals(visit.getTicket())) {
-    //                                visit.setTicket("");
-    //                                break;
-    //                            }
-    //                        }
-    //                    }
-    //                    tk.setPatientId("");
-    //                    Master.getTicketQueue().put(tkKey, tk);
-    //                }
-    //            }
-    //        }
-    //    }
-    //
-    //    private String assignAvailableTicketForDuty(String patientId, MapInterface<Integer, String> todaysDoctors) {
-    //        Object[] tkKeys = Master.getTicketQueue().getAllKeys();
-    //        for (int i = 0; i < tkKeys.length; i++) {
-    //            String tkKey = (String) tkKeys[i];
-    //            Ticket ticket = Master.getTicketQueue().getValue(tkKey);
-    //            if (ticket == null) {
-    //                continue;
-    //            }
-    //            boolean unassigned = ticket.getPatientId() == null || ticket.getPatientId().isEmpty();
-    //            boolean staffOnDuty = todaysDoctors.containsValue(ticket.getStaffId());
-    //            if (unassigned && staffOnDuty) {
-    //                ticket.setPatientId(patientId);
-    //                Master.getTicketQueue().put(tkKey, ticket);
-    //                return ticket.getTicketNumber();
-    //            }
-    //        }
-    //        return null;
-    //    }
-    //
-    //    private String getAssignedDoctor(String ticketNumber) {
-    //        Object[] tkKeys = Master.getTicketQueue().getAllKeys();
-    //        for (int i = 0; i < tkKeys.length; i++) {
-    //            String tkKey = (String) tkKeys[i];
-    //            Ticket tk = Master.getTicketQueue().getValue(tkKey);
-    //            if (tk != null && ticketNumber.equals(tk.getTicketNumber())) {
-    //                return tk.getStaffId();
-    //            }
-    //        }
-    //        return "Unknown";
-    //    }
-    //
-    //    private void clearTicketQueueAssignment(String ticketNumber) {
-    //        if (ticketNumber == null || ticketNumber.isEmpty()) {
-    //            return;
-    //        }
-    //        Object[] tkKeys = Master.getTicketQueue().getAllKeys();
-    //        for (int i = 0; i < tkKeys.length; i++) {
-    //            String tkKey = (String) tkKeys[i];
-    //            Ticket tk = Master.getTicketQueue().getValue(tkKey);
-    //            if (tk != null && ticketNumber.equals(tk.getTicketNumber())) {
-    //                tk.setPatientId("");
-    //                Master.getTicketQueue().put(tkKey, tk);
-    //                break;
-    //            }
-    //        }
-    //    }
-    private boolean isSameDay(Date a, Date b) {
-        java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyyMMdd");
-        return f.format(a).equals(f.format(b));
     }
 
     private void reportTimelineByDateRange() {
@@ -706,25 +573,6 @@ public class PatientManagement implements CRUD {
         return IDGenerator.generateNextID(lastId);
     }
 
-    // Find today's visit that already has a ticket.
-    private Visit findTodaysTicketedVisit(Patient p) {
-        if (p == null || p.getVisitCount() == 0) {
-            return null;
-        }
-
-        Date today = new Date();
-        Visit[] vs = p.getVisits();
-        for (int i = 0; i < p.getVisitCount(); i++) {
-            Visit v = vs[i];
-            if (v != null
-                    && v.getQueueStart() != null && isSameDay(v.getQueueStart(), today)
-                    && v.getTicket() != null && !v.getTicket().isEmpty()) {
-                return v;
-            }
-        }
-        return null;
-    }
-
     private void saveHistory(Patient patient, String action) {
         historyPatient.put(historyKey, copyPatient(patient));
         historyAction.put(historyKey, action);
@@ -756,16 +604,15 @@ public class PatientManagement implements CRUD {
                 }
                 Date qs = v.getQueueStart() == null ? null : new Date(v.getQueueStart().getTime());
                 Date qe = v.getQueueEnd() == null ? null : new Date(v.getQueueEnd().getTime());
-                String tk = v.getTicket();
-                patientCopy.addVisit(qs, qe, tk);
+                patientCopy.addVisit(qs, qe);
             }
         }
         return patientCopy;
     }
 
     public MapInterface<String, Patient>[] groupPatientsByVisitFrequency() {
-        MapInterface<String, Patient> newPatients = new ChainBucket<>();    
-        MapInterface<String, Patient> returningPatients = new ChainBucket<>(); 
+        MapInterface<String, Patient> newPatients = new ChainBucket<>();
+        MapInterface<String, Patient> returningPatients = new ChainBucket<>();
 
         Iterator<Patient> iterator = patientMap.getIterator();
         while (iterator.hasNext()) {

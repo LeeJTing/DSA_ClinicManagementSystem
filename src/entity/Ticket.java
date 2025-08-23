@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Lwin
@@ -11,10 +13,14 @@ package entity;
 public class Ticket implements Comparable<Ticket> {
     private String ticketNumber;
     private String ticketStatus;
+    private Date queueStart;
+    private Date queueEnd;
 
-    public Ticket(String ticketNumber, String ticketStatus) {
+    public Ticket(String ticketNumber, String ticketStatus, Date queueStart, Date queueEnd) {
         this.ticketNumber = ticketNumber;
         this.ticketStatus = ticketStatus;
+        this.queueStart = queueStart;
+        this.queueEnd = queueEnd;
     }
 
     public String getTicketNumber() {
@@ -38,8 +44,26 @@ public class Ticket implements Comparable<Ticket> {
         return this.ticketNumber.compareTo(other.ticketNumber);
     }
 
+    public Date getQueueStart() {
+        return queueStart;
+    }
+
+    public void setQueueStart(Date queueStart) {
+        this.queueStart = queueStart;
+    }
+
+    public Date getQueueEnd() {
+        return queueEnd;
+    }
+
+    public void setQueueEnd(Date queueEnd) {
+        this.queueEnd = queueEnd;
+    }
+
     @Override
     public String toString() {
-        return "Ticket{" + "ticketNumber=" + ticketNumber + ", ticketStatus=" + ticketStatus + '}';
+        return "Ticket{" + "ticketNumber=" + ticketNumber + ", ticketStatus=" + ticketStatus + ", queueStart=" + queueStart + ", queueEnd=" + queueEnd + '}';
     }
+
+    
 }

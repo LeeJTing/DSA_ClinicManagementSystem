@@ -24,7 +24,7 @@ public class PatientManagementUI {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                   SUCCESS                         |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|         Patient %s registered.%-14s|\n", id, "");
+        System.out.printf("\t\t\t\t|         Patient %s registered.%-14s |\n", id, "");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
@@ -69,10 +69,8 @@ public class PatientManagementUI {
         System.out.printf("\t\t\t\t| Registration    : %-33s |\n", reg);
         String qs = (visit == null || visit.getQueueStart() == null) ? "N/A" : df.format(visit.getQueueStart());
         String qe = (visit == null || visit.getQueueEnd() == null) ? "N/A" : df.format(visit.getQueueEnd());
-        String tk = (visit == null || visit.getTicket() == null || visit.getTicket().isEmpty()) ? "None" : visit.getTicket();
         System.out.printf("\t\t\t\t| Queue Start     : %-33s |\n", qs);
         System.out.printf("\t\t\t\t| Queue End       : %-33s |\n", qe);
-        System.out.printf("\t\t\t\t| Ticket          : %-33s |\n", tk);
         System.out.println("\t\t\t\t========================================================");
     }
 
@@ -107,7 +105,7 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t|               WARNING                             |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|         This action cannot be undone!            |");
+        System.out.println("\t\t\t\t|         This action cannot be undone!             |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
@@ -282,6 +280,16 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
     }
+    
+    public static int displayGetTicketMenu() {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t              Get Ticket Portal                   ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|  1. Get Ticket Number                             |");
+        System.out.println("\t\t\t\t|  2. Exit                                          |");
+        System.out.println("\t\t\t\t=====================================================");
+        return Input.getIntegerInput("\t\t\t\tSelect an option > ");
+    }
 
     public static void displayPatientInfo(String patientId, String name, String contact,
             String email, String gender, int age, String regDate) {
@@ -362,8 +370,8 @@ public class PatientManagementUI {
         String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         String pad = "\t\t\t\t";
         int cells = (endHour - startHour) + 1;
-        sep(pad, cells);
         displayReportHeader();
+        sep(pad, cells);
         System.out.printf(pad + "| %-5s |", "Day");
         for (int h = startHour; h < endHour; h++) {
             System.out.printf(" %5s |", h + ":00");
@@ -403,6 +411,10 @@ public class PatientManagementUI {
         return b.toString();
     }
 
+    public void newLine() {
+        System.out.println("\t\t\t\t-----------------------------------------------------");
+    }
+
     public String promptLoginId() {
         return Input.getStringInput("\t\t\t\tEnter your patient ID: ");
     }
@@ -412,18 +424,22 @@ public class PatientManagementUI {
     }
 
     public String promptPatientContact() {
+        newLine();
         return Input.getStringInput("\t\t\t\tEnter Contact Number: ");
     }
 
     public String promptPatientEmail() {
+        newLine();
         return Input.getStringInput("\t\t\t\tEnter Email: ");
     }
 
     public String promptPatientGender() {
+        newLine();
         return Input.getStringInput("\t\t\t\tEnter Gender (Male/Female): ");
     }
 
     public int promptPatientAge() {
+        newLine();
         return Input.getIntegerInput("\t\t\t\tEnter Age: ");
     }
 
@@ -452,27 +468,36 @@ public class PatientManagementUI {
     }
 
     public void displayDeleteOptions() {
-        System.out.println("\t\t\t\tDelete Options:");
-        System.out.println("\t\t\t\t1. Delete visit record");
-        System.out.println("\t\t\t\t2. Delete entire patient");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t              DELETE OPTIONS                         ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|  1. Delete visit record                           |");
+        System.out.println("\t\t\t\t|  2. Delete entire patient                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public int promptDeleteOption() {
         return Input.getIntegerInput("\t\t\t\tEnter option (1/2): ");
     }
 
-    public void displayNoVisitRecordsToDelete() {
-        System.out.println("\t\t\t\tNo visit records to delete.");
-    }
-
     public void displayVisitList(Patient patient) {
-        System.out.println("\t\t\t\tVisit Records:");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t              VISIT RECORDS                          ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                                                   |");
+
         Visit[] visits = patient.getVisits();
         int count = patient.getVisitCount();
         for (int i = 0; i < count; i++) {
             Date d = visits[i].getQueueStart();
-            System.out.println("\t\t\t\t[" + (i + 1) + "] " + (d == null ? "N/A" : d));
+            String dateStr = d == null ? "N/A" : patient.getDateFormat().format(d);
+            System.out.printf("\t\t\t\t|  [%d] %-44s |\n", (i + 1), dateStr);
         }
+
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public int promptVisitNumberToDelete() {
@@ -480,7 +505,12 @@ public class PatientManagementUI {
     }
 
     public void displayVisitDeleteSuccess() {
-        System.out.println("\t\t\t\tVisit record deleted successfully.");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                   SUCCESS                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|        Visit record deleted successfully.         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public boolean confirmDeletePatient() {
@@ -494,7 +524,12 @@ public class PatientManagementUI {
     }
 
     public void displayNoTicketIssued() {
-        System.out.println("\t\t\t\tOkay, no ticket will be issued.");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                    NOTICE                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|                no ticket will be issued.         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public int promptQueueReportMenuOption() {
@@ -502,8 +537,15 @@ public class PatientManagementUI {
     }
 
     public void displayDayOfWeekMenu() {
-        System.out.println("\t\t\t\t1. Monday  2. Tuesday  3. Wednesday  4. Thursday");
-        System.out.println("\t\t\t\t5. Friday  6. Saturday 7. Sunday");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t              SELECT DAY OF WEEK                     ");
+        System.out.println("\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|  1. Monday     2. Tuesday    3. Wednesday         |");
+        System.out.println("\t\t\t\t|  4. Thursday   5. Friday     6. Saturday          |");
+        System.out.println("\t\t\t\t|  7. Sunday                                        |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public int promptDayOfWeek() {
@@ -523,9 +565,12 @@ public class PatientManagementUI {
     }
 
     public void displayNoUndoHistory() {
-        System.out.println("\n\t\t\t\t----------------------------------------------");
-        System.out.println("\t\t\t\tNo undo history found.");
-        System.out.println("\t\t\t\t----------------------------------------------");
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                    NOTICE                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|            No undo history found.                |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public void displayUndoDone(String action, String id) {
@@ -579,17 +624,22 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public void displayNoVisit() {
-        System.out.println("\n\t\t\t\t\tNO VISIT FOUND");
+    public void displayNoVisitRecordsToDelete() {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|                    NOTICE                         |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|         No visit records to delete.              |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
     }
 
     public static void displayVisitFrequencyTables(MapInterface<String, Patient> newPatients, MapInterface<String, Patient> returningPatients) {
-        System.out.println("\n\t\t\t\t=====================================================\t\t\t				|=====================================================");
-        System.out.println("\t\t\t\t              NEW PATIENTS (0 VISITS)                \t\t\t 				|          RETURNING PATIENTS (1+ VISITS)            |");
-        System.out.println("\t\t\t\t=====================================================\t\t\t				======================================================");
-        System.out.printf("\t\t\t\t| Total: %-43d |\t\t\t				|| Total: %-42d |\n",
+        System.out.println("\n\t\t\t\t=====================================================\t				|=====================================================");
+        System.out.println("\t\t\t\t              NEW PATIENTS (0 VISITS)                \t 				|          RETURNING PATIENTS (1+ VISITS)            |");
+        System.out.println("\t\t\t\t=====================================================\t				======================================================");
+        System.out.printf("\t\t\t\t| Total: %-43d |\t\t			|  Total: %-42d |\n",
                 newPatients.size(), returningPatients.size());
-        System.out.println("\t\t\t\t-----------------------------------------------------\t\t\t				|-----------------------------------------------------");
+        System.out.println("\t\t\t\t-----------------------------------------------------\t				|-----------------------------------------------------");
         Object[] newPatientValues = newPatients.getAllValues();
         Object[] returnPatientValues = returningPatients.getAllValues();
 
@@ -613,9 +663,9 @@ public class PatientManagementUI {
                         patient.getVisitCount());
             }
 
-            System.out.println(leftLine + "\t\t\t" + rightLine);
+            System.out.println(leftLine + "\t" + rightLine);
         }
-        System.out.println("\t\t\t\t=====================================================\t\t\t				|=====================================================");
+        System.out.println("\t\t\t\t=====================================================\t				|=====================================================");
         displayVisitFrequencySummary(newPatients.size(), returningPatients.size());
     }
 
