@@ -66,7 +66,7 @@ public class DoctorManagement implements CRUD {
             do {
                 staffOption = staffmenu.doctorManagementMenu(staffFound);
                 switchDoctorMenu(staffOption);
-            } while (staffOption != 10);
+            } while (staffOption < 9 && staffFound != null);
         }
     }
 
@@ -336,7 +336,6 @@ public class DoctorManagement implements CRUD {
                 undoDeletion(lastDeletedStaff);
             }
             staffmenu.logOutMsg();
-            //call main menu();
         } else {
             staffmenu.doctorManagementMenu(staffFound);
         }
@@ -599,7 +598,7 @@ public class DoctorManagement implements CRUD {
     }
 
     public void printTopPerformers(int option) {
-        staffmenu.printTopDoctor();
+        staffmenu.printTopDoctor(option);
         staffmenu.printExperienceReportHeader();
 
         int i = 0;

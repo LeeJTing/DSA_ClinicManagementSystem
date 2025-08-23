@@ -51,8 +51,7 @@ public class StaffUI {
     }
 
     public void displayDoctorsUI(Staff staff, String level) {
-        System.out.println(staff.allDoctorToString(level));
-
+        System.out.printf("\t\t\t\t| %-15s | %-20s | %-10s | %-15s | %-25s | %-12s | %-20d | %-25s | %-12s |\n", staff.getStaffID(), staff.getStaffName(), staff.getStaffPosition(), staff.getStaffContact(), staff.getStaffEmail(), staff.getDutyStatus(), staff.getServiceDuration(), level, staff.getJoinedDate());
     }
 
     public void displayDoctorsFooter() {
@@ -60,7 +59,7 @@ public class StaffUI {
     }
 
     public void displayProfileUI(Staff staff, String level) {
-        System.out.print(staff.customizedToString(level));
+        displayProfileDetails(staff, level);
     }
 
     public String promptStaffID() {
@@ -264,9 +263,9 @@ public class StaffUI {
     }
 
     public void printScheduleHeader() {
-        System.out.println("\t\t\t\t------------------------------------------------------------------------------------------------");
-        System.out.println("\t\t\t\t| Day              | Doctor on Duty                                                             |");
-        System.out.println("\t\t\t\t------------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t| Day              | Doctor on Duty                                                                     |");
+        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
     }
 
     public void printLine() {
@@ -280,11 +279,11 @@ public class StaffUI {
     }
 
     public void printDoctorOnDuty(String staffName) {
-        System.out.print(String.format("\t\t\t\t%-20s  |", staffName));
+        System.out.print(String.format("\t%-20s  |", staffName));
     }
 
     public void printSceduleFooter() {
-        System.out.println("\t\t\t\t------------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
     }
 
     public int displayPerformanceReportMenu() {
@@ -339,28 +338,28 @@ public class StaffUI {
     public void performanceReportUI(Staff staff, String mode) {
         switch (mode.toLowerCase()) {
             case "patients":
-                System.out.println(staff.patientPerformanceToString());
+                patientPerformance(staff);
                 break;
             case "duration":
-                System.out.println(staff.consultationPerformanceToString());
+                consultationPerformance(staff);
                 break;
         }
     }
 
-    public void printTopDoctor() {
-        System.out.println("\n\t\t\t\tTop 3 Most Experience Doctors\n");
+    public void printTopDoctor(int value) {
+        System.out.printf("\n\t\t\t\t\t\t\t\tTop %d Most Experience Doctors\n", value);
     }
 
     public void printExperinceTitle() {
-        System.out.println("\n\t\t\t\t\tMost Experience Doctors Overview\n");
+        System.out.println("\n\t\t\t\t\t\t\t\tMost Experience Doctors Overview\n");
     }
 
     public void printHigestConsultTime() {
-        System.out.println("\n\t\t\t\tDoctor With Higest Consultation Time\n");
+        System.out.println("\n\t\t\t\t\t\tDoctor With Higest Consultation Time\n");
     }
 
     public void printHigestPatientCount() {
-        System.out.println("\n\t\t\t\tDoctor with Higest Patient Count\n");
+        System.out.println("\n\t\t\t\t\t\tDoctor with Higest Patient Count\n");
     }
 
     public void printUndoMsg(String mode) {
@@ -369,7 +368,7 @@ public class StaffUI {
                 System.out.println("\n\t\t\t\tYour profile edition undo successfully");
                 break;
             case "delete":
-                System.out.println("\n\t\t\t\tYour account deletion undo successfully");
+                System.out.println("\n\t\t\t\t\tYour account deletion undo successfully");
                 break;
             case "leave":
                 System.out.println("\n\t\t\t\tYour leave application undo successfully");
@@ -391,6 +390,32 @@ public class StaffUI {
                 break;
 
         }
+    }
+
+    public void patientPerformance(Staff staff) {
+        System.out.printf("\t\t\t\t| %-20s | %-20s | %-20d  |\n", staff.getStaffID(), staff.getStaffName(), staff.getPatientCount());
+    }
+
+    public void consultationPerformance(Staff staff) {
+        System.out.printf("\t\t\t\t| %-20s | %-20s | %-20d  |\n", staff.getStaffID(), staff.getStaffName(), staff.getConsultationDuration());
+    }
+    
+    public void displayProfileDetails(Staff staff, String level) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy");
+
+        System.out.println("\t\t\t\t+------------------------------------------------------+");
+        System.out.printf("\t\t\t\t| %-52s |%n", "Doctor Profile");
+        System.out.println("\t\t\t\t+------------------------------------------------------+");
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Staff ID", staff.getStaffID());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Staff Name", staff.getStaffName());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Position", staff.getStaffPosition());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Contact", staff.getStaffContact());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Email", staff.getStaffEmail());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Education Level", level);
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Service Years", staff.getServiceDuration() + " years");
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Duty Status", staff.getDutyStatus());
+        System.out.printf("\t\t\t\t| %-18s : %-31s |\n", "Joined Date", staff.getJoinedDate().format(dateFormat));
+        System.out.println("\t\t\t\t+------------------------------------------------------+");
     }
 
 }

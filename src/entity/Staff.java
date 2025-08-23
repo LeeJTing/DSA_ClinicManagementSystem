@@ -191,40 +191,10 @@ public class Staff implements Comparable<Staff> {
         this.compare = compare;
     }
 
-    public String customizedToString(String level) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-        return "\t+------------------------------------------------------+\n"
-                + String.format("\t| %-52s |%n", "Doctor Profile")
-                + "\t+------------------------------------------------------+\n"
-                + String.format("\t| %-18s : %-31s |\n", "Staff ID", staff_id)
-                + String.format("\t| %-18s : %-31s |\n", "Staff Name", staff_name)
-                + String.format("\t| %-18s : %-31s |\n", "Position", staff_position)
-                + String.format("\t| %-18s : %-31s |\n", "Contact", staff_contact)
-                + String.format("\t| %-18s : %-31s |\n", "Email", staff_email)
-                + String.format("\t| %-18s : %-31s |\n", "Education Level", level)
-                + String.format("\t| %-18s : %-31s |\n", "Service Years", service_duration + " years")
-                + String.format("\t| %-18s : %-31s |\n", "Duty Status", dutyStatus)
-                + String.format("\t| %-18s : %-31s |\n", "Joined Date", joined_date.format(dateFormat))
-                + "\t+------------------------------------------------------+\n";
-    }
-
     @Override
     public String toString() {
 //        staffId, staffName, clinicYrs, industryYrs, education, score)
-        return String.format("\t| %-10s | %-20s | %-13d | %-13d | %-14d | %-15d |", staff_id, staff_name, clinic_years, service_duration, education_level, score);
-    }
-
-    public String patientPerformanceToString() {
-        return String.format("\t| %-20s | %-20s | %-20d  |", staff_id, staff_name, patient_count);
-    }
-
-    public String consultationPerformanceToString() {
-        return String.format("\t| %-20s | %-20s | %-20d  |", staff_id, staff_name, consultation_duration);
-    }
-
-    public String allDoctorToString(String level) {
-        return String.format("\t| %-15s | %-20s | %-10s | %-15s | %-25s | %-12s | %-20d | %-25s | %-12s |", staff_id, staff_name, staff_position, staff_contact, staff_email, dutyStatus, service_duration, level, joined_date);
+        return String.format("\t\t\t\t| %-10s | %-20s | %-13d | %-13d | %-14d | %-15d |", staff_id, staff_name, clinic_years, service_duration, education_level, score);
     }
 
     @Override
