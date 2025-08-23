@@ -3,150 +3,188 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package adt;
-import java.util.Comparator;
+
 import java.util.Iterator;
+
 /**
  *
  * @author User
  */
 //V extends Comparable<V>
 public interface MapInterface<K, V> {
-    
+
     /**
-     * Add data into the ADT in key-value pairs
+     * Add data into the ChainBucket in key-value pairs.
+     *
      * @param key the key to be stored
      * @param value the value to be associated with the key
      */
     public void put(K key, V value);
-    
+
     /**
-     * Insert a new element at the front of the ADT
-     * @param key the key to be stored
-     * @param value the value to be associated with the key
-     */
-    public void addFirst(K key, V value);
-    
-    /**
-     * Search the key from the ADT based on the given value
+     * Search the key from the ChainBucket based on the given value.
+     *
      * @param value the value to search for
-     * @return the key that maps to the given value
+     * @return first key whose value matches the given value based on insertion
+     * order is returned or returns null if no value is found.
      */
     public K getKey(V value);
-    
+
     /**
-     * Retrieve the data from the ADT based on the given key
+     * Retrieve the data from the ChainBucket based on the given key.
+     *
      * @param key the key search for
-     * @return the value that map to the given key
+     * @return the value that is associated with the given key or return null if
+     * no value is found.
      */
     public V getValue(K key);
-    
+
     /**
-     * Return all the values in insertion order
-     * @return an array of values in the order they were inserted
+     * Retrieve all the values in insertion order.
+     *
+     * @return a list of values orderly and the length equal to the total number
+     * of key-value pairs in the ChainBucket.
      */
     public V[] getAllValues();
-    
+
     /**
-     * Return all the values in insertion order
-     * @return array of keys in the order they were inserted
+     * Return all the keys in insertion order.
+     *
+     * @return a list of keys orderly and the length equal to the total number
+     * of key-value pairs in the ChainBucket.
      */
     public K[] getAllKeys();
-    
+
     /**
-     * Remove the entry associated with the specified key from the map
+     * Removes the entry associated with the specified key from the ChainBucket.
+     *
      * @param key the key of the entry to be removed
      */
     public void remove(K key);
-    
+
     /**
-     * Check if the ADT contains entries with the given key or not
+     * Check if the ChainBucket contains entries with the given key or not.
+     *
      * @param key the key search for
-     * @return true if the key exist, else return false
+     * @return true if the key exists, otherwise returns false.
      */
     public boolean containsKey(K key);
-    
+
     /**
-     * Check if the ADT contains entries with the given value or not
+     * Check if the ChainBucket contains entries with the given value or not.
+     *
      * @param value the value search for
-     * @return true if the value exist, else false
+     * @return true if the value exists, otherwise returns false.
      */
-    public boolean containsValue(V value); 
-    
+    public boolean containsValue(V value);
+
     /**
-     * Determines whether the ADT is empty.
-     * @return true if the ADT is empty, else false
+     * Determines whether the ChainBucket is empty.
+     *
+     * @return true if the ChainBucket is empty, else return false
      */
     public boolean isEmpty();
-        
+
     /**
-     * Find out the size of the ADT
-     * @return the number of entries
+     * Find out the number of key-value mappings currently stored in
+     * ChainBucket.
+     *
+     * @return the integer value of the total number of entries as ChainBucket
+     * size or return 0 if the ChainBucket is empty.
      */
     public int size();
-    
+
     /**
-     * Return the last key from the ADT
-     * @return return the last key of the ADT
+     * Get the last key from the ChainBucket according insertion order.
+     *
+     * @return the last insertion key or return null if the ChainBucket contains
+     * no entries.
      */
     public K getLastKey();
-    
+
     /**
-     * Return the first key from the ADT
-     * @return return the first key of the ADT
+     * Get the first key from the ChainBucket according insertion order.
+     *
+     * @return the first insertion key or return null if the ChainBucket
+     * contains no entries.
      */
     public K getFrontKey();
-    
+
     /**
-     * Returns an iterator that traverses all values stored in the map
-     * @return an Iterator over the values of type V in this map
+     * Provides an iterator to traverse all values stored in the ChainBucket,
+     * typically in insertion order.
+     *
+     * @return an Iterator over the values of type V in this ChainBucket
      */
     public Iterator<V> getIterator();
-        
+
     /**
-     * Sorting value of the ADT
+     * Sort all the values in the ChainBucket from large to small values.
      */
     public void sorting();
-    
-    public void keyReverseSorting();
-    
+
     /**
-     * Clear the ADT
+     * Sort all the keys in the ChainBucket from small to large values.
+     */
+    public void keyReverseSorting();
+
+    /**
+     * Removes all key-value pairs from the ChainBucket, leaving it empty.
      */
     public void clear();
-    
+
     /**
-     * Return the value of the first key from the ADT
-     * @return return the value of the first key of the ADT
+     * Get the value of the first key from the ChainBucket.
+     *
+     * @return the value of the first key or return null if the ChainBucket
+     * contains no entries.
      */
     public V getFront();
-    
-     /**
-     * Return the value of the last key from the ADT
-     * @return return the value of the last key of the ADT
+
+    /**
+     * Get the value of the last key from the ChainBucket.
+     *
+     * @return the value of the last key or return null if the ChainBucket
+     * contains no entries.
      */
     public V getLast();
-    
+
     /**
-     * Remove the first node from the ADT
-     * @return the First node value
+     * Get and remove the value of the first key from the ChainBucket.
+     *
+     * @return the value of the first key or return null if the ChainBucket
+     * contains no entries.
      */
     public V removeFirst();
-    
+
     /**
-     * Remove the last node from the ADT
-     * @return the Last node value
+     * Get and remove the value of the last key from the ChainBucket.
+     *
+     * @return Return the value of the last key or return null if the
+     * ChainBucket contains no entries.
      */
     public V removeLast();
-    
+
     /**
-     * Creates a new map containing only the value pairs that are present in both the current map and the specified
-     * @param map 
-     * @return a new map containing only the value pairs with map and existing map
+     * Creates a new map containing only the key-value pairs that are present in
+     * both the current map and the specified map.
+     *
+     * @param map
+     * @return a new Map containing all key-value pairs whose values also exist
+     * in the specified map. Else, returns an empty map if no matches are found.
      */
     public MapInterface<K, V> intersect(MapInterface<K, V> map);
-    
+
+    /**
+     * Creates a new map containing only the key-value pairs that have equal
+     * value with the given value.
+     *
+     * @param value
+     * @return a new Map containing all key-value pairs whose values are equal
+     * to the specified value. Else, returns an empty map if no matches are
+     * found.
+     *
+     */
     public MapInterface<K, V> groupBy(V value);
-    
-//    public MapInterface<K, V> groupBy(V value, Comparator<V> comparator);
-    
+
 }

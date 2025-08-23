@@ -307,13 +307,13 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
     public boolean isEmpty() {
         return size == 0;
     }
-    
+
     @Override
-    public void keyReverseSorting(){
+    public void keyReverseSorting() {
         if (isEmpty() || size == 1) {
             return;
         } else {
-             // find the largest one
+            // find the largest one
             int cSize = size;
             Entry<K, V>[] largeToSmall = new Entry[cSize];
             Entry<K, V> current, largest;
@@ -394,39 +394,6 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
     }
 
     @Override
-    public void addFirst(K key, V value) {
-        int hashValue = hashing(key);
-        Entry<K, V> newEntry = new Entry<>(key, value);
-
-        // when the ADT is empty set the head and tail as newEntry and set the entries[hashValue] = newEntries
-        if (isEmpty()) {
-            tail = newEntry;
-
-        } else {
-            // if the key already exist, will remove it first and move it to the front
-            if (containsKey(key)) {
-                remove(key);
-            }
-
-            // newEntry will be head and it linked to the previous head and previous head link to head
-            head.before = newEntry;
-            newEntry.after = head;
-
-            // the first note of the bucket
-            Entry<K, V> current = entries[hashValue];
-
-            // have note inside the bucket
-            if (current != null) {
-                newEntry.next = current;
-            }
-            // no any note inside the bucket
-        }
-        head = newEntry;
-        entries[hashValue] = newEntry;
-        size++;
-    }
-
-    @Override
     public MapInterface<K, V> intersect(MapInterface<K, V> map) {
         MapInterface<K, V> intersectMap = new ChainBucket<>();
         if (isEmpty()) {
@@ -473,45 +440,5 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
 
         return group;
     }
-    
-//    @Override
-//    public MapInterface<K, V> groupBy(V value, Comparator<V> comparator) {
-//        MapInterface<K, V> group = new LinkedHashMap<>();
-//
-//        if (!isEmpty()) {
-//            Entry<K, V> current = head;
-//            while (current != null) {
-//                if (comparator.compare(current.value, value) == 0) {
-//                    group.put(current.key, current.value);
-//                }
-//                current = current.after;
-//            }
-//        }
-//        return group;
-//    }
 
-//    public static void main(String[] args) {
-//        MapInterface<Integer, String> str1 = new LinkedHashMap<>();
-//        MapInterface<Integer, String> str2 = new LinkedHashMap<>();
-//
-//        str1.put(1, "I");
-//        str1.put(5, "I");
-//        str1.put(2, "Love");
-//        str1.put(3, "You");
-//        str1.put(4, "Hee");
-//
-//        str2.put(1, "I");
-////        str2.put(5, "I");
-//        str2.put(2, "Love");
-//        str2.put(3, "You");
-//        str2.put(4, "Hellow");
-//        MapInterface<Integer, String> str3 = str2.intersect(str1);
-//
-//        Object[] obj = str3.getAllValues();
-//        for (Object o : obj) {
-//            String str = (String) o;
-//            System.out.println(str);
-//
-//        }
-//    }
 }
