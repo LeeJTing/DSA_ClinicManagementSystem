@@ -10,11 +10,11 @@ package entity;
  */
 public class Ticket implements Comparable<Ticket> {
     private String ticketNumber;
-    private String status;
+    private String ticketStatus;
 
-    public Ticket(String ticketNumber, String status) {
+    public Ticket(String ticketNumber, String ticketStatus) {
         this.ticketNumber = ticketNumber;
-        this.status = status;
+        this.ticketStatus = ticketStatus;
     }
 
     public String getTicketNumber() {
@@ -25,14 +25,13 @@ public class Ticket implements Comparable<Ticket> {
         this.ticketNumber = ticketNumber;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTicketStatus() {
+        return ticketStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
-
 
     @Override
     public int compareTo(Ticket other) {
@@ -41,6 +40,6 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public String toString() {
-        return "Ticket{" + "ticketNumber=" + ticketNumber + ", status=" + status + '}';
+        return "Ticket{" + "ticketNumber=" + ticketNumber + ", ticketStatus=" + ticketStatus + '}';
     }
 }
