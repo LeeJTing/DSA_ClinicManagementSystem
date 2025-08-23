@@ -590,7 +590,7 @@ public class PharmacyManagementModule implements CRUD {
 
     // Filter the medicine category desired by the user
     private void filterMedicineByCategory(String category) {
-        MapInterface<String, Medicine> categoryMedicine;
+        MapInterface<String, Medicine> categoryMedicine = new ChainBucket<>();
         boolean found = false;
 
         Medicine newMed = new Medicine();
