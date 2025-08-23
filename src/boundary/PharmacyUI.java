@@ -316,14 +316,14 @@ public class PharmacyUI {
     public void displayRemoveExpiredMedicineSuccessfully() {
         System.out.println("\t\t\t\tAll expired items has been deleted successfully.");
     }
-    
+
     public int promptDeleteMenu() {
         int choice = 0;
         System.out.println("\n\t\t\t\tDelete Medicine:");
         System.out.println("\t\t\t\t1. Delete medicine by ID");
         System.out.println("\t\t\t\t2. Delete expired medicine");
         System.out.println("\t\t\t\t3. Back");
-        
+
         while (choice < 1 || choice > 3) {
             choice = Input.getIntegerInput("\t\t\t\tEnter your choice: ");
         }
@@ -372,7 +372,7 @@ public class PharmacyUI {
     }
 
     public void displayMedicineCustomizedToString(Medicine med) {
-        System.out.print(med.customizedToString());
+        System.out.printf("\t\t\t\t|  %-20s | %-32s | %-8d | %15.2f  |\n", med.getMedicineName(), med.getMedicineCategory(), med.getMedicineStock(), med.getMedicineUnitPrice());
         System.out.println("\t\t\t\t------------------------------------------------------------------------------------------");
     }
 
@@ -511,7 +511,13 @@ public class PharmacyUI {
     }
 
     public void displayMedicineStatusToString(Medicine med) {
-        System.out.print(med.statusToString());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(med.getMedicineExpiryDate());
+        if (med.getMedicineStatus().equals("Good")) {
+            System.out.printf("\t\t\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %-16s  |\n", med.getMedicineID(), med.getMedicineName(), med.getMedicineCategory(), formattedDate, med.getMedicineStock(), med.getMedicineUnitPrice(), med.getMedicineStatus());
+        } else {
+            System.out.printf("\t\t\t\t|  %-14s | %-20s | %-32s | %-14s | %-8d | %15.2f | %s%-16s%s  |\n", med.getMedicineID(), med.getMedicineName(), med.getMedicineCategory(), formattedDate, med.getMedicineStock(), med.getMedicineUnitPrice(), MessageUI.RED, med.getMedicineStatus(), MessageUI.RESET);
+        }
         System.out.println("\t\t\t\t-----------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
@@ -525,7 +531,7 @@ public class PharmacyUI {
     }
 
     public void displayMedicineListByCategory(Medicine med) {
-        System.out.print(med.categoryToString());
+        System.out.printf("\t\t\t\t|  %-32s | %-8d  |\n", med.getMedicineName(), med.getMedicineStock());
         System.out.println("\t\t\t\t-------------------------------------------------");
     }
 
@@ -555,7 +561,10 @@ public class PharmacyUI {
     }
 
     public void displayExpiredMedicine(Medicine med) {
-        System.out.print(med.expiryToString());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(med.getMedicineExpiryDate());
+
+        System.out.printf("\t\t\t\t|  %-14s | %-20s | %-32s | %-14s  |\n", med.getMedicineID(), med.getMedicineName(), med.getMedicineCategory(), formattedDate);
         System.out.println("\t\t\t\t-----------------------------------------------------------------------------------------------");
     }
 

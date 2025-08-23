@@ -384,7 +384,7 @@ public class PharmacyManagementModule implements CRUD {
 
         topValue = PharmacyUI.promptTopMedicineDispensedSummary();
 
-        Medicine firstMed = medicineDispensedMap.getFront();
+        Medicine firstMed = new Medicine();
         firstMed.setCompare("medicine_stock");
         medicineDispensedMap.sorting();
 
