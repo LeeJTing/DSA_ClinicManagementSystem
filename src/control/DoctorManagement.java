@@ -38,6 +38,7 @@ public class DoctorManagement implements CRUD {
     private static MapInterface<String, Staff> doctorReportMap = new ChainBucket<>();
     private static MapInterface<Integer, Staff> staffRecordHistory = new ChainBucket<>();
     private static MapInterface<Integer, String> actionHistory = new ChainBucket<>();
+    private static MapInterface<Integer, String> doctorsOnDuty = new ChainBucket<>();
 
     public static StaffUI staffmenu = new StaffUI();
     public static final Master Master = new Master();
@@ -72,7 +73,7 @@ public class DoctorManagement implements CRUD {
 
     public void notifyDoctor() {
         LocalDate today = LocalDate.now();
-        var doctorsOnDuty = dutyScheduleMap.getValue(today);
+        doctorsOnDuty = dutyScheduleMap.getValue(today);
         String staffId = staffFound.getStaffID();
 
         // Check if this doctor is first or last on duty
@@ -90,7 +91,7 @@ public class DoctorManagement implements CRUD {
 
     public void updateDutyStatus() {
         LocalDate today = LocalDate.now();
-        var doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
+        doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
 
         Iterator<Staff> iterator = staffMap.getIterator();
         while (iterator.hasNext()) {
@@ -276,7 +277,7 @@ public class DoctorManagement implements CRUD {
             LocalDate leaveDate = today.plusDays(choice + 2);
 
             // Find which slot this staff occupies on that leaveDate
-            MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
+            doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
             Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
 
             if (slotNumber != null) {
@@ -292,7 +293,7 @@ public class DoctorManagement implements CRUD {
     }
 
     public void updateLeaveDate(Staff loggedInStaff, LocalDate leaveDate) {
-        MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
+        doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
         Integer keyToRemove = doctorsOnDuty.getKey(loggedInStaff.getStaffID());
 
         if (keyToRemove != null) {
@@ -336,8 +337,6 @@ public class DoctorManagement implements CRUD {
                 undoDeletion(lastDeletedStaff);
             }
             staffmenu.logOutMsg();
-        } else {
-            staffmenu.doctorManagementMenu(staffFound);
         }
     }
 
@@ -632,7 +631,7 @@ public class DoctorManagement implements CRUD {
                 int slotNumber = Integer.parseInt(parts[1]);
                 LocalDate leaveDate = LocalDate.parse(parts[2]);
 
-                MapInterface<Integer, String> doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
+                doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
 
                 if (doctorsOnDuty != null) {
                     doctorsOnDuty.put(slotNumber, prevStaff.getStaffID());
