@@ -361,7 +361,7 @@ public class PatientManagement implements CRUD {
                 ticket.setTicketStatus("queue");
                 ticketQueue.put(ticketKey, ticket);
                 Master.setCurrentTicket(ticket.getTicketNumber());
-                ui.displayTicketAssigned(ticket.getTicketNumber(), "System");
+                ui.displayTicketAssigned(ticket.getTicketNumber());
                 return;
             }
         }

@@ -128,11 +128,11 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayTicketAssigned(String ticketNumber, String staffId) {
+    public static void displayTicketAssigned(String ticketNumber) {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                   SUCCESS                         |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|    Assigned ticket %s to Dr.%-16s   |\n", ticketNumber, staffId);
+        System.out.printf("\t\t\t\t|            Assigned ticket %s                  |\n", ticketNumber);
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
