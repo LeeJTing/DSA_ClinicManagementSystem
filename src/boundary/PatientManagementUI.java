@@ -897,5 +897,7 @@ public class PatientManagementUI {
     System.out.printf("\t\t\t\t| %-"+labelW+"s |   %-"+colW+"s     |    %-"+colW+"s    |    %-"+totalW+"d |\n","Count", maleCount   + " (" + String.format("%.2f%%", malePct)   + ")", femaleCount + " (" + String.format("%.2f%%", femalePct) + ")", total);
     System.out.println("\t\t\t\t=================================================================");
 }
-
+public static void displayNoTicketsInQueueRow() {
+    System.out.println("\t\t\t\t|               No tickets in queue                      |");
+}
 }

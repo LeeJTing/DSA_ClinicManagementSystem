@@ -112,6 +112,8 @@ public class PatientManagement implements CRUD {
     }
 
     public void offlinePatientModule() {    // Offline patient module - let patient to get ticket
+    MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
+    displayPublicQueueForOffline(ticketQueue); 
         int choice = ui.displayGetTicketMenu();
         switch (choice) {
             case 1:
@@ -885,4 +887,52 @@ public class PatientManagement implements CRUD {
         }
         return false;
     }
+    private void displayPublicQueueForOffline(MapInterface<String, Ticket> ticketQueue) {
+        if (ticketQueue == null) {
+            return;
+        }
+
+        PatientManagementUI.displayQueueHeader();
+        MapInterface<String, Ticket> queued = new ChainBucket<>();
+        Object[] keys = ticketQueue.getAllKeys();
+        for (int i = 0; i < keys.length; i++) {
+            String k = (String) keys[i];
+            Ticket t = ticketQueue.getValue(k);
+            if (t != null && "queue".equals(t.getTicketStatus())) {
+                queued.put(k, t);
+            }
+        }
+
+        if (queued.isEmpty()) {
+            ui.displayNoTicketsInQueueRow();
+            ui.displayQueueFooter();
+            return;
+        }
+        String frontKey = queued.getFrontKey();
+        SimpleDateFormat hhmm = new SimpleDateFormat("HH:mm");
+        Object[] qKeys = queued.getAllKeys();
+        int pos = 1;
+
+        for (int i = 0; i < qKeys.length; i++) {
+            String k = (String) qKeys[i];
+            Ticket t = queued.getValue(k);
+
+            String indicator = k.equals(frontKey) ? "[Current]" : "";
+            String count = String.valueOf(pos);
+            String ticketNo = t.getTicketNumber();
+
+            String timeStarted = "N/A";
+            String timeWaited = "N/A";
+            if (t.getQueueStart() != null) {
+                timeStarted = hhmm.format(t.getQueueStart());
+                long waitedMillis = System.currentTimeMillis() - t.getQueueStart().getTime();
+                long waitedMins = Math.max(0, waitedMillis / 60000);
+                timeWaited = String.valueOf(waitedMins);
+            }
+            ui.displayQueueRow(indicator, count, ticketNo, timeStarted, timeWaited);
+            pos++;
+        }
+        ui.displayQueueFooter();
+    }
+
 }
