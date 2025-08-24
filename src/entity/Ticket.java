@@ -11,22 +11,27 @@ import java.util.Date;
  * @author Lwin
  */
 public class Ticket implements Comparable<Ticket> {
+
     private String ticketNumber;
     private String ticketStatus;
     private Date queueStart;
     private Date queueEnd;
     private String patientID;
-    
+
     public Ticket() {
     }
-    
-    
 
-    public Ticket(String ticketNumber, String ticketStatus, Date queueStart, Date queueEnd) {
+    public Ticket(String ticketNumber, String ticketStatus) {
+        this.ticketNumber = ticketNumber;
+        this.ticketStatus = ticketStatus;
+    }
+
+    public Ticket(String ticketNumber, String ticketStatus, Date queueStart, Date queueEnd, String patientID) {
         this.ticketNumber = ticketNumber;
         this.ticketStatus = ticketStatus;
         this.queueStart = queueStart;
         this.queueEnd = queueEnd;
+        this.patientID = patientID;
     }
 
     public String getTicketNumber() {
@@ -52,13 +57,6 @@ public class Ticket implements Comparable<Ticket> {
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
-    
-    
-
-    @Override
-    public int compareTo(Ticket other) {
-        return this.ticketNumber.compareTo(other.ticketNumber);
-    }
 
     public Date getQueueStart() {
         return queueStart;
@@ -77,9 +75,12 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     @Override
+    public int compareTo(Ticket other) {
+        return this.ticketNumber.compareTo(other.ticketNumber);
+    }
+
+    @Override
     public String toString() {
         return "Ticket{" + "ticketNumber=" + ticketNumber + ", ticketStatus=" + ticketStatus + ", queueStart=" + queueStart + ", queueEnd=" + queueEnd + '}';
     }
-
-    
 }

@@ -44,12 +44,13 @@ public class Patient {
         this.patient_email = email;
         this.patient_gender = gender;
         this.age = age;
-        String newRegisterDate = dateFormat.format(currentDate);
-        try {
-            this.registration_date = dateFormat.parse(newRegisterDate);
-        } catch (ParseException e) {
-            System.out.println("Error parsing date: " + e.getMessage());
-        }
+//        String newRegisterDate = dateFormat.format(currentDate);
+//        try {
+//            this.registration_date = dateFormat.parse(newRegisterDate);
+//        } catch (ParseException e) {
+//            System.out.println("Error parsing date: " + e.getMessage());
+//        }
+        this.registration_date = registrationDate;
     }
 
     public void addVisit(Date queueStart, Date queueEnd) {

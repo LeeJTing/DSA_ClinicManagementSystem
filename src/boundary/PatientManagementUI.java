@@ -128,15 +128,6 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayTicketAssigned(String ticketNumber) {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                   SUCCESS                         |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|            Assigned ticket %s                  |\n", ticketNumber);
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
-    }
-
     public static void displayNoTicketsAvailable() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
@@ -146,30 +137,14 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayQueueHeader() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t                 CURRENT QUEUE                       ");
-        System.out.println("\t\t\t\t=====================================================");
-    }
-
     public static void displayQueueItem(int position, String ticketNumber, String patientName, String staffId) {
         System.out.printf("\t\t\t\t%d. %s - %s (Dr.%s)%n", position, ticketNumber, patientName, staffId);
-    }
-
-    public static void displayEmptyQueue() {
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|            No patients in queue                   |");
-        System.out.println("\t\t\t\t|                                                   |");
     }
 
     public static void displayQueuePosition(int position) {
         System.out.println("\t\t\t\t|                                                   |");
         System.out.printf("\t\t\t\t|       Your position in queue: %-18d |\n", position);
         System.out.println("\t\t\t\t|                                                   |");
-    }
-
-    public static void displayQueueFooter() {
-        System.out.println("\t\t\t\t=====================================================");
     }
 
     public static void displayReportHeader() {
@@ -243,15 +218,33 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayAgeDemographics(int totalPatients, int youngAdult, int middleAge, int senior) {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t               AGE DEMOGRAPHICS                      ");
-        System.out.println("\t\t\t\t=====================================================");
-        System.out.printf("\t\t\t\t|  Total: %-42d|\n", totalPatients);
-        System.out.printf("\t\t\t\t|  Young Adult (18-35): %-27d |\n", youngAdult);
-        System.out.printf("\t\t\t\t|  Middle Age (36-55): %-28d |\n", middleAge);
-        System.out.printf("\t\t\t\t|  Senior (55+): %-34d |\n", senior);
-        System.out.println("\t\t\t\t=====================================================");
+    public static void displayAgeDemographicsTable(String[] young, String[] middle, String[] senior, int total) {
+        // Header
+        System.out.println("\t\t\t\t==========================================================================");
+        System.out.println("\t\t\t\t                          AGE DEMOGRAPHICS                           ");
+        System.out.println("\t\t\t\t==========================================================================");
+        System.out.println("\t\t\t\t|       | Young Adult        | Middle Age         | Senior       | Total |");
+        System.out.println("\t\t\t\t--------------------------------------------------------------------------");
+
+        int rows = Math.max(young == null ? 0 : young.length,
+                Math.max(middle == null ? 0 : middle.length,
+                        senior == null ? 0 : senior.length));
+
+        for (int r = 0; r < rows; r++) {
+            String y = (young != null && r < young.length && young[r] != null) ? young[r] : "";
+            String m = (middle != null && r < middle.length && middle[r] != null) ? middle[r] : "";
+            String s = (senior != null && r < senior.length && senior[r] != null) ? senior[r] : "";
+            System.out.printf("\t\t\t\t| %-5s| %-19s | %-18s | %-12s | %-5s |\n",
+                    "", y, m, s, "");
+            System.out.println("\t\t\t\t--------------------------------------------------------------------------");
+        }
+        int yc = young == null ? 0 : young.length;
+        int mc = middle == null ? 0 : middle.length;
+        int sc = senior == null ? 0 : senior.length;
+
+        System.out.printf("\t\t\t\t| %-5s| %-19s | %-18s | %-12s | %-5s |\n",
+                "Count", String.valueOf(yc), String.valueOf(mc), String.valueOf(sc), String.valueOf(total));
+        System.out.println("\t\t\t\t==========================================================================");
     }
 
     public static int displayPatientManagementMenu() {
@@ -262,10 +255,9 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|  2. Update My Information                         |");
         System.out.println("\t\t\t\t|  3. Delete My Account                             |");
         System.out.println("\t\t\t\t|  4. Average Queue Time Report                     |");
-        System.out.println("\t\t\t\t|  5. Get Ticket                                    |");
-        System.out.println("\t\t\t\t|  6. Patient Report                                |");
-        System.out.println("\t\t\t\t|  7. Undo Last Change                              |");
-        System.out.println("\t\t\t\t|  8. Return to Main Menu                           |");
+        System.out.println("\t\t\t\t|  5. Patient Report                                |");
+        System.out.println("\t\t\t\t|  6. Undo Last Change                              |");
+        System.out.println("\t\t\t\t|  7. Return to Main Menu                           |");
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
     }
@@ -280,7 +272,7 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
     }
-    
+
     public static int displayGetTicketMenu() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t              Get Ticket Portal                   ");
@@ -633,40 +625,12 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayVisitFrequencyTables(MapInterface<String, Patient> newPatients, MapInterface<String, Patient> returningPatients) {
-        System.out.println("\n\t\t\t\t=====================================================\t				|=====================================================");
-        System.out.println("\t\t\t\t              NEW PATIENTS (0 VISITS)                \t 				|          RETURNING PATIENTS (1+ VISITS)            |");
-        System.out.println("\t\t\t\t=====================================================\t				======================================================");
-        System.out.printf("\t\t\t\t| Total: %-43d |\t\t			|  Total: %-42d |\n",
-                newPatients.size(), returningPatients.size());
-        System.out.println("\t\t\t\t-----------------------------------------------------\t				|-----------------------------------------------------");
-        Object[] newPatientValues = newPatients.getAllValues();
-        Object[] returnPatientValues = returningPatients.getAllValues();
-
-        int maxRows = Math.max(newPatientValues.length, returnPatientValues.length);
-
-        for (int i = 0; i < maxRows; i++) {
-            String leftLine = "\t\t\t\t|                                                     |";
-            String rightLine = "\t\t\t\t|                                                    |";
-            if (i < newPatientValues.length) {
-                Patient patient = (Patient) newPatientValues[i];
-                leftLine = String.format("\t\t\t\t| %-8s | %-20s | %2d visits        |",
-                        patient.getPatient_id(),
-                        truncateName(patient.getPatient_name(), 20),
-                        patient.getVisitCount());
-            }
-            if (i < returnPatientValues.length) {
-                Patient patient = (Patient) returnPatientValues[i];
-                rightLine = String.format("\t\t\t\t| %-8s | %-20s | %2d visits        |",
-                        patient.getPatient_id(),
-                        truncateName(patient.getPatient_name(), 20),
-                        patient.getVisitCount());
-            }
-
-            System.out.println(leftLine + "\t" + rightLine);
-        }
-        System.out.println("\t\t\t\t=====================================================\t				|=====================================================");
-        displayVisitFrequencySummary(newPatients.size(), returningPatients.size());
+    public static void displayPatientSummary(Patient p) {
+        System.out.printf("\t\t\t\t| %-10s | %-20s | %-5d | %-6s |%n",
+                p.getPatient_id(),
+                p.getPatient_name(),
+                p.getAge(),
+                p.getPatient_gender());
     }
 
     public static void displayVisitFrequencySummary(int newPatientCount, int returningPatientCount) {
@@ -689,4 +653,249 @@ public class PatientManagementUI {
         }
         return name.substring(0, maxLength - 3) + "...";
     }
+
+    public static void displayQueueHeader() {
+        System.out.println("\n\t\t\t\t=====================================================================");
+        System.out.println("\t\t\t\t                          CURRENT TICKET QUEUE                 ");
+        System.out.println("\t\t\t\t=====================================================================");
+        System.out.println("\t\t\t\t| Count              | Ticket    | Time Started | Time Waited(mins) |");
+        System.out.println("\t\t\t\t|--------------------|-----------|--------------|-------------------|");
+    }
+
+    public static void displayQueueRow(String youIndicator, String count, String ticketNo, String timeStarted, String timeWaited) {
+        String countDisplay;
+        if (!youIndicator.isEmpty()) {
+            countDisplay = count + " " + youIndicator;
+        } else {
+            countDisplay = count;
+        }
+
+        String row = String.format("\t\t\t\t|  %-15s   | %-9s | %-12s | %-17s |",
+                countDisplay,
+                ticketNo,
+                timeStarted,
+                timeWaited);
+
+        System.out.println(row);
+    }
+
+    public static void displayEmptyQueue() {
+        System.out.println("\t\t\t\t|                                                         |");
+        System.out.println("\t\t\t\t|               No patients in queue                      |");
+        System.out.println("\t\t\t\t|                                                         |");
+    }
+
+    public static void displayQueueFooter() {
+        System.out.println("\t\t\t\t=====================================================================");
+    }
+
+    public static void displayTicketAssigned(String ticketNumber) {
+        System.out.println("\t\t\t\t                  Ticket Assigned To You: " + ticketNumber);
+        System.out.println("\t\t\t\t=====================================================================");
+    }
+
+    public static void displayBracket() {
+        System.out.println("\t\t\t\t|                                                         |");
+        System.out.println("\t\t\t\t|                                                         |");
+        System.out.println("\t\t\t\t|                                                         |");
+    }
+
+    public static void displayDeletedAccountNotice() {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t|              ACCOUNT STATUS NOTICE                |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t|   Your account was deleted. You can revert it.    |");
+        System.out.println("\t\t\t\t|                                                   |");
+        System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public static boolean promptUndoDeletedAccount() {
+        String s = Input.getStringInput("\t\t\t\tRevert deletion now? (Y/N): ");
+        return s != null && s.trim().equalsIgnoreCase("Y");
+    }
+
+    public static void displayAccessCancelled() {
+        System.out.println("\n\t\t\t\t=====================================================");
+        System.out.println("\t\t\t\t Access cancelled. You may log in with another ID.");
+        System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public static void displayAllPatientsTable(Object[] values) {
+        System.out.println("\n\t\t\t\t====================================================================================================================");
+        System.out.println("\t\t\t\t                                             Patient Details                                                        ");
+        System.out.println("\t\t\t\t====================================================================================================================");
+        System.out.println("\t\t\t\t| Patient ID |        Name        |   Contact   |         Email         | Gender | Age |     Registration     |");
+        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------------------");
+
+        if (values == null || values.length == 0) {
+            System.out.println("\t\t\t\t|                                              No patients found.                                                  |");
+            System.out.println("\t\t\t\t====================================================================================================================");
+            return;
+        }
+
+        for (int i = 0; i < values.length; i++) {
+            Patient p = (Patient) values[i];
+            if (p == null) {
+                continue;
+            }
+            String regStr = "N/A";
+            try {
+                if (p.getRegistration_date() != null) {
+                    SimpleDateFormat df = (p.getDateFormat() != null)
+                            ? p.getDateFormat()
+                            : new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    regStr = df.format(p.getRegistration_date());
+                }
+            } catch (Exception e) {
+                regStr = "N/A";
+            }
+
+            System.out.printf(
+                    "\t\t\t\t| %-9s | %-18s | %-11s | %-22s | %-6s | %3d | %-19s |\n",
+                    p.getPatient_id(),
+                    p.getPatient_name(),
+                    p.getPatient_contact(),
+                    p.getPatient_email(),
+                    p.getPatient_gender(),
+                    p.getAge(),
+                    regStr
+            );
+        }
+        System.out.println("\t\t\t\t====================================================================================================================");
+    }
+
+    public void displayVisitFreqSummary(int total, int newCnt, int retCnt) {
+        double np = (total == 0) ? 0 : (100.0 * newCnt / total);
+        double rp = (total == 0) ? 0 : (100.0 * retCnt / total);
+        System.out.println();
+        System.out.println("\t\t\t==================== VISIT FREQUENCY SUMMARY ====================");
+        System.out.printf("\t\t\tTotal Patients : %d%n", total);
+        System.out.printf("\t\t\tNew (<2 visits): %d (%.1f%%)%n", newCnt, np);
+        System.out.printf("\t\t\tReturn (>=2)   : %d (%.1f%%)%n", retCnt, rp);
+        System.out.println("\t\t\t===============================================================\n");
+    }
+
+    public void displayTopHeader(String title) {
+        System.out.println("\t\t\t---------------------------------------------------------------");
+        System.out.printf("\t\t\t%s%n", title);
+        System.out.println("\t\t\t---------------------------------------------------------------");
+        System.out.println("\t\t\t| ID       | Name                   | Visits | Latest Visit    |");
+        System.out.println("\t\t\t---------------------------------------------------------------");
+    }
+
+    public void displayTopRow(String id, String name, int visits, String latest) {
+        if (name == null) {
+            name = "-";
+        }
+        if (name.length() > 23) {
+            name = name.substring(0, 23);
+        }
+        System.out.printf("\t\t\t| %-8s | %-23s        | %6d | %-15s |%n",
+                (id == null ? "-" : id),
+                name,
+                visits,
+                (latest == null ? "N/A" : latest));
+    }
+
+    public void displayTopFooter() {
+        System.out.println("\t\t\t---------------------------------------------------------------\n");
+    }
+
+    private static final int BOX_W = 94;
+
+    private String repChar(char c, int n) {
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    private String padRight(String s, int w) {
+        if (s == null) {
+            s = "";
+        }
+        if (s.length() >= w) {
+            return s.substring(0, w);
+        }
+        StringBuilder sb = new StringBuilder(w);
+        sb.append(s);
+        while (sb.length() < w) {
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
+
+    public void displayVisitFreqReportHeader(int total, int newCnt, int retCnt) {
+        String top = repChar('=', BOX_W);
+        System.out.println("\t\t\t\t" + top);
+        System.out.println("\t\t\t\t| " + padRight("VISIT FREQUENCY REPORT", BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t" + repChar('=', BOX_W));
+        System.out.println("\t\t\t\t| " + padRight("Total Patients  : " + total, BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t| " + padRight("New : " + newCnt, BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t| " + padRight("Returning : " + retCnt, BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t" + repChar('=', BOX_W));
+    }
+
+    public void displayVisitFreqTableHeader() {
+        System.out.println("\t\t\t\t| " + padRight("", BOX_W - 4) + "|");
+        String header
+                = padRight("Type", 8) + " | "
+                + padRight("PatientID", 10) + " | "
+                + padRight("Name", 26) + " | "
+                + padRight("Visits", 6) + " | "
+                + padRight("Latest Visit", 20);
+        System.out.println("\t\t\t\t| " + padRight(header, BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t| " + padRight(repChar('-', 8) + "-+-"
+                + repChar('-', 10) + "-+-"
+                + repChar('-', 26) + "-+-"
+                + repChar('-', 6) + "-+-"
+                + repChar('-', 20), BOX_W - 4) + "|");
+    }
+
+    public void displayVisitFreqTableRow(String type, String patientId, String name, int visits, String latest) {
+        String row
+                = padRight(type, 8) + " | "
+                + padRight(patientId, 10) + " | "
+                + padRight(name, 26) + " | "
+                + padRight(String.valueOf(visits), 6) + " | "
+                + padRight(latest, 20);
+        System.out.println("\t\t\t\t| " + padRight(row, BOX_W - 4) + "|");
+    }
+
+    public void displayVisitFreqTableFooter() {
+        System.out.println("\t\t\t\t| " + padRight("", BOX_W - 4) + "|");
+        System.out.println("\t\t\t\t" + repChar('=', BOX_W));
+        System.out.println();
+    }
+
+   public static void displayGenderGrid(String[] maleIds, int maleCount,
+                                     String[] femaleIds, int femaleCount) {
+    int total = maleCount + femaleCount;
+    final int labelW = 7;
+    final int colW = 12;
+    final int totalW = 6;
+
+    System.out.println("\t\t\t\t=================================================================");
+    System.out.println("\t\t\t\t|                       Gender DemoGraphics                     |");
+    System.out.println("\t\t\t\t=================================================================");
+    System.out.printf("\t\t\t\t| %-"+labelW+"s |    %-"+colW+"s    |    %-"+colW+"s    |    %-"+totalW+"s |\n", "", "Male", "Female", "total");
+    System.out.println("\t\t\t\t-----------------------------------------------------------------");
+
+    int rows = Math.max(maleCount, femaleCount);
+    for (int i = 0; i < rows; i++) {
+        String m = (i < maleCount)   ? maleIds[i]   : "";
+        String f = (i < femaleCount) ? femaleIds[i] : "";
+        System.out.printf("\t\t\t\t| %-"+labelW+"s |    %-"+colW+"s    |    %-"+colW+"s    |    %-"+totalW+"s |\n",
+                "", m, f, "");
+        System.out.println("\t\t\t\t-----------------------------------------------------------------");
+    }
+
+    double malePct   = (total == 0) ? 0 : (maleCount   * 100.0 / total);
+    double femalePct = (total == 0) ? 0 : (femaleCount * 100.0 / total);
+
+    System.out.printf("\t\t\t\t| %-"+labelW+"s |   %-"+colW+"s     |    %-"+colW+"s    |    %-"+totalW+"d |\n","Count", maleCount   + " (" + String.format("%.2f%%", malePct)   + ")", femaleCount + " (" + String.format("%.2f%%", femalePct) + ")", total);
+    System.out.println("\t\t\t\t=================================================================");
+}
+
 }

@@ -15,6 +15,7 @@ import entity.Payment;
 import entity.Ticket;
 import entity.Treatment;
 import entity.Visit;
+import java.text.SimpleDateFormat;
 import utility.IDGenerator;
 
 import java.util.Date;
@@ -73,30 +74,44 @@ public class PatientManagement implements CRUD {
         while (true) {
             choice = ui.displayPatientManagementMenu();
             switch (choice) {
-                case 1 ->
+                case 1 -> {
+                    if (revertDelete()) {
+                        break;
+                    }
                     readInstance();
-                case 2 ->
-                    updateInstance();
-                case 3 ->
-                    deleteInstance();
-                case 4 ->
-                    reportsModule();
-                case 5 -> {
-                    System.out.println("under maintainance");
                 }
-                case 6 ->
+                case 2 -> {
+                    if (revertDelete()) {
+                        break;
+                    }
+                    updateInstance();
+                }
+                case 3 -> {
+                    if (revertDelete()) {
+                        break;
+                    }
+                    deleteInstance();
+                }
+                case 4 -> {
+                    reportsModule();
+                }
+                case 5 -> {
+                    if (revertDelete()) {
+                        break;
+                    }
                     patientReport();
-                case 7 ->
+                }
+                case 6 -> {
                     undo();
-                case 8 -> {
+
+                }
+                case 7 -> {
                     Master.setCurrentPatientId("");
                     return;
                 }
+
                 default ->
                     ui.displayInvalidChoice();
-            }
-            if (patientWasDeleted) {
-                return;
             }
         }
     }
@@ -136,6 +151,8 @@ public class PatientManagement implements CRUD {
     }
 
     public void patientReport() {
+        Object[] allVals = patientMap.getAllValues();
+        PatientManagementUI.displayAllPatientsTable(allVals);
         ui.displayDemographicsHeader();
         int choice = ui.promptDemographicsMenuOption();
         switch (choice) {
@@ -193,7 +210,6 @@ public class PatientManagement implements CRUD {
             PatientManagementUI.displayProfile(patient, patient.getVisits()[0]);
             return;
         }
-//        }
         ui.displayMultipleVisitsFound();
         for (int i = 0; i < patient.getVisitCount(); i++) {
             visitDates[i] = patient.getDateFormat().format(patient.getVisits()[i].getQueueStart());
@@ -284,7 +300,10 @@ public class PatientManagement implements CRUD {
                 boolean confirm = ui.confirmDeletePatient();
                 if (confirm) {
                     saveHistory(patient, "Delete");
-                    patientMap.remove(id);
+                    String keyDelete = patientMap.getKey(patient);
+                    String keyToRemove = (keyDelete != null && !keyDelete.isEmpty()) ? keyDelete : id;
+
+                    patientMap.remove(keyToRemove);
                     ui.displayDeleteSuccess();
                     patientWasDeleted = true;
                 }
@@ -309,7 +328,6 @@ public class PatientManagement implements CRUD {
         if (lastAction != null && lastAction.startsWith("TicketAssign:")) {
             String ticketNo = lastAction.substring("TicketAssign:".length());
             patientMap.put(id, snapshot);
-//            clearTicketQueueAssignment(ticketNo);
             ui.displayUndoDone("update", id);
             return;
         }
@@ -339,19 +357,20 @@ public class PatientManagement implements CRUD {
         MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
         Object[] ticketKeys = ticketQueue.getAllKeys();
         Date currentDate = new Date();
+        MapInterface<String, Ticket> completedTickets = new ChainBucket<>();
+        Ticket completedTicket = completedTickets.removeFirst();
+
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
 
             if (ticket != null && "complete".equals(ticket.getTicketStatus())) {
-                ticket.setTicketStatus("");
-                ticket.setQueueEnd(currentDate);
+                recordVisitFromTicket(ticket);
+
                 ticketQueue.put(ticketKey, ticket);
             }
         }
-
-        displayCurrentQueue(ticketQueue);
-
+        Ticket assignedTicket = null;
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
@@ -361,12 +380,17 @@ public class PatientManagement implements CRUD {
                 ticket.setTicketStatus("queue");
                 ticketQueue.put(ticketKey, ticket);
                 Master.setCurrentTicket(ticket.getTicketNumber());
-                ui.displayTicketAssigned(ticket.getTicketNumber());
-                return;
+                assignedTicket = ticket;
+                break;
             }
         }
 
-        ui.displayNoTicketsAvailable();
+        if (assignedTicket == null) {
+            ui.displayNoTicketsAvailable();
+            return;
+        }
+        displayCurrentQueue(ticketQueue);
+        ui.displayTicketAssigned(assignedTicket.getTicketNumber());
     }
 
     private void displayCurrentQueue(MapInterface<String, Ticket> ticketQueue) {
@@ -375,29 +399,95 @@ public class PatientManagement implements CRUD {
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
             Ticket ticket = ticketQueue.getValue(ticketKey);
-
             if (ticket != null && "queue".equals(ticket.getTicketStatus())) {
                 queuedTickets.put(ticketKey, ticket);
             }
         }
-        queuedTickets.sorting();
-        ui.displayMessage("\n\t\t\t\tCurrent Queue : ");
+        ui.displayQueueHeader();
         if (queuedTickets.isEmpty()) {
-            ui.displayMessage("No tickets in queue.");
+            System.out.println("\t\t\t\t|                                                         |");
+            System.out.println("\t\t\t\t|                                                         |");
+            System.out.println("\t\t\t\t|                                                         |");
+            ui.displayQueueFooter();
             return;
         }
-        Object[] sortedTicketKeys = queuedTickets.getAllKeys();
-        String firstKey = (String) sortedTicketKeys[sortedTicketKeys.length - 1];
-        Ticket firstTicket = queuedTickets.getValue(firstKey);
-        ui.displayMessage("Next Ticket to Be Serve: " + firstTicket.getTicketNumber());
-        int waitingCount = 0;
-        for (int i = sortedTicketKeys.length - 2; i >= 0; i--) {
-            String ticketKey = (String) sortedTicketKeys[i];
+        String frontTicketKey = queuedTickets.getFrontKey();
+        Ticket frontTicket = queuedTickets.getFront();
+        String lastTicketKey = queuedTickets.getLastKey();
+        Ticket lastTicket = queuedTickets.getLast();
+
+        String currentAssignedTicket = Master.getCurrentTicket();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        Object[] allTicketKeys = queuedTickets.getAllKeys();
+        int position = 1;
+
+        for (int i = 0; i < allTicketKeys.length; i++) {
+            String ticketKey = (String) allTicketKeys[i];
             Ticket ticket = queuedTickets.getValue(ticketKey);
-            ui.displayMessage("Ticket: " + ticket.getTicketNumber());
-            waitingCount++;
+            String ticketNo = ticket.getTicketNumber();
+            String timeStarted = "N/A";
+            String timeWaited = "N/A";
+            String countLabel = String.valueOf(position);
+            String youIndicator = "";
+            boolean isCurrentServing = ticketKey.equals(frontTicketKey);
+            boolean isMostRecent = ticketKey.equals(lastTicketKey);
+            boolean isUsersAssignedTicket = ticketNo.equals(currentAssignedTicket);
+
+            if (isCurrentServing) {
+                youIndicator = "[Current]";
+            } else if (isMostRecent && isUsersAssignedTicket) {
+                youIndicator = "[You]";
+            }
+
+            if (ticket.getQueueStart() != null) {
+                timeStarted = timeFormat.format(ticket.getQueueStart());
+                long waitedMillis = new Date().getTime() - ticket.getQueueStart().getTime();
+                long waitedMins = waitedMillis / (60 * 1000);
+                timeWaited = String.valueOf(waitedMins);
+            }
+            ui.displayQueueRow(youIndicator, countLabel, ticketNo, timeStarted, timeWaited);
+            position++;
         }
-        ui.displayMessage("Current waiting ticket: " + waitingCount);
+
+        ui.displayQueueFooter();
+    }
+
+    private void recordVisitFromTicket(Ticket ticket) {
+        if (ticket == null || ticket.getPatientID() == null || ticket.getPatientID().isEmpty()) {
+            return;
+        }
+
+        String patientId = ticket.getPatientID();
+        Patient patient = patientMap.getValue(patientId);
+
+        if (patient == null) {
+            patient = createNewOfflinePatient(patientId);
+            if (patient == null) {
+                System.out.println("Failed to create patient record for: " + patientId);
+                return;
+            }
+        }
+        patient.addVisit(ticket.getQueueStart(), ticket.getQueueEnd());
+        patientMap.put(patientId, patient);
+        System.out.println("Visit recorded for patient: " + patientId);
+    }
+
+    private Patient createNewOfflinePatient(String patientId) {
+        try {
+            Patient patient = new Patient();
+            patient.setPatient_id(patientId);
+            patient.setPatient_name("Offline Patient " + patientId);
+            patient.setPatient_contact("N/A");
+            patient.setPatient_email("N/A");
+            patient.setPatient_gender("Unknown");
+            patient.setAge(0);
+            patient.setRegistration_date(new Date());
+
+            return patient;
+        } catch (Exception e) {
+            System.out.println("Error creating offline patient: " + e.getMessage());
+            return null;
+        }
     }
 
     private void reportTimelineByDateRange() {
@@ -539,34 +629,101 @@ public class PatientManagement implements CRUD {
     }
 
     private void groupByGender() {
-        int male = 0, female = 0;
-        Iterator<Patient> iterator = patientMap.getIterator();
-        while (iterator.hasNext()) {
-            Patient p = iterator.next();
-            if (p.getPatient_gender().equalsIgnoreCase("Male")) {
-                male++;
+        String[] maleIds = new String[4];
+        int maleCount = 0;
+        String[] femaleIds = new String[4];
+        int femaleCount = 0;
+
+        Iterator<Patient> it = patientMap.getIterator();
+        while (it.hasNext()) {
+            Patient p = it.next();
+            if (p == null) {
+                continue;
+            }
+
+            if ("Male".equalsIgnoreCase(p.getPatient_gender())) {
+                if (maleCount == maleIds.length) {
+                    maleIds = grow(maleIds);
+                }
+                maleIds[maleCount++] = p.getPatient_id();
             } else {
-                female++;
+                if (femaleCount == femaleIds.length) {
+                    femaleIds = grow(femaleIds);
+                }
+                femaleIds[femaleCount++] = p.getPatient_id();
             }
         }
-        ui.displayGenderDemographics(patientMap.size(), male, female);
+
+        ui.displayGenderGrid(maleIds, maleCount, femaleIds, femaleCount);
+    }
+
+    private String[] grow(String[] a) {
+        String[] b = new String[a.length * 2];
+        for (int i = 0; i < a.length; i++) {
+            b[i] = a[i];
+        }
+        return b;
     }
 
     private void groupByAge() {
-        int young = 0, middle = 0, senior = 0;
-        Iterator<Patient> iterator = patientMap.getIterator();
-        while (iterator.hasNext()) {
-            Patient p = iterator.next();
+        String[] young = new String[4];
+        int yc = 0;   
+        String[] middle = new String[4];
+        int mc = 0; 
+        String[] senior = new String[4];
+        int sc = 0; 
+
+        Iterator<Patient> it = patientMap.getIterator();
+        while (it.hasNext()) {
+            Patient p = it.next();
+            if (p == null) {
+                continue;
+            }
             int age = p.getAge();
-            if (age <= 35) {
-                young++;
-            } else if (age <= 55) {
-                middle++;
+
+            if (age <= 30) {
+                if (yc == young.length) {
+                    String[] tmp = new String[young.length == 0 ? 1 : young.length * 2];
+                    for (int i = 0; i < young.length; i++) {
+                        tmp[i] = young[i];
+                    }
+                    young = tmp;
+                }
+                young[yc++] = p.getPatient_id();
+            } else if (age <= 50) {
+                if (mc == middle.length) {
+                    String[] tmp = new String[middle.length == 0 ? 1 : middle.length * 2];
+                    for (int i = 0; i < middle.length; i++) {
+                        tmp[i] = middle[i];
+                    }
+                    middle = tmp;
+                }
+                middle[mc++] = p.getPatient_id();
             } else {
-                senior++;
+                if (sc == senior.length) {
+                    String[] tmp = new String[senior.length == 0 ? 1 : senior.length * 2];
+                    for (int i = 0; i < senior.length; i++) {
+                        tmp[i] = senior[i];
+                    }
+                    senior = tmp;
+                }
+                senior[sc++] = p.getPatient_id();
             }
         }
-        ui.displayAgeDemographics(patientMap.size(), young, middle, senior);
+        String[] youngIds = new String[yc];
+        for (int i = 0; i < yc; i++) {
+            youngIds[i] = young[i];
+        }
+        String[] middleIds = new String[mc];
+        for (int i = 0; i < mc; i++) {
+            middleIds[i] = middle[i];
+        }
+        String[] seniorIds = new String[sc];
+        for (int i = 0; i < sc; i++) {
+            seniorIds[i] = senior[i];
+        }
+        int total = patientMap.size();
+        ui.displayAgeDemographicsTable(youngIds, middleIds, seniorIds, total);
     }
 
     private String generatePatientId() {
@@ -612,19 +769,28 @@ public class PatientManagement implements CRUD {
     }
 
     public MapInterface<String, Patient>[] groupPatientsByVisitFrequency() {
+        MapInterface<String, Patient> work = new ChainBucket<>();
+        Iterator<Patient> it = patientMap.getIterator();
+        while (it.hasNext()) {
+            Patient p = it.next();
+            long t = latestVisitMillis(p);
+            String k = padMillis(t) + "|" + p.getPatient_id();
+            work.put(k, p);
+        }
+        work.sorting();
         MapInterface<String, Patient> newPatients = new ChainBucket<>();
         MapInterface<String, Patient> returningPatients = new ChainBucket<>();
-
-        Iterator<Patient> iterator = patientMap.getIterator();
-        while (iterator.hasNext()) {
-            Patient patient = iterator.next();
-            int visitCount = patient.getVisitCount();
-
-            if (visitCount < 2) {
-                newPatients.put(patient.getPatient_id(), patient);
-            } else {
-                returningPatients.put(patient.getPatient_id(), patient);
+        while (!work.isEmpty()) {
+            Patient p = work.getLast();
+            if (p == null) {
+                break;
             }
+            if (p.getVisitCount() < 2) {
+                newPatients.put(p.getPatient_id(), p);
+            } else {
+                returningPatients.put(p.getPatient_id(), p);
+            }
+            work.removeLast();
         }
         MapInterface<String, Patient>[] result = new MapInterface[2];
         result[0] = newPatients;
@@ -632,8 +798,95 @@ public class PatientManagement implements CRUD {
         return result;
     }
 
+    private long latestVisitMillis(Patient p) {
+        if (p == null || p.getVisitCount() <= 0) {
+            return 0L;
+        }
+        long best = 0L;
+        Visit[] vs = p.getVisits();
+        int n = p.getVisitCount();
+        for (int i = 0; i < n; i++) {
+            Visit v = vs[i];
+            if (v == null) {
+                continue;
+            }
+            Date d = (v.getQueueEnd() != null) ? v.getQueueEnd() : v.getQueueStart();
+            if (d != null && d.getTime() > best) {
+                best = d.getTime();
+            }
+        }
+        return best;
+    }
+
+    private String padMillis(long t) {
+        return String.format("%013d", Math.max(0, t));
+    }
+
+    private String fmtLatest(Patient p, long t) {
+        if (t <= 0) {
+            return "N/A";
+        }
+        java.text.SimpleDateFormat df = (p.getDateFormat() != null)
+                ? p.getDateFormat()
+                : new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm");
+        return df.format(new java.util.Date(t));
+    }
+
     public void displayVisitFrequencyReport() {
-        MapInterface<String, Patient>[] groups = groupPatientsByVisitFrequency();
-        ui.displayVisitFrequencyTables(groups[0], groups[1]);
+        int total = patientMap.size();
+        int newCnt = 0, retCnt = 0;
+        Iterator<Patient> itCnt = patientMap.getIterator();
+        while (itCnt.hasNext()) {
+            Patient p = itCnt.next();
+            if (p != null) {
+                if (p.getVisitCount() < 2) {
+                    newCnt++;
+                } else {
+                    retCnt++;
+                }
+            }
+        }
+        ui.displayVisitFreqReportHeader(total, newCnt, retCnt);
+        ui.displayVisitFreqTableHeader();
+        MapInterface<String, Patient> work = new ChainBucket<>();
+        Iterator<Patient> it = patientMap.getIterator();
+        while (it.hasNext()) {
+            Patient p = it.next();
+            if (p == null) {
+                continue;
+            }
+            long t = latestVisitMillis(p);
+            String k = padMillis(t) + "|" + p.getPatient_id();
+            work.put(k, p);
+        }
+        work.sorting();
+        while (!work.isEmpty()) {
+            Patient p = work.getLast();
+            if (p == null) {
+                break;
+            }
+            String type = (p.getVisitCount() < 2) ? "NEW" : "RETURN";
+            long t = latestVisitMillis(p);
+            ui.displayVisitFreqTableRow(type, p.getPatient_id(), p.getPatient_name(), p.getVisitCount(), fmtLatest(p, t));
+            work.removeLast();
+        }
+
+        ui.displayVisitFreqTableFooter();
+    }
+
+    private boolean revertDelete() {
+        String currentId = Master.getCurrentPatientId();
+        if (currentId == null || currentId.isEmpty() || patientMap.getValue(currentId) == null) {
+            PatientManagementUI.displayDeletedAccountNotice();
+            boolean yes = PatientManagementUI.promptUndoDeletedAccount();
+            if (yes) {
+                undo();
+            } else {
+                Master.setCurrentPatientId("");
+                PatientManagementUI.displayAccessCancelled();
+            }
+            return true;
+        }
+        return false;
     }
 }
