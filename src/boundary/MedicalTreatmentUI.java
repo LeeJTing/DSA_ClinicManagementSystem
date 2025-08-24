@@ -44,18 +44,18 @@ public class MedicalTreatmentUI {
     }
 
     public int displayMenu() {
-        System.out.print("\t\t\t\t================================================================================"
-                + "\t\t\t\t=                                                                              ="
-                + "\t\t\t\t================================================================================"
-                + "\t\t\t\t =                                                                              ="
-                + "\t\t\t\t=                   1. Search For Treatment ID                                 ="
-                + "\t\t\t\t=                   2. View Patient Medical Treatment Record                   ="
-                + "\t\t\t\t=                   3. All Medical Treatment Record                            ="
-                + "\t\t\t\t=                   0. Exit                                                    ="
-                + "\t\t\t\t=                                                                              ="
-                + "\t\t\t\t================================================================================");
+        System.out.print("\n\t\t\t\t================================================================================\n"
+                + "\t\t\t\t=                                                                              =\n"
+                + "\t\t\t\t================================================================================\n"
+                + "\t\t\t\t =                                                                              =\n"
+                + "\t\t\t\t=                   1. Search For Treatment ID                                 =\n"
+                + "\t\t\t\t=                   2. View Patient Medical Treatment Record                   =\n"
+                + "\t\t\t\t=                   3. All Medical Treatment Record                            =\n"
+                + "\t\t\t\t=                   0. Exit                                                    =\n"
+                + "\t\t\t\t=                                                                              =\n"
+                + "\t\t\t\t================================================================================\n");
 
-        System.out.print("          Selection(0-3): ");
+        System.out.print("\t\t\t\tSelection(0-3): ");
         return Input.getIntegerInput();
     }
 

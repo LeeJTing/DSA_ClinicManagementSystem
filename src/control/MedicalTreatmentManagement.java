@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package control;
 
 import dao.Master;
@@ -149,6 +145,7 @@ public class MedicalTreatmentManagement implements CRUD {
                 || consultationMap.getValue(consultationID).getAppointmentStatus().equals("Completed")) { // check whether completed or not
             UI.addNewConsultationNotFoundCompleted();
             scanner.nextLine();
+            MessageUI.clearScreen();
         } else {
             consultationToTreatment(consultationID);
         }
@@ -317,6 +314,7 @@ public class MedicalTreatmentManagement implements CRUD {
                     patientName = getPatientName(treatmentMap.getValue(treatmentID).getPatient_id());
                     UI.displaySpecificTreatmentRecord(treatmentMap.getValue(treatmentID), getPrescription(treatmentID), staffName, patientName);
                     scanner.nextLine();
+                    MessageUI.clearScreen();
                     break;
                 case 2:
                     String patientID = UI.askPatientID();
@@ -334,8 +332,10 @@ public class MedicalTreatmentManagement implements CRUD {
                         }
                     }
                     scanner.nextLine();
+                    MessageUI.clearScreen();
                     break;
                 case 3:
+                    treatmentMap.sorting();
                     Iterator<Treatment> iterator = treatmentMap.getIterator();
                     while (iterator.hasNext()) {
                         Treatment treatment = iterator.next();
@@ -343,7 +343,9 @@ public class MedicalTreatmentManagement implements CRUD {
                         patientName = getPatientName(treatment.getPatient_id());
                         UI.displaySpecificTreatmentRecord(treatment, getPrescription(treatment.getTreatment_id()), staffName, patientName);
                     }
+                    treatmentMap.keyReverseSorting();
                     scanner.nextLine();
+                    MessageUI.clearScreen();
                     break;
                 default:
                     exit = true;
@@ -546,6 +548,7 @@ public class MedicalTreatmentManagement implements CRUD {
                 prescriptionMap.remove(prescription.getPatient_id());
                 error = false;
                 scanner.nextLine();
+                MessageUI.clearScreen();
             } else {
                 error = true;
                 UI.noRecord("Medical Treatment");
@@ -679,6 +682,7 @@ public class MedicalTreatmentManagement implements CRUD {
                 countMale, countFemale);
 
         scanner.nextLine();
+        MessageUI.clearScreen();
     }
 
     private void diseasePredictionAndRelationshipReport() {
@@ -779,6 +783,7 @@ public class MedicalTreatmentManagement implements CRUD {
         callRelationshipUI("Fracture", fractureMap, fractureRelationship);
 
         scanner.nextLine();
+        MessageUI.clearScreen();
 
     }
 

@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat;
  *
  * @author Lee Jun Ting
  */
-public class Treatment implements Comparable<Treatment>{
-    
+public class Treatment implements Comparable<Treatment> {
+
     private SimpleDateFormat dateForm = new SimpleDateFormat("dd-MM-yyyy");
-    
+
     private String treatment_id; // start from T000001
     private String consultation_id;
     private String disease;
@@ -36,13 +36,13 @@ public class Treatment implements Comparable<Treatment>{
         this.isScan = false;
         this.remark = "";
     }
-    
-    public Treatment(String disease){
+
+    public Treatment(String disease) {
         this();
         this.disease = disease;
     }
 
-    public Treatment(String treatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id,boolean isScan, String remark) {
+    public Treatment(String treatmentID, String consultation_id, String disease, String treatment_advice, Date treatment_date, String staff_id, String patient_id, boolean isScan, String remark) {
         this.treatment_id = treatmentID;
         this.consultation_id = consultation_id;
         this.disease = disease;
@@ -61,7 +61,7 @@ public class Treatment implements Comparable<Treatment>{
     public String getConsultation_id() {
         return consultation_id;
     }
-    
+
     public String getDisease() {
         return disease;
     }
@@ -77,8 +77,8 @@ public class Treatment implements Comparable<Treatment>{
     public String getStaff_id() {
         return staff_id;
     }
-    
-    public String getPatient_id(){
+
+    public String getPatient_id() {
         return patient_id;
     }
 
@@ -97,7 +97,7 @@ public class Treatment implements Comparable<Treatment>{
     public void setConsultation_id(String consultation_id) {
         this.consultation_id = consultation_id;
     }
-    
+
     public void setDisease(String disease) {
         this.disease = disease;
     }
@@ -113,8 +113,8 @@ public class Treatment implements Comparable<Treatment>{
     public void setStaff_id(String staff_id) {
         this.staff_id = staff_id;
     }
-    
-    public void setPatient_id(String patient_id){
+
+    public void setPatient_id(String patient_id) {
         this.patient_id = patient_id;
     }
 
@@ -125,11 +125,11 @@ public class Treatment implements Comparable<Treatment>{
     public void setRemark(String remark) {
         this.remark = remark;
     }
-    
+
     @Override
-    public String toString(){
-        return "\nTreatment ID: " + treatment_id 
-                + "\nDisease: " + disease 
+    public String toString() {
+        return "\nTreatment ID: " + treatment_id
+                + "\nDisease: " + disease
                 + "\nTreatment Advice: " + treatment_advice
                 + "\nTreatment Date: " + treatment_date
                 + "\nStaff ID: " + staff_id
@@ -140,7 +140,28 @@ public class Treatment implements Comparable<Treatment>{
 
     @Override
     public int compareTo(Treatment o) {
-        return this.disease.compareTo(o.getDisease());
+        int th = this.ratingDisease();
+        int ot = o.ratingDisease();
+
+        return th - ot;
     }
-    
+
+    private int ratingDisease() {
+        int rating;
+
+        if (disease.equals("COVID-19")) {
+            rating = 5;
+        } else if (disease.equals("Asthma")) {
+            rating = 4;
+        } else if (disease.equals("Diabetes Type 2")) {
+            rating = 3;
+        } else if (disease.equals("Fracture")) {
+            rating = 2;
+        } else if (disease.equals("Hypertension")) {
+            rating = 1;
+        } else {
+            rating = 0;
+        }
+        return rating;
+    }
 }
