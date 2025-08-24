@@ -62,7 +62,7 @@ public class ConsultationManagement implements CRUD {
                     readInstance();
                 case 2 -> { // search appointment (patient)
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
-                        System.out.println("\t\t The Patient not avaliable search appoinment");
+                        consultUI.notAvailableMsg("Patient", "search");
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
                         searchAppoinment();
                     } else {
@@ -75,7 +75,7 @@ public class ConsultationManagement implements CRUD {
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
                         updateAppoinment();
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-                        System.out.println("\t\t The Staff not avaliable update appoinment");
+                        consultUI.notAvailableMsg("Staff", "update");
                     } else {
                         consultUI.displayCurrentUserMsg();
                     }
@@ -84,7 +84,7 @@ public class ConsultationManagement implements CRUD {
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
                         deleteInstance();
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
-                        System.out.println("\t\t The Staff not avaliable deleted appoinment");
+                        consultUI.notAvailableMsg("Staff", "deleted");
                     } else {
                         consultUI.displayCurrentUserMsg();
                     }
@@ -93,7 +93,7 @@ public class ConsultationManagement implements CRUD {
                     viewConsultationSchedule();
                 case 7 -> {// view Consultation Flw Up Report 
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
-                        System.out.println("\t\t The patient not avaliable view report");
+                        consultUI.notAvailableMsg2("patient", "view");
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
                         viewConsultationFlwUpReport();
                     } else {
@@ -102,7 +102,7 @@ public class ConsultationManagement implements CRUD {
                 }
                 case 8 -> { // view Consultation Valume Report
                     if (currentPatientId != null && !currentPatientId.isEmpty()) {
-                        System.out.println("\t\t The patient not avaliable view report");
+                        consultUI.notAvailableMsg2("patient", "view");
                     } else if (currentStaffId != null && !currentStaffId.isEmpty()) {
                         viewConsultationValumeReport();
                     } else {
@@ -579,7 +579,7 @@ public class ConsultationManagement implements CRUD {
                         break;
                     }
                 }
-                
+
                 if (!print) {
                     consultUI.displayFlwUpReport(date, staffID, count);
                 }

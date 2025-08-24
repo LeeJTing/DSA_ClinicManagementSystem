@@ -232,6 +232,14 @@ public class ConsultationUI {
         System.out.print("\n\t\t\t\t----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
+    public void notAvailableMsg(String user, String type) {
+        System.out.println("\t\t\t\tThe " + user + "not avaliable " + type + " appoinment");
+    }
+
+    public void notAvailableMsg2(String user, String type) {
+        System.out.println("\t\t\t\tThe " + user + "not avaliable " + type + " report");
+    }
+
     // UI
     public void staffViewAppoinmentUI() {
         int tableWidth = 110; // total width including borders
