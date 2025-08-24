@@ -24,38 +24,33 @@ import java.util.LinkedHashMap;
 
 public class PatientManagement implements CRUD {
 
-    private MapInterface<String, Ticket> ticketMap = new ChainBucket<>();
     private MapInterface<String, Patient> patientMap = new ChainBucket<>();
-    private MapInterface<String, Consultation> consultationMap = new ChainBucket<>();
-    private MapInterface<String, Medicine> medicineMap = new ChainBucket<>();
-    private MapInterface<String, Payment> paymentMap = new ChainBucket<>();
-    private MapInterface<String, Treatment> treatmentMap = new ChainBucket<>();
     private MapInterface<Integer, Patient> historyPatient = new ChainBucket<>();
     private MapInterface<Integer, String> historyAction = new ChainBucket<>();
     private int historyKey = 1;
     public boolean patientWasDeleted = false;
     private final PatientManagementUI ui;
 
-    public PatientManagement() {
+    public PatientManagement() {    // Constructor - load patient map and UI
         this.patientMap = Master.getPatientMap();
         this.ui = new PatientManagementUI();
     }
 
-    public static Patient getCurrentPatient() {
+    public static Patient getCurrentPatient() {    // Get current logged-in patient
         return Master.getPatientMap().getValue(Master.getCurrentPatientId());
     }
 
-    public static boolean patientExists(String patientId) {
+    public static boolean patientExists(String patientId) {// Check if patient exists
         return patientId != null && Master.getPatientMap().getValue(patientId) != null;
     }
 
-    public void PatientModule() {
+    public void PatientModule() {// Main module for patient login/register
         int choice = ui.displayUserPageMenu();
         switch (choice) {
             case 1:
-                createNewInstance();
+                createNewInstance();// Register new patient
                 break;
-            case 2:
+            case 2:// Login existing patient
                 String enteredId = ui.promptLoginId();
                 if (patientExists(enteredId)) {
                     patientWasDeleted = false;
@@ -69,13 +64,13 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void patientManagementModule() {
+    public void patientManagementModule() {// Patient management menu (CRUD, reports, undo, logout)
         int choice;
         while (true) {
             choice = ui.displayPatientManagementMenu();
             switch (choice) {
                 case 1 -> {
-                    if (revertDelete()) {
+                    if (revertDelete()) {//Check if the patient had deleted their own account or not if yes then redirect to the undo function
                         break;
                     }
                     readInstance();
@@ -93,7 +88,7 @@ public class PatientManagement implements CRUD {
                     deleteInstance();
                 }
                 case 4 -> {
-                    reportsModule();
+                    waitTimeReportsModule();
                 }
                 case 5 -> {
                     if (revertDelete()) {
@@ -116,11 +111,11 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void offlinePatientModule() {
+    public void offlinePatientModule() {    // Offline patient module - let patient to get ticket
         int choice = ui.displayGetTicketMenu();
         switch (choice) {
             case 1:
-                getTicket();
+                getTicket();// Get new ticket
                 break;
             case 2:
                 return;
@@ -130,17 +125,17 @@ public class PatientManagement implements CRUD {
 
     }
 
-    public void reportsModule() {
+    public void waitTimeReportsModule() {//wait time report module
         while (true) {
             PatientManagementUI.displayAverageQueueMenu();
             int ch = ui.promptQueueReportMenuOption();
             switch (ch) {
                 case 1 ->
-                    reportTimelineByDateRange();
+                    reportTimelineByDateRange(); // Report by date range
                 case 2 ->
-                    reportTimelineByDayOfWeek();
+                    reportTimelineByDayOfWeek();// Report by day of week
                 case 3 ->
-                    reportTimelineHeatmapAllData();
+                    reportTimelineHeatmapAllData();// Heatmap report
                 case 4 -> {
                     return;
                 }
@@ -150,18 +145,18 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void patientReport() {
+    public void patientReport() {//patient report module
         Object[] allVals = patientMap.getAllValues();
         PatientManagementUI.displayAllPatientsTable(allVals);
         ui.displayDemographicsHeader();
         int choice = ui.promptDemographicsMenuOption();
         switch (choice) {
             case 1 ->
-                groupByGender();
+                groupByGender();// Group by gender
             case 2 ->
-                groupByAge();
+                groupByAge();// Group by age
             case 3 -> {
-                displayVisitFrequencyReport();
+                displayVisitFrequencyReport();// Visit frequency
             }
             case 4 -> {
                 return;
@@ -172,9 +167,9 @@ public class PatientManagement implements CRUD {
     }
 
     @Override
-    public void createNewInstance() {
+    public void createNewInstance() {    // Create new patient record
         ui.displayCreateHeader();
-        String id = generatePatientId();
+        String id = generatePatientId();// Generate ID for patient
         Patient patient = new Patient(
                 id,
                 ui.promptPatientName(),
@@ -185,16 +180,15 @@ public class PatientManagement implements CRUD {
                 new Date()
         );
         patientMap.put(id, patient);
-
-        saveHistory(patient, "Create");
+        saveHistory(patient, "Create");// Save history for undo
         ui.displayCreateSuccess(id);
     }
 
     @Override
-    public void readInstance() {
+    public void readInstance() {    // Read/view patient details
         String currentPatientId = Master.getCurrentPatientId();
         Patient patient = Master.getPatientMap().getValue(currentPatientId);
-        String[] visitDates = new String[patient.getVisitCount()];
+        String[] visitDates = new String[patient.getVisitCount()];// Handle single/multiple visits
         if (patient == null) {
             ui.displayNotFound("Patient record");
             return;
@@ -222,7 +216,7 @@ public class PatientManagement implements CRUD {
         PatientManagementUI.displayProfile(patient, patient.getVisits()[selected - 1]);
     }
 
-    public void updateInstance() {
+    public void updateInstance() {// Update patient details
         String id = Master.getCurrentPatientId();
         Patient patient = patientMap.getValue(id);
         if (patient == null) {
@@ -235,7 +229,7 @@ public class PatientManagement implements CRUD {
             patient.getPatient_email(),
             String.valueOf(patient.getAge())
         };
-        while (true) {
+        while (true) {//prompt to let user to choose what info to update if done save or cancel if they dont want
             ui.displayUpdateMenu(options, values);
             int choice = ui.promptUpdateSelectOption();
             switch (choice) {
@@ -264,7 +258,7 @@ public class PatientManagement implements CRUD {
     }
 
     @Override
-    public void deleteInstance() {
+    public void deleteInstance() {    // Delete patient or patient visit
         String id = Master.getCurrentPatientId();
         Patient patient = patientMap.getValue(id);
         if (patient == null) {
@@ -276,16 +270,16 @@ public class PatientManagement implements CRUD {
         switch (option) {
             case 1 -> {
                 if (patient.getVisitCount() == 0) {
-                    ui.displayNoVisitRecordsToDelete();
+                    ui.displayNoVisitRecordsToDelete();//if no patient record then display no record and return
                     return;
                 }
-                ui.displayVisitList(patient);
+                ui.displayVisitList(patient);//if there is record let user to  delete it
                 int visitChoice = ui.promptVisitNumberToDelete();
                 if (visitChoice < 1 || visitChoice > patient.getVisitCount()) {
                     ui.displayInvalidChoice();
                     return;
                 }
-                saveHistory(patient, "Update");
+                saveHistory(patient, "Update");//update undo opereation to allow revert
                 Visit[] visits = patient.getVisits();
                 for (int i = visitChoice - 1; i < patient.getVisitCount() - 1; i++) {
                     visits[i] = visits[i + 1];
@@ -295,11 +289,11 @@ public class PatientManagement implements CRUD {
                 patientMap.put(id, patient);
                 ui.displayVisitDeleteSuccess();
             }
-            case 2 -> {
+            case 2 -> {// let user to decide delete their account or not
                 ui.displayDeleteWarning();
                 boolean confirm = ui.confirmDeletePatient();
                 if (confirm) {
-                    saveHistory(patient, "Delete");
+                    saveHistory(patient, "Delete");//save to undo to allow revert
                     String keyDelete = patientMap.getKey(patient);
                     String keyToRemove = (keyDelete != null && !keyDelete.isEmpty()) ? keyDelete : id;
 
@@ -313,7 +307,7 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void undo() {
+    public void undo() {    // Undo last action (Create/Update/Delete)
         if (historyAction.isEmpty()) {
             ui.displayNoUndoHistory();
             return;
@@ -353,23 +347,25 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    public void getTicket() {
+    public void getTicket() {    // Assign new ticket to patient, create new patient before status changed to complete after the patient id has been set at consultation 
         MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
         Object[] ticketKeys = ticketQueue.getAllKeys();
         Date currentDate = new Date();
-        MapInterface<String, Ticket> completedTickets = new ChainBucket<>();
-        Ticket completedTicket = completedTickets.removeFirst();
 
         for (int i = 0; i < ticketKeys.length; i++) {
-            String ticketKey = (String) ticketKeys[i];
-            Ticket ticket = ticketQueue.getValue(ticketKey);
-
-            if (ticket != null && "complete".equals(ticket.getTicketStatus())) {
-                recordVisitFromTicket(ticket);
-
-                ticketQueue.put(ticketKey, ticket);
+            Ticket front = ticketQueue.getFront();
+            if (front == null) {
+                break;
+            }
+            if ("complete".equals(front.getTicketStatus())) {
+                Ticket completedTicket = ticketQueue.removeFirst();
+                recordVisitFromTicket(completedTicket);
+                ticketQueue.put(completedTicket.getTicketNumber(), completedTicket);
+            } else {
+                break;
             }
         }
+
         Ticket assignedTicket = null;
         for (int i = 0; i < ticketKeys.length; i++) {
             String ticketKey = (String) ticketKeys[i];
@@ -386,14 +382,14 @@ public class PatientManagement implements CRUD {
         }
 
         if (assignedTicket == null) {
-            ui.displayNoTicketsAvailable();
+            ui.displayNoTicketsAvailable();//if all ticket are fully assigned then display no ticket message
             return;
         }
         displayCurrentQueue(ticketQueue);
-        ui.displayTicketAssigned(assignedTicket.getTicketNumber());
+        ui.displayTicketAssigned(assignedTicket.getTicketNumber());//display ticket queue and ticket assigned to patient, including current waiting
     }
 
-    private void displayCurrentQueue(MapInterface<String, Ticket> ticketQueue) {
+    private void displayCurrentQueue(MapInterface<String, Ticket> ticketQueue) {//operation to display current queue
         MapInterface<String, Ticket> queuedTickets = new ChainBucket<>();
         Object[] ticketKeys = ticketQueue.getAllKeys();
         for (int i = 0; i < ticketKeys.length; i++) {
@@ -421,7 +417,7 @@ public class PatientManagement implements CRUD {
         Object[] allTicketKeys = queuedTickets.getAllKeys();
         int position = 1;
 
-        for (int i = 0; i < allTicketKeys.length; i++) {
+        for (int i = 0; i < allTicketKeys.length; i++) {//loop to check the patient with all patient key to get number of bucket and check which one is the last to get current latest waiting patient
             String ticketKey = (String) allTicketKeys[i];
             Ticket ticket = queuedTickets.getValue(ticketKey);
             String ticketNo = ticket.getTicketNumber();
@@ -439,7 +435,7 @@ public class PatientManagement implements CRUD {
                 youIndicator = "[You]";
             }
 
-            if (ticket.getQueueStart() != null) {
+            if (ticket.getQueueStart() != null) {//use queue start and current time to display all the currently queued patient waiting time
                 timeStarted = timeFormat.format(ticket.getQueueStart());
                 long waitedMillis = new Date().getTime() - ticket.getQueueStart().getTime();
                 long waitedMins = waitedMillis / (60 * 1000);
@@ -452,7 +448,7 @@ public class PatientManagement implements CRUD {
         ui.displayQueueFooter();
     }
 
-    private void recordVisitFromTicket(Ticket ticket) {
+    private void recordVisitFromTicket(Ticket ticket) {//record visit if the patient id has been verified by the consultation and is existing patient and if not then create a new patient to record down
         if (ticket == null || ticket.getPatientID() == null || ticket.getPatientID().isEmpty()) {
             return;
         }
@@ -472,7 +468,7 @@ public class PatientManagement implements CRUD {
         System.out.println("Visit recorded for patient: " + patientId);
     }
 
-    private Patient createNewOfflinePatient(String patientId) {
+    private Patient createNewOfflinePatient(String patientId) {//create new patient for offline
         try {
             Patient patient = new Patient();
             patient.setPatient_id(patientId);
@@ -490,7 +486,7 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    private void reportTimelineByDateRange() {
+    private void reportTimelineByDateRange() {//find wait time distribution by start date and end date
         try {
             String sStart = ui.promptStartDate();
             String sEnd = ui.promptEndDate();
@@ -504,7 +500,7 @@ public class PatientManagement implements CRUD {
         }
     }
 
-    private void reportTimelineByDayOfWeek() {
+    private void reportTimelineByDayOfWeek() {//find wait time through day of week with calendar and find with date same with which day and find patient on that day to calculate
         ui.displayDayOfWeekMenu();
         int day = ui.promptDayOfWeek();
         if (day < 1 || day > 7) {
@@ -515,12 +511,12 @@ public class PatientManagement implements CRUD {
         PatientManagementUI.printHourlyTimeline(8, 18, avg);
     }
 
-    private void reportTimelineHeatmapAllData() {
+    private void reportTimelineHeatmapAllData() {//generate the whole average waiting time table with x-axis day y-axis time
         int[][] avg = computeHeatmap();
         PatientManagementUI.printHeatmap(8, 18, avg);
     }
 
-    private int[] computeHourlyAvg(Date start, Date end, int dayOfWeek) {
+    private int[] computeHourlyAvg(Date start, Date end, int dayOfWeek) {//operation to compute the hourly average wait time
         final int START = 8, END = 18, SLOTS = END - START;
         int[] sum = new int[SLOTS], cnt = new int[SLOTS];
         Iterator<Patient> it = patientMap.getIterator();
@@ -559,7 +555,7 @@ public class PatientManagement implements CRUD {
         return avg;
     }
 
-    private int[][] computeHeatmap() {
+    private int[][] computeHeatmap() {//operation to do the whole table
         final int START = 8, END = 18, SLOTS = END - START, DAYS = 7;
         int[][] sum = new int[DAYS][SLOTS];
         int[][] cnt = new int[DAYS][SLOTS];
@@ -595,7 +591,7 @@ public class PatientManagement implements CRUD {
         return avg;
     }
 
-    private Date startOfDay(Date d) {
+    private Date startOfDay(Date d) {//compute the start date
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.setTime(d);
         c.set(java.util.Calendar.HOUR_OF_DAY, 0);
@@ -605,7 +601,7 @@ public class PatientManagement implements CRUD {
         return c.getTime();
     }
 
-    private Date endOfDay(Date d) {
+    private Date endOfDay(Date d) {//compute the end date
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.setTime(d);
         c.set(java.util.Calendar.HOUR_OF_DAY, 23);
@@ -615,20 +611,20 @@ public class PatientManagement implements CRUD {
         return c.getTime();
     }
 
-    private int hour(Date d) {
+    private int hour(Date d) {//get time of the day 
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.setTime(d);
         return c.get(java.util.Calendar.HOUR_OF_DAY);
     }
 
-    private int toMon1Sun7(Date d) {
+    private int toMon1Sun7(Date d) {//get day of week through date
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.setTime(d);
         int dw = c.get(java.util.Calendar.DAY_OF_WEEK);
         return (dw == java.util.Calendar.SUNDAY) ? 7 : (dw - 1);
     }
 
-    private void groupByGender() {
+    private void groupByGender() {//group patient by gender
         String[] maleIds = new String[4];
         int maleCount = 0;
         String[] femaleIds = new String[4];
@@ -657,7 +653,7 @@ public class PatientManagement implements CRUD {
         ui.displayGenderGrid(maleIds, maleCount, femaleIds, femaleCount);
     }
 
-    private String[] grow(String[] a) {
+    private String[] grow(String[] a) {//copy the array a into b so operations wont interrupt a
         String[] b = new String[a.length * 2];
         for (int i = 0; i < a.length; i++) {
             b[i] = a[i];
@@ -665,13 +661,13 @@ public class PatientManagement implements CRUD {
         return b;
     }
 
-    private void groupByAge() {
+    private void groupByAge() {//group age of patients
         String[] young = new String[4];
-        int yc = 0;   
+        int yc = 0;
         String[] middle = new String[4];
-        int mc = 0; 
+        int mc = 0;
         String[] senior = new String[4];
-        int sc = 0; 
+        int sc = 0;
 
         Iterator<Patient> it = patientMap.getIterator();
         while (it.hasNext()) {
@@ -726,18 +722,18 @@ public class PatientManagement implements CRUD {
         ui.displayAgeDemographicsTable(youngIds, middleIds, seniorIds, total);
     }
 
-    private String generatePatientId() {
+    private String generatePatientId() {//generate patient id 
         String lastId = patientMap.isEmpty() ? "P000000" : patientMap.getLastKey();
         return IDGenerator.generateNextID(lastId);
     }
 
-    private void saveHistory(Patient patient, String action) {
+    private void saveHistory(Patient patient, String action) {//save patient details to allow revert and save when patient didnt do undo
         historyPatient.put(historyKey, copyPatient(patient));
         historyAction.put(historyKey, action);
         historyKey++;
     }
 
-    private Patient copyPatient(Patient src) {
+    private Patient copyPatient(Patient src) {//clone a petient to make undo
         if (src == null) {
             return null;
         }
@@ -768,7 +764,7 @@ public class PatientManagement implements CRUD {
         return patientCopy;
     }
 
-    public MapInterface<String, Patient>[] groupPatientsByVisitFrequency() {
+    public MapInterface<String, Patient>[] groupPatientsByVisitFrequency() {//group patient by visit counts,clone one patient with sorting from last and reomelast to display
         MapInterface<String, Patient> work = new ChainBucket<>();
         Iterator<Patient> it = patientMap.getIterator();
         while (it.hasNext()) {
@@ -832,7 +828,7 @@ public class PatientManagement implements CRUD {
         return df.format(new java.util.Date(t));
     }
 
-    public void displayVisitFrequencyReport() {
+    public void displayVisitFrequencyReport() {//display the patient visit to classify them is returned patient or new patient
         int total = patientMap.size();
         int newCnt = 0, retCnt = 0;
         Iterator<Patient> itCnt = patientMap.getIterator();
@@ -874,7 +870,7 @@ public class PatientManagement implements CRUD {
         ui.displayVisitFreqTableFooter();
     }
 
-    private boolean revertDelete() {
+    private boolean revertDelete() {//revert to undo the account deletion 
         String currentId = Master.getCurrentPatientId();
         if (currentId == null || currentId.isEmpty() || patientMap.getValue(currentId) == null) {
             PatientManagementUI.displayDeletedAccountNotice();
