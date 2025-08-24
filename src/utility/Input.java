@@ -118,7 +118,7 @@ public class Input {
         boolean error;
         do{
             error = false;
-            System.out.println("\t\t [1] for 'yes', [0] for 'no'");
+            System.out.println("\t\t\t\t[1] for 'yes', [0] for 'no'");
             choice = getIntegerInput(question);
             switch (choice){
                 case 1 -> yes = true;

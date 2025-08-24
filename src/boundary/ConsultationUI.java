@@ -71,7 +71,7 @@ public class ConsultationUI {
         int choice = 0;
 
         System.out.println("\t\t\t\t=================================================");
-        System.out.println("\t\t\t\t=              Add Appointment Menu             =");
+        System.out.println("\t\t\t\t=              Search Appointment Menu          =");
         System.out.println("\t\t\t\t=================================================");
         System.out.println("\t\t\t\t=         1. Consultation ID                    =");
         System.out.println("\t\t\t\t=         2. Patient ID                         =");
@@ -152,7 +152,31 @@ public class ConsultationUI {
                 timeFormat.format(c.getConsultation_end_time())
         );
 
-        System.out.printf("\t\t | %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s | %7s | %7s   | \n\t\t %s\n", c.getConsultation_Id(), dateFormat.format(c.getAppointment_date()), dateFormat.format(c.getConsultation_date()), consultationTime, c.getAppointmentStatus(), c.getType(), c.getPatient_Id(), c.getStaff_Id(), border);
+        System.out.printf("\t\t\t\t| %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s | %7s | %7s   | \n\t\t\t\t%s\n", c.getConsultation_Id(), dateFormat.format(c.getAppointment_date()), dateFormat.format(c.getConsultation_date()), consultationTime, c.getAppointmentStatus(), c.getType(), c.getStaff_Id(), c.getPatient_Id(), border);
+    }
+
+    public void displayConsultationToString1(Consultation c) {
+        int tableWidth = 112; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+        String consultationTime = String.format("%s-%s",
+                timeFormat.format(c.getConsultation_start_time()),
+                timeFormat.format(c.getConsultation_end_time())
+        );
+
+        System.out.printf("\t\t\t\t| %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s | %8s |\n\t\t\t\t%s\n", c.getConsultation_Id(), dateFormat.format(c.getAppointment_date()), dateFormat.format(c.getConsultation_date()), consultationTime, c.getAppointmentStatus(), c.getType(), c.getPatient_Id(), border);
+    }
+
+    public void displayConsultationToString2(Consultation c) {
+        int tableWidth = 110; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+        String consultationTime = String.format("%s-%s",
+                timeFormat.format(c.getConsultation_start_time()),
+                timeFormat.format(c.getConsultation_end_time())
+        );
+
+        System.out.printf("\t\t\t\t| %-14s |  %-15s | %-17s | %-17s | %-10s | %-7s | %7s | \n\t\t\t\t%s\n", c.getConsultation_Id(), dateFormat.format(c.getAppointment_date()), dateFormat.format(c.getConsultation_date()), consultationTime, c.getAppointmentStatus(), c.getType(), c.getStaff_Id(), border);
     }
 
     public void displayConsultationOperationMsg(String id, String type1, String type2) {
@@ -177,7 +201,7 @@ public class ConsultationUI {
     }
 
     public void displayConsultationScheduleX(boolean booked) {
-        System.out.printf("\t\t\t\t%-6s %s", booked ? "   X" : "", "|");
+        System.out.printf("%-6s %s", booked ? "   X" : "", "|");
     }
 
     public void displayCatchError(Exception e) {
@@ -214,6 +238,14 @@ public class ConsultationUI {
         String border = "=".repeat(tableWidth);
         System.out.println("\t\t\t\t" + border);
         System.out.println("\t\t\t\t|                                                 Today Appoinment                                           |");
+        System.out.println("\t\t\t\t" + border);
+    }
+
+    public void staffViewAppoinmentUI1() {
+        int tableWidth = 112; // total width including borders
+        String border = "=".repeat(tableWidth);
+        System.out.println("\t\t\t\t" + border);
+        System.out.println("\t\t\t\t|                                                 Today Appoinment                                             |");
         System.out.println("\t\t\t\t" + border);
     }
 
@@ -270,9 +302,12 @@ public class ConsultationUI {
     }
 
     public void staffSearchAppointmentUI() {
-        System.out.println("\t\t\t\t=================================================");
-        System.out.println("\t\t\t\t|              Search Appoinment                |");
-        System.out.println("\t\t\t\t=================================================");
+        int tableWidth = 122; // total width including borders
+        String border = "=".repeat(tableWidth);
+
+        System.out.println("\t\t\t\t" + border);
+        System.out.println("\t\t\t\t|                                                    Search Appoinment                                                   |");
+        System.out.println("\t\t\t\t" + border);
     }
 
     public void editAppoinmentUI() {
@@ -322,6 +357,15 @@ public class ConsultationUI {
         System.out.println("\t\t\t\t" + border);
     }
 
+    public void appointmentFieldUI4() {
+        int tableWidth = 112; // total width including borders
+        String border = "-".repeat(tableWidth);
+
+//        System.out.println("\t\t\t\t" + border);
+        System.out.printf("\t\t\t\t| %-14s | %-15s | %-17s | %-17s | %-10s | %-7s | %-7s |\n", "ConsultationID", "Appointment Date", "Consultation Date", "Consultation Time", "Status", "Type", "PatientID");
+        System.out.println("\t\t\t\t" + border);
+    }
+
     public void consultationScheduleUI(MapInterface<String, String> timeSlotMap) {
         int tableWidth = 178; // total width including borders
         String border = "-".repeat(tableWidth);
@@ -339,7 +383,7 @@ public class ConsultationUI {
         int tableWidth = 57; // total width including borders
         String border = "-".repeat(tableWidth);
         System.out.printf("\t\t\t\t| %-17s | %-10s |           %-10d |\n", date, staffID, count);
-        System.out.println("\t\t " + border);
+        System.out.println("\t\t\t\t" + border);
     }
 
     public void displayAppoinment(Consultation consultation) {
@@ -429,7 +473,7 @@ public class ConsultationUI {
         Date consultationEndTime = null;
         boolean valid = false;
         while (!valid) {
-            String newConsultEndTime = Input.getStringInput("\t\t\t\tEnter your Booking Start Time (HH:mm):");
+            String newConsultEndTime = Input.getStringInput("\t\t\t\tEnter your Booking End Time (HH:mm):");
             try {
                 consultationEndTime = timeFormat.parse(newConsultEndTime);
 

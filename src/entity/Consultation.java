@@ -138,8 +138,8 @@ public class Consultation implements Comparable<Consultation> {
         this.staff_Id = staff_Id;
     }
 
-    public static void setCompare(String compare) {
-        Consultation.compare = compare;
+    public void setCompare(String compare) {
+        this.compare = compare;
     }
 
     public int calculationDurationTimeInMinutes() {
@@ -204,7 +204,7 @@ public class Consultation implements Comparable<Consultation> {
             int th = this.getStatusRank(this.appointmentStatus);
             int ot = other.getStatusRank(other.getAppointmentStatus());
             return Integer.compare(ot, th);
-            
+
 //            return th - ot;
         } else if (this.compare.equals("consultation_date")) {
             int dateCompare = other.consultation_date.compareTo(this.consultation_date);
@@ -213,6 +213,32 @@ public class Consultation implements Comparable<Consultation> {
             }
             // Same date → compare by start time
             return other.consultation_start_time.compareTo(this.consultation_start_time);
+        } else if (this.compare.equals("year")) {
+            if (this.consultation_date == null || other.consultation_date == null) {
+                return 0;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            String thisYear = sdf.format(this.consultation_date);
+            String otherYear = sdf.format(other.consultation_date);
+            return thisYear.compareTo(otherYear);
+
+        } else if (this.compare.equals("month")) {
+            if (this.consultation_date == null || other.consultation_date == null) {
+                return 0;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            String thisMonth = sdf.format(this.consultation_date);
+            String otherMonth = sdf.format(other.consultation_date);
+            return thisMonth.compareTo(otherMonth);
+
+        } else if (this.compare.equals("day")) {
+            if (this.consultation_date == null || other.consultation_date == null) {
+                return 0;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String thisDay = sdf.format(this.consultation_date);
+            String otherDay = sdf.format(other.consultation_date);
+            return thisDay.compareTo(otherDay);
         } else {
             return 0;
         }
@@ -235,4 +261,5 @@ public class Consultation implements Comparable<Consultation> {
 //                return 4;
 //        }
     }
+
 }
