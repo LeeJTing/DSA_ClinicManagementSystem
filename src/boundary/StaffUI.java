@@ -97,6 +97,10 @@ public class StaffUI {
         System.out.println("\t\t\t\tCongratulations. Your leave application success recorded for " + leaveDate.format(formatter));
     }
 
+    public void printAlreadyApplyMsg() {
+        System.out.println("\t\t\t\tYou have applied leave for the same date. Please select another date.");
+    }
+
     public int leaveApplicationUI() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -399,7 +403,7 @@ public class StaffUI {
     public void consultationPerformance(Staff staff) {
         System.out.printf("\t\t\t\t| %-20s | %-20s | %-20d  |\n", staff.getStaffID(), staff.getStaffName(), staff.getConsultationDuration());
     }
-    
+
     public void displayProfileDetails(Staff staff, String level) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
@@ -418,4 +422,17 @@ public class StaffUI {
         System.out.println("\t\t\t\t+------------------------------------------------------+");
     }
 
+    public int promptThreshold() {
+        System.out.print("\t\t\t\tEnter KPI threshold > ");
+        int threshold = scanner.nextInt();
+        return threshold;
+    }
+
+    public void noKPIsDoctors(int threshold) {
+        System.out.println("\t\t\t\tNo doctors met the threshold of " + threshold + " minutes.");
+    }
+    
+    public void printThresholdHeader(int count){
+        System.out.printf("\t\t\t\t\t\t\tTotal %d doctors achived the KPIs\n", count);
+    }
 }

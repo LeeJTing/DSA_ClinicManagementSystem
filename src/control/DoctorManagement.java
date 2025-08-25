@@ -39,6 +39,7 @@ public class DoctorManagement implements CRUD {
     private static MapInterface<Integer, Staff> staffRecordHistory = new ChainBucket<>();
     private static MapInterface<Integer, String> actionHistory = new ChainBucket<>();
     private static MapInterface<Integer, String> doctorsOnDuty = new ChainBucket<>();
+    private static MapInterface<String, Staff> kpiDoctors = new ChainBucket<>();
 
     public static StaffUI staffmenu = new StaffUI();
     public static final Master Master = new Master();
@@ -269,23 +270,27 @@ public class DoctorManagement implements CRUD {
 
     @Override
     public void createNewInstance() {
-        int choice = staffmenu.leaveApplicationUI();
-        if (choice == 8) {
-            return;
-        } else {
+        while (true) {
+            int choice = staffmenu.leaveApplicationUI();
+            if (choice == 8) { // exit option
+                return;
+            }
+
             LocalDate today = LocalDate.now();
             LocalDate leaveDate = today.plusDays(choice + 2);
 
-            // Find which slot this staff occupies on that leaveDate
             doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
             Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
 
-            if (slotNumber != null) {
+            if (slotNumber != null) { // doctor found in schedule → can apply leave
                 saveHistory(staffFound, "Leave", slotNumber, leaveDate);
+                staffmenu.promptLeavSuccess(leaveDate);
+                updateLeaveDate(staffFound, leaveDate);
+            } else { // doctor already applied for that date
+                staffmenu.printAlreadyApplyMsg();
+                continue;
             }
 
-            staffmenu.promptLeavSuccess(leaveDate);
-            updateLeaveDate(staffFound, leaveDate);
             if (exitConfirmation()) {
                 return;
             }
@@ -507,7 +512,6 @@ public class DoctorManagement implements CRUD {
                 doctorReportMap.put(staff.getStaffID(), newStaff);
             }
         }
-
         doctorReportMap.sorting();
         Iterator<Staff> exIterator = doctorReportMap.getIterator();
         while (exIterator.hasNext()) {
@@ -515,9 +519,40 @@ public class DoctorManagement implements CRUD {
             staffmenu.performanceReportUI(staff, "duration");
         }
         staffmenu.printLine();
+        thresholdFilter();
         if (exitConfirmation()) {
             return;
         }
+    }
+
+    public void thresholdFilter() {
+        int threshold = staffmenu.promptThreshold();
+        int doctorCount = 0;
+
+        Iterator<Staff> doctorIterator = doctorReportMap.getIterator();
+        while (doctorIterator.hasNext()) {
+            Staff staff = doctorIterator.next();
+            if (staff.getConsultationDuration() >= threshold) {
+                kpiDoctors.put(staff.getStaffID(), staff);
+                doctorCount++;
+            }
+        }
+
+        if (!kpiDoctors.isEmpty()) {
+            staffmenu.printThresholdHeader(doctorCount);
+            staffmenu.printHighDurationReportHeader();
+
+            Iterator<Staff> kpiIterator = kpiDoctors.getIterator();
+            while (kpiIterator.hasNext()) {
+                Staff doctor = kpiIterator.next();
+                staffmenu.performanceReportUI(doctor, "duration");
+            }
+
+        } else {
+            staffmenu.noKPIsDoctors(threshold);
+        }
+
+        staffmenu.printLine();
     }
 
     public void displayStaffPatientCountReport() {
