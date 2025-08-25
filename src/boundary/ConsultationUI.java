@@ -156,7 +156,7 @@ public class ConsultationUI {
     }
 
     public void displayConsultationToString1(Consultation c) {
-        int tableWidth = 112; // total width including borders
+        int tableWidth = 111; // total width including borders
         String border = "-".repeat(tableWidth);
 
         String consultationTime = String.format("%s-%s",
