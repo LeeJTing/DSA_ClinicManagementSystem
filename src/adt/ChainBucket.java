@@ -131,13 +131,20 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
 
     @Override
     public K getKey(V value) {
-        //linear searching from beginning is there have any values match
-        Entry<K, V> current = head;
-        while (current != null) {
-            if (current.value.equals(value)) {
-                return current.key;
+        //linear searching from beginning and the tail simultaneously is there have any values match
+        int actionNum = size / 2 + (size % 2 == 0 ? 0 : 1);
+        return searchKeyFormHeadTail(head, tail, value, actionNum);
+    }
+
+    private K searchKeyFormHeadTail(Entry<K, V> currentLeft, Entry<K, V> currentRight, V value, int actionNum) {
+        if (actionNum >= 0 && currentLeft != null && currentRight != null) {
+            if (currentLeft.value.equals(value)) {
+                return currentLeft.key;
+            } else if (currentRight.value.equals(value)) {
+                return currentRight.key;
+            } else {
+                return searchKeyFormHeadTail(currentLeft.after, currentRight.before, value, --actionNum);
             }
-            current = current.after;
         }
         return null;
     }
@@ -163,19 +170,26 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
     }
 
     @Override
-    public V getValue(K key) {
+    public V getValue(K key
+    ) {
         //directly point to the value in the entries based on the hash value (key -> index) and keep looping
         int index = hashing(key);
         Entry<K, V> current = entries[index];
+        V search = searchValueInBucket(current, key);
+        return search;
 
-        while (current != null) {
-            if (current.key.equals(key)) {
-                return current.value;
-            }
-            current = current.next;
+    }
+    // recursive function for searching value based on key.
+
+    private V searchValueInBucket(Entry<K, V> current, K key) {
+
+        if (current == null) {
+            return null;
+        } else if (current.key.equals(key)) {
+            return current.value;
+        } else {
+            return searchValueInBucket(current.next, key);
         }
-
-        return null;
     }
 
     @Override
@@ -277,27 +291,22 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
     public boolean containsKey(K key) {
         int index = hashing(key);
         Entry<K, V> current = entries[index];
-        while (current != null) {
-            if (current.key.equals(key)) {
-                return true;
-            }
-            current = current.next;
-        }
-        return false;
+        V value = searchValueInBucket(current, key);
+
+        return value != null;
     }
 
     @Override
     public boolean containsValue(V value) {
-        Entry<K, V> current = head;
-        while (current != null) {
-            if (current.value.equals(value)) {
-                return true;
-            }
-            current = current.after;
-        }
-        return false;
+        int actionNum = size / 2 + (size % 2 == 0 ? 0 : 1);
+        return searchKeyFormHeadTail(head, tail, value, actionNum) != null;
     }
 
+//    private K searchKeyFromHeadTail(Entry<K, V> currentLeft, Entry<K, V> currentRight, V value) {
+//        if(){
+//        
+//        }
+//    }
     @Override
     public int size() {
         return size;
