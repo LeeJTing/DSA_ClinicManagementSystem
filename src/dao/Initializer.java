@@ -417,7 +417,7 @@ public class Initializer {
         MapInterface<LocalDate, MapInterface<Integer, String>> dutyScheduleMap = new ChainBucket<>();
 
         int year = 2025;
-        int month = 8; // August
+        int month = 9; // August
         int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
 
         for (int day = 1; day <= daysInMonth; day++) {
