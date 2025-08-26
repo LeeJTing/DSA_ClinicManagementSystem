@@ -410,9 +410,7 @@ public class PatientManagement implements CRUD {
             return;
         }
         String frontTicketKey = queuedTickets.getFrontKey();
-        Ticket frontTicket = queuedTickets.getFront();
         String lastTicketKey = queuedTickets.getLastKey();
-        Ticket lastTicket = queuedTickets.getLast();
 
         String currentAssignedTicket = Master.getCurrentTicket();
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -496,7 +494,7 @@ public class PatientManagement implements CRUD {
             Date start = sdfD.parse(sStart);
             Date end = sdfD.parse(sEnd);
             int[] avg = computeHourlyAvg(start, end, -1);
-            PatientManagementUI.printHourlyTimeline(8, 18, avg);
+            PatientManagementUI.printHourlyTimeline(9, 18, avg);
         } catch (Exception e) {
             ui.displayInvalidChoice();
         }
@@ -510,16 +508,16 @@ public class PatientManagement implements CRUD {
             return;
         }
         int[] avg = computeHourlyAvg(null, null, day);
-        PatientManagementUI.printHourlyTimeline(8, 18, avg);
+        PatientManagementUI.printHourlyTimeline(9, 18, avg);
     }
 
     private void reportTimelineHeatmapAllData() {//generate the whole average waiting time table with x-axis day y-axis time
         int[][] avg = computeHeatmap();
-        PatientManagementUI.printHeatmap(8, 18, avg);
+        PatientManagementUI.printHeatmap(9, 18, avg);
     }
 
     private int[] computeHourlyAvg(Date start, Date end, int dayOfWeek) {//operation to compute the hourly average wait time
-        final int START = 8, END = 18, SLOTS = END - START;
+        final int START = 9, END = 18, SLOTS = END - START;
         int[] sum = new int[SLOTS], cnt = new int[SLOTS];
         Iterator<Patient> it = patientMap.getIterator();
         while (it.hasNext()) {
@@ -558,7 +556,7 @@ public class PatientManagement implements CRUD {
     }
 
     private int[][] computeHeatmap() {//operation to do the whole table
-        final int START = 8, END = 18, SLOTS = END - START, DAYS = 7;
+        final int START = 9, END = 18, SLOTS = END - START, DAYS = 7;
         int[][] sum = new int[DAYS][SLOTS];
         int[][] cnt = new int[DAYS][SLOTS];
         Iterator<Patient> it = patientMap.getIterator();

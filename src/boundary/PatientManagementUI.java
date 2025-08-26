@@ -29,15 +29,6 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayNotLoggedIn() {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                    WARNING                        |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|         No patient is currently logged in.       |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
-    }
-
     public static int displayMultipleRecordsMenu(String[] visitDates) {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t            MULTIPLE PATIENT RECORDS                ");
@@ -119,15 +110,6 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    public static void displayExistingTicket(String ticketNumber) {
-        System.out.println("\n\t\t\t\t=====================================================");
-        System.out.println("\t\t\t\t|                    NOTICE                         |");
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|      Patient already has ticket: %-14s |\n", ticketNumber);
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t=====================================================");
-    }
-
     public static void displayNoTicketsAvailable() {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
@@ -135,16 +117,6 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|     No available tickets for today's doctors     |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
-    }
-
-    public static void displayQueueItem(int position, String ticketNumber, String patientName, String staffId) {
-        System.out.printf("\t\t\t\t%d. %s - %s (Dr.%s)%n", position, ticketNumber, patientName, staffId);
-    }
-
-    public static void displayQueuePosition(int position) {
-        System.out.println("\t\t\t\t|                                                   |");
-        System.out.printf("\t\t\t\t|       Your position in queue: %-18d |\n", position);
-        System.out.println("\t\t\t\t|                                                   |");
     }
 
     public static void displayReportHeader() {
@@ -353,7 +325,7 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
         int idx = 0;
         for (int h = startHour; h < endHour; h++) {
-            System.out.printf("\t\t\t\t| %02d:00-%02d:00 | Avg: %3d |\n", h, h + 1, avg[idx++]);
+            System.out.printf("\t\t\t\t| %02d:00-%02d:00           | Avg: %3d                  |\n", h, h + 1, avg[idx++]);
         }
         System.out.println("\t\t\t\t=====================================================");
     }
