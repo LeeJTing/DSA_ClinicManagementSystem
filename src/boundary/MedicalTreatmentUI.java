@@ -260,7 +260,7 @@ public class MedicalTreatmentUI {
     public void showAllTreatmentID(String[] treatmentId) {
         System.out.println("");
         for (int i = 0; i < treatmentId.length; i++) {
-            System.out.println("          " + (i + 1) + ". " + treatmentId[i]);
+            System.out.println("\t\t\t\t" + (i + 1) + ". " + treatmentId[i]);
         }
     }
 
