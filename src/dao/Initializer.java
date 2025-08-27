@@ -235,7 +235,7 @@ public class Initializer {
 
         try {
             Patient p1 = new Patient("P000001", "Adam Lee", "0123456789", "adam@gmail.com", "Male", 25, sdf.parse("24-07-2025 12:00"));
-            p1.addVisit(sdf.parse("26-08-2025 08:45"), sdf.parse("26-08-2025 09:00"));
+            p1.addVisit(sdf.parse("26-08-2025 09:00"), sdf.parse("26-08-2025 09:30"));
             p1.addVisit(sdf.parse("17-08-2025 11:00"), sdf.parse("17-08-2025 12:00"));
 
             Patient p2 = new Patient("P000002", "Betty Tan", "0112233445", "betty@gmail.com", "Female", 30, sdf.parse("24-07-2025 13:30"));
@@ -252,10 +252,10 @@ public class Initializer {
             p5.addVisit(sdf.parse("27-08-2025 15:10"), sdf.parse("27-08-2025 15:30"));
 
             Patient p6 = new Patient("P000006", "Fiona Cheah", "0198877665", "fiona@gmail.com", "Female", 35, sdf.parse("26-07-2025 14:00"));
-            p6.addVisit(sdf.parse("28-08-2025 08:50"), sdf.parse("28-08-2025 09:00"));
+            p6.addVisit(sdf.parse("28-08-2025 09:30"), sdf.parse("28-08-2025 09:50"));
 
             Patient p7 = new Patient("P000007", "Gavin Ong", "0177766554", "gavin@gmail.com", "Male", 26, sdf.parse("26-07-2025 14:10"));
-            p7.addVisit(sdf.parse("28-08-2025 08:40"), sdf.parse("28-08-2025 09:30"));
+            p7.addVisit(sdf.parse("28-08-2025 09:20"), sdf.parse("28-08-2025 09:30"));
 
             Patient p8 = new Patient("P000008", "Hannah Yap", "0135566778", "hannah@gmail.com", "Female", 24, sdf.parse("26-07-2025 15:45"));
             p8.addVisit(sdf.parse("28-08-2025 09:40"), sdf.parse("28-08-2025 10:00"));
@@ -267,7 +267,7 @@ public class Initializer {
             p10.addVisit(sdf.parse("17-08-2025 11:45"), sdf.parse("17-08-2025 12:00"));
 
             Patient p11 = new Patient("P000011", "Monday Patient 1", "0111111111", "monday1@clinic.com", "Male", 40, sdf.parse("30-07-2025 08:00"));
-            p11.addVisit(sdf.parse("04-08-2025 08:15"), sdf.parse("04-08-2025 08:45"));
+            p11.addVisit(sdf.parse("04-08-2025 09:00"), sdf.parse("04-08-2025 09:30"));
 
             Patient p12 = new Patient("P000012", "Monday Patient 2", "0111111112", "monday2@clinic.com", "Female", 35, sdf.parse("30-07-2025 09:00"));
             p12.addVisit(sdf.parse("04-08-2025 09:30"), sdf.parse("04-08-2025 10:30"));
@@ -479,8 +479,18 @@ public class Initializer {
         ticketMap.put("TK016", new Ticket("TK016", "", null, null, ""));
         ticketMap.put("TK017", new Ticket("TK017", "", null, null, ""));
         ticketMap.put("TK018", new Ticket("TK018", "", null, null, ""));
-        ticketMap.put("TK019", new Ticket("TK018", "", null, null, ""));
-        ticketMap.put("TK020", new Ticket("TK018", "", null, null, ""));
+        ticketMap.put("TK019", new Ticket("TK019", "", null, null, ""));
+        ticketMap.put("TK020", new Ticket("TK020", "", null, null, ""));
+        ticketMap.put("TK021", new Ticket("TK021", "", null, null, ""));
+        ticketMap.put("TK022", new Ticket("TK022", "", null, null, ""));
+        ticketMap.put("TK023", new Ticket("TK023", "", null, null, ""));
+        ticketMap.put("TK024", new Ticket("TK024", "", null, null, ""));
+        ticketMap.put("TK025", new Ticket("TK025", "", null, null, ""));
+        ticketMap.put("TK026", new Ticket("TK026", "", null, null, ""));
+        ticketMap.put("TK027", new Ticket("TK027", "", null, null, ""));
+        ticketMap.put("TK028", new Ticket("TK028", "", null, null, ""));
+        ticketMap.put("TK029", new Ticket("TK029", "", null, null, ""));
+        ticketMap.put("TK030", new Ticket("TK030", "", null, null, ""));
         return ticketMap;
     }
 }

@@ -360,10 +360,12 @@ public class PatientManagement implements CRUD {
 
         for (int i = 0; i < ticketKeys.length; i++) {
             Ticket front = ticketQueue.getFront();
+            System.out.println(front);
             if (front == null) {
                 break;
             }
-            if ("complete".equals(front.getTicketStatus())) {
+            
+            if ("Completed".equals(front.getTicketStatus())) {
                 Ticket completedTicket = ticketQueue.removeFirst();
                 recordVisitFromTicket(completedTicket);
                 ticketQueue.put(completedTicket.getTicketNumber(), completedTicket);
