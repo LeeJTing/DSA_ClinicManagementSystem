@@ -300,6 +300,7 @@ public class StaffUI {
         System.out.println("\t\t\t\t=================================================");
         System.out.print("\t\t\t\tEnter your choice > ");
         int menuOption = scanner.nextInt();
+        scanner.nextLine();
         return menuOption;
     }
 
@@ -399,6 +400,35 @@ public class StaffUI {
 
     public void patientPerformance(Staff staff) {
         System.out.printf("\t\t\t\t| %-20s | %-20s | %-20d  |\n", staff.getStaffID(), staff.getStaffName(), staff.getPatientCount());
+    }
+
+    public void printBusyDoctorTable(String busiestName, int busiestPatients, String leastName, int leastPatients) {
+        System.out.println("\n\n\t\t\t\t==================== Doctor Highlights ====================");
+        System.out.printf("\t\t\t\t| %-15s | %-24s | %-10s |\n", "Category", "Doctor Name", "Patients");
+        System.out.println("\t\t\t\t-----------------------------------------------------------");
+
+        System.out.printf("\t\t\t\t| %-15s | %-24s | %-10d |\n", "Busiest", busiestName, busiestPatients);
+        System.out.printf("\t\t\t\t| %-15s | %-24s | %-10d |\n", "Least Busy", leastName, leastPatients);
+
+        System.out.println("\t\t\t\t===========================================================");
+    }
+
+    public void displaySummaryTable(int totalDoctors, int totalPatients,
+            int avgPatients, int workloadGap) {
+        System.out.println("\n\n\t\t\t\t================ Summary Report ==================");
+        System.out.printf("\t\t\t\t| %-33s | %-10s |\n", "Metric", "Value");
+        System.out.println("\t\t\t\t--------------------------------------------------");
+        System.out.printf("\t\t\t\t| %-33s | %-10d |\n", "Total Doctors", totalDoctors);
+        System.out.printf("\t\t\t\t| %-33s | %-10d |\n", "Total Patients Seen", totalPatients);
+        System.out.printf("\t\t\t\t| %-33s | %-10d |\n", "Average per Doctor", avgPatients);
+        System.out.printf("\t\t\t\t| %-33s | %-10d |\n", "Workload Gap (Max-Min)", workloadGap);
+        System.out.println("\t\t\t\t==================================================");
+    }
+
+    public boolean confirmViewSummary() {
+        System.out.print("\n\t\t\t\tDo you want to view in more details (y/n): ");
+        String choice = scanner.nextLine().trim().toUpperCase();
+        return choice.equals("Y");
     }
 
     public void consultationPerformance(Staff staff) {

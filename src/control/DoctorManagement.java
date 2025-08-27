@@ -346,7 +346,7 @@ public class DoctorManagement implements CRUD {
             if (staffmenu.confirmUndoUI()) {
                 undoDeletion(lastDeletedStaff);
             } else {
-                staffmenu.logOutMsg(); 
+                staffmenu.logOutMsg();
             }
         }
     }
@@ -565,6 +565,9 @@ public class DoctorManagement implements CRUD {
         staffmenu.printHigestPatientCount();
         staffmenu.printHighPatientsReportHeader();
 
+        int grandTotalPatients = 0;
+
+        // Count totals per doctor and display in table format
         Iterator<Staff> staffIterator = staffMap.getIterator();
         while (staffIterator.hasNext()) {
             Staff staff = staffIterator.next();
@@ -581,19 +584,45 @@ public class DoctorManagement implements CRUD {
                         totalPatients++;
                     }
                 }
+
+                grandTotalPatients += totalPatients;
+
                 Staff newStaff = new Staff(staff, totalPatients, 0, "patients");
                 newStaff.setCompare("patients");
                 doctorReportMap.put(staff.getStaffID(), newStaff);
             }
         }
+
         doctorReportMap.sorting();
 
+        // Display each doctor
         Iterator<Staff> exIterator = doctorReportMap.getIterator();
         while (exIterator.hasNext()) {
             Staff staff = exIterator.next();
             staffmenu.performanceReportUI(staff, "patients");
         }
         staffmenu.printLine();
+
+        // Identify busiest and least busy doctors as well as display summary
+        Staff busiest = doctorReportMap.getFront();
+        Staff least = doctorReportMap.getLast();
+        int totalDoctors = doctorReportMap.size();
+
+        int totalPatients = grandTotalPatients;
+        int avgPatients = (totalDoctors > 0) ? totalPatients / totalDoctors : 0;
+        String busiestName = (busiest != null) ? busiest.getStaffName() : "N/A";
+        int busiestPatients = (busiest != null) ? busiest.getPatientCount() : 0;
+
+        String leastName = (least != null) ? least.getStaffName() : "N/A";
+        int leastPatients = (least != null) ? least.getPatientCount() : 0;
+
+        int workloadGap = (busiest != null && least != null) ? (busiestPatients - leastPatients) : 0;
+
+        if (staffmenu.confirmViewSummary()) {
+            staffmenu.printBusyDoctorTable(busiestName, busiestPatients, leastName, leastPatients);
+            staffmenu.displaySummaryTable(totalDoctors, totalPatients, avgPatients, workloadGap);
+        }
+
         if (exitConfirmation()) {
             return;
         }
@@ -715,6 +744,5 @@ public class DoctorManagement implements CRUD {
         }
         staffFound = null;
         Master.setCurrentStaffId("");
-        //call main menu()
     }
 }
