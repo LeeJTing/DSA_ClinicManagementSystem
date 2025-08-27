@@ -95,6 +95,8 @@ public class MedicalTreatmentManagement implements CRUD {
         } else {
             Treatment treatment;
             Prescription prescription;
+            Prescription tempPre;
+            MapInterface<String, Medicine> tempList;
             if (actionHistory.removeLast().equals("Create")) {
                 // the treatment and prescription sould remove
                 treatment = treatmentRecordHistory.removeLast();
@@ -105,8 +107,11 @@ public class MedicalTreatmentManagement implements CRUD {
 
                 String patientName = getPatientName(treatment.getPatient_id());
                 String staffName = getStaffName(treatment.getStaff_id());
+                
+                tempList = prescription.getMedicineList();
+                tempList.sorting();
 
-                UI.removedTreatment(treatment, prescription, staffName, patientName);
+                UI.removedTreatment(treatment, prescription, staffName, patientName, tempList.getAllValues());
             } else {
                 // delete and update
                 treatment = treatmentRecordHistory.removeLast();
@@ -120,8 +125,11 @@ public class MedicalTreatmentManagement implements CRUD {
 
                 String patientName = getPatientName(treatment.getPatient_id());
                 String staffName = getStaffName(treatment.getStaff_id());
+                tempPre = getPrescription(treatment.getTreatment_id());
+                tempList = tempPre.getMedicineList();
+                tempList.sorting();
 
-                UI.showUpdatedTreatment(treatment, prescription, staffName, patientName);
+                UI.showUpdatedTreatment(treatment, prescription, staffName, patientName, tempList.getAllValues());
             }
             Master.setTreatmentMap(treatmentMap);
             Master.setPrescriptionMap(prescriptionMap);
@@ -254,7 +262,7 @@ public class MedicalTreatmentManagement implements CRUD {
             if (!medicine.isEmpty()) {
                 medicine.sorting();
 
-                Medicine tempMedicine = UI.askMedicine(medicine);
+                Medicine tempMedicine = UI.askMedicine(medicine.getAllKeys(), medicine.getAllValues());
                 String tempMedicineName = tempMedicine.getMedicineName();
                 int preStock = medicine.getValue(tempMedicineName).getMedicineStock();
                 int usedStock = tempMedicine.getMedicineStock();
@@ -304,6 +312,8 @@ public class MedicalTreatmentManagement implements CRUD {
         // get user input, option 1 = treatment id, 2 = only specific patient, 3 = all treatment,0 or other is exit
         boolean exit = false;
         String staffName, patientName;
+        Prescription tempPre;
+        MapInterface<String, Medicine> tempList;
         while (!exit) {
             int option = UI.displayMenu();
             switch (option) {
@@ -312,7 +322,10 @@ public class MedicalTreatmentManagement implements CRUD {
                     treatmentID = treatmentID.toUpperCase();
                     staffName = getStaffName(treatmentMap.getValue(treatmentID).getStaff_id());
                     patientName = getPatientName(treatmentMap.getValue(treatmentID).getPatient_id());
-                    UI.displaySpecificTreatmentRecord(treatmentMap.getValue(treatmentID), getPrescription(treatmentID), staffName, patientName);
+                    tempPre = getPrescription(treatmentID);
+                    tempList = tempPre.getMedicineList();
+                    tempList.sorting();
+                    UI.displaySpecificTreatmentRecord(treatmentMap.getValue(treatmentID), tempPre, staffName, patientName, tempList.getAllValues());
                     scanner.nextLine();
                     MessageUI.clearScreen();
                     break;
@@ -327,7 +340,10 @@ public class MedicalTreatmentManagement implements CRUD {
                             staffName = getStaffName(treatment.getStaff_id());
                             patientName = getPatientName(patientID);
                             if (treatment.getPatient_id().equals(patientID)) {
-                                UI.displaySpecificTreatmentRecord(treatment, getPrescription(treatment.getTreatment_id()), staffName, patientName);
+                                tempPre = getPrescription(treatment.getTreatment_id());
+                                tempList = tempPre.getMedicineList();
+                                tempList.sorting();
+                                UI.displaySpecificTreatmentRecord(treatment, tempPre, staffName, patientName, tempList.getAllValues());
                             }
                         }
                     }
@@ -341,7 +357,10 @@ public class MedicalTreatmentManagement implements CRUD {
                         Treatment treatment = iterator.next();
                         staffName = getStaffName(treatment.getStaff_id());
                         patientName = getPatientName(treatment.getPatient_id());
-                        UI.displaySpecificTreatmentRecord(treatment, getPrescription(treatment.getTreatment_id()), staffName, patientName);
+                        tempPre = getPrescription(treatment.getTreatment_id());
+                        tempList = tempPre.getMedicineList();
+                        tempList.sorting();
+                        UI.displaySpecificTreatmentRecord(treatment, tempPre, staffName, patientName, tempList.getAllValues());
                     }
                     treatmentMap.keyReverseSorting();
                     scanner.nextLine();
@@ -401,7 +420,9 @@ public class MedicalTreatmentManagement implements CRUD {
         Prescription prescriptionBackup = new Prescription(prescription.getPrescription_id(), prescription.getMedicineList(), prescription.getStaff_id(), prescription.getPatient_id(), prescription.getTreatment_id());
 
         saveHistory(treatmentBackup, prescriptionBackup, "Update");
-        UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId);
+        MapInterface<String, Medicine> tempList = prescription.getMedicineList();
+        tempList.sorting();
+        UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId, tempList.getAllValues());
         boolean con = true;
         do {
             int option = UI.updateMenu(treatmentId);
@@ -471,7 +492,7 @@ public class MedicalTreatmentManagement implements CRUD {
                         if (!medicine.isEmpty()) {
                             medicine.sorting();
 
-                            Medicine tempMedicine = UI.askMedicine(medicine);
+                            Medicine tempMedicine = UI.askMedicine(medicine.getAllKeys(), medicine.getAllValues());
                             String tempMedicineName = tempMedicine.getMedicineName();
                             int preStock = medicine.getValue(tempMedicineName).getMedicineStock();
                             int usedStock = tempMedicine.getMedicineStock();
@@ -508,7 +529,8 @@ public class MedicalTreatmentManagement implements CRUD {
                     break;
             }
         } while (con);
-        UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId);
+        tempList = prescription.getMedicineList();
+        UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId, tempList.getAllValues());
 
         treatmentMap.put(treatmentId, treatment);
 
@@ -540,7 +562,9 @@ public class MedicalTreatmentManagement implements CRUD {
                 Treatment treatment = treatmentMap.getValue(treatmentId);
                 String staffName = getStaffName(treatment.getStaff_id());
                 String patientName = getPatientName(treatment.getPatient_id());
-                UI.removedTreatment(treatment, prescription, staffName, patientName);
+                MapInterface<String, Medicine> tempList = prescription.getMedicineList();
+                tempList.sorting();
+                UI.removedTreatment(treatment, prescription, staffName, patientName, tempList.getAllValues());
 
                 saveHistory(treatment, prescription, "Delete");
                 // remove treatment and prescription

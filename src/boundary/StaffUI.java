@@ -102,7 +102,8 @@ public class StaffUI {
     }
 
     public int leaveApplicationUI() {
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2025, 9, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         System.out.println("\t\t\t\t=================================================");
@@ -232,11 +233,11 @@ public class StaffUI {
             System.out.println("\t\t\t\t=================================================");
             System.out.println("\t\t\t\t=              Duty Schedule Option             =");
             System.out.println("\t\t\t\t=================================================");
-            System.out.println("\t\t\t\t=         1. 1 August - 7 August                =");
-            System.out.println("\t\t\t\t=         2. 8 August - 14 August               =");
-            System.out.println("\t\t\t\t=         3. 15 August - 21 August              =");
-            System.out.println("\t\t\t\t=         4. 22 August - 28 August              ="); //remember change back to sept 30
-            System.out.println("\t\t\t\t=         5. 29 August - 31 August              ="); //remember change back to sept 30
+            System.out.println("\t\t\t\t=         1. 1 Sept - 7 Sept                    =");
+            System.out.println("\t\t\t\t=         2. 8 Sept - 14 Sept                   =");
+            System.out.println("\t\t\t\t=         3. 15 Sept - 21 Sept                  =");
+            System.out.println("\t\t\t\t=         4. 22 Sept - 28 Sept                  ="); //remember change back to sept 30
+            System.out.println("\t\t\t\t=         5. 29 Sept - 30 Sept                  ="); //remember change back to sept 30
             System.out.println("\t\t\t\t=         6. Back                               =");
             System.out.println("\t\t\t\t=================================================");
             System.out.print("\n\t\t\t\tEnter option > ");
@@ -431,8 +432,8 @@ public class StaffUI {
     public void noKPIsDoctors(int threshold) {
         System.out.println("\t\t\t\tNo doctors met the threshold of " + threshold + " minutes.");
     }
-    
-    public void printThresholdHeader(int count){
+
+    public void printThresholdHeader(int count) {
         System.out.printf("\t\t\t\t\t\t\tTotal %d doctors achived the KPIs\n", count);
     }
 }

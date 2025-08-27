@@ -6,6 +6,7 @@ package entity;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  *
@@ -145,6 +146,56 @@ public class Treatment implements Comparable<Treatment> {
 
         return th - ot;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Treatment other = (Treatment) obj;
+        if (this.isScan != other.isScan) {
+            return false;
+        }
+        if (!Objects.equals(this.treatment_id, other.treatment_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.consultation_id, other.consultation_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.disease, other.disease)) {
+            return false;
+        }
+        if (!Objects.equals(this.treatment_advice, other.treatment_advice)) {
+            return false;
+        }
+        if (!Objects.equals(this.staff_id, other.staff_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.patient_id, other.patient_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.remark, other.remark)) {
+            return false;
+        }
+        if (!Objects.equals(this.dateForm, other.dateForm)) {
+            return false;
+        }
+        return Objects.equals(this.treatment_date, other.treatment_date);
+    }
+    
+    
 
     private int ratingDisease() {
         int rating;

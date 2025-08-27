@@ -73,7 +73,8 @@ public class DoctorManagement implements CRUD {
     }
 
     public void notifyDoctor() {
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2025, 9, 1);
         doctorsOnDuty = dutyScheduleMap.getValue(today);
         String staffId = staffFound.getStaffID();
 
@@ -276,7 +277,8 @@ public class DoctorManagement implements CRUD {
                 return;
             }
 
-            LocalDate today = LocalDate.now();
+//            LocalDate today = LocalDate.now();
+            LocalDate today = LocalDate.of(2025, 9, 1);
             LocalDate leaveDate = today.plusDays(choice + 2);
 
             doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
@@ -352,7 +354,7 @@ public class DoctorManagement implements CRUD {
             return;
         } else {
 
-            YearMonth ym = YearMonth.of(2025, 8);
+            YearMonth ym = YearMonth.of(2025, 9);
             LocalDate firstDayOfMonth = ym.atDay(1);
 
             // Compute week start correctly
@@ -364,7 +366,7 @@ public class DoctorManagement implements CRUD {
                 LocalDate date = weekStart.plusDays(i);
 
                 // Stop if date goes past end of month
-                if (date.getMonth() != Month.AUGUST) {
+                if (date.getMonth() != Month.SEPTEMBER) {
                     break;
                 }
 

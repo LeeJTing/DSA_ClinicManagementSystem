@@ -6,7 +6,6 @@ package boundary;
 
 import utility.Input;
 import entity.*;
-import adt.MapInterface;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -213,23 +212,22 @@ public class MedicalTreatmentUI {
         return input;
     }
 
-    public Medicine askMedicine(MapInterface<String, Medicine> medicineList) {
+    public Medicine askMedicine(Object[] medicineKeyList, Object[] medicineList) {
         System.out.println("\n\t\t\t\tMedicine List: ");
-        Object[] obj = medicineList.getAllKeys();
+        Object[] obj = medicineKeyList;
         System.out.printf("\n\t\t\t\tNo. %-30s %-3s", "Medicine Name", "QTY");
         for (int i = 0; i < obj.length; i++) {
             String key = (String) obj[i];
-            System.out.printf("\n\t\t\t\t%-3d. %-30s %d", i + 1, key, medicineList.getValue(key).getMedicineStock());
+            Medicine medicine = (Medicine) medicineList[i];
+            System.out.printf("\n\t\t\t\t%-3d. %-30s %d", i + 1, key, medicine.getMedicineStock());
         }
 
         System.out.printf("\n\t\t\t\tSelection(1 - %d): ", obj.length);
         int optionName = Input.getIntegerInput();
-        Iterator<Medicine> iter = medicineList.getIterator();
+        
         String name = "";
-
-        for (int i = 1; i <= optionName && iter.hasNext(); i++) {
-            name = iter.next().getMedicineName();
-        }
+        Medicine temp = (Medicine) medicineList[optionName - 1];
+        name = temp.getMedicineName();
         System.out.print("\t\t\t\tQuantity: ");
         int quantity = Input.getIntegerInput();
 
@@ -262,7 +260,7 @@ public class MedicalTreatmentUI {
     public void showAllTreatmentID(String[] treatmentId) {
         System.out.println("");
         for (int i = 0; i < treatmentId.length; i++) {
-            System.out.println("          " + (i + 1) + ". " + treatmentId[i]);
+            System.out.println("\t\t\t\t" + (i + 1) + ". " + treatmentId[i]);
         }
     }
 
@@ -293,16 +291,16 @@ public class MedicalTreatmentUI {
         System.out.println("\n\t\t\t\tUpdate Treatment Record: ");
     }
 
-    public void showUpdatedTreatment(Treatment treatment, Prescription prescription, String staffName, String patientName) {
-        displaySpecificTreatmentRecord(treatment, prescription, staffName, patientName);
+    public void showUpdatedTreatment(Treatment treatment, Prescription prescription, String staffName, String patientName, Object[] medicineList) {
+        displaySpecificTreatmentRecord(treatment, prescription, staffName, patientName, medicineList);
     }
 
-    public void removedTreatment(Treatment treatment, Prescription prescription, String staffName, String patientName) {
-        displaySpecificTreatmentRecord(treatment, prescription, staffName, patientName);
+    public void removedTreatment(Treatment treatment, Prescription prescription, String staffName, String patientName, Object[] medicineList) {
+        displaySpecificTreatmentRecord(treatment, prescription, staffName, patientName, medicineList);
         System.out.println("\n\t\t\t\t" + treatment.getTreatment_id() + " and " + prescription.getPrescription_id() + " was removed.");
     }
 
-    public void displaySpecificTreatmentRecord(Treatment treatment, Prescription prescription, String staffName, String patientName) {
+    public void displaySpecificTreatmentRecord(Treatment treatment, Prescription prescription, String staffName, String patientName, Object[] medicineList) {
 
         String[] remark_parts = treatment.getRemark().split(",");
         String[] treatment_advice = treatment.getTreatment_advice().split(",");
@@ -351,16 +349,21 @@ public class MedicalTreatmentUI {
         System.out.printf("\t\t\t\t+===============================================================================+\n");
         System.out.printf("\t\t\t\t|  Medicine ID  |  Medicine Name                   |    QTY    |  Expired Date  |\n");
         System.out.printf("\t\t\t\t+-------------------------------------------------------------------------------+\n");
-        MapInterface<String, Medicine> prescriptionList = prescription.getMedicineList();
-        prescriptionList.sorting();
-        Iterator<Medicine> iter = prescriptionList.getIterator();
 
-        Medicine medicine;
-        while (iter.hasNext()) {
-            medicine = iter.next();
-            System.out.printf("\t\t\t\t|  %-12s |  %-31s |    %3d    |   %-10s   |\n", medicine.getMedicineID(), medicine.getMedicineName(),
-                    medicine.getMedicineStock(), DATEFORM.format(medicine.getMedicineExpiryDate()));
+        showMedicineList(medicineList);
+        
+        showPrescriptionCost(prescription);
+    }
+    
+    public void showMedicineList(Object[] medicine){
+        for(Object obj: medicine){
+            Medicine mdc = (Medicine) obj;
+            System.out.printf("\t\t\t\t|  %-12s |  %-31s |    %3d    |   %-10s   |\n", mdc.getMedicineID(), mdc.getMedicineName(),
+                    mdc.getMedicineStock(), DATEFORM.format(mdc.getMedicineExpiryDate()));
         }
+    }
+    
+    public void showPrescriptionCost(Prescription prescription){
         System.out.printf("\t\t\t\t+-------------------------------------------------------------------------------+\n");
         System.out.printf("\t\t\t\t|  Total Price: RM %-61.2f|\n", prescription.getMedicine_total_cost());
         System.out.printf("\t\t\t\t+===============================================================================+\n");
