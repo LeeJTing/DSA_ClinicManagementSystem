@@ -4,6 +4,7 @@ import utility.IDGenerator;
 
 import adt.ChainBucket;
 import adt.MapInterface;
+import java.util.Objects;
 import utility.IDGenerator;
 
 /*
@@ -109,5 +110,37 @@ public class Prescription {
                 + "\nPatient ID:" + patient_id
                 + "\nTreatment ID:" + treatment_id;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Prescription other = (Prescription) obj;
+        if (Double.doubleToLongBits(this.medicine_total_cost) != Double.doubleToLongBits(other.medicine_total_cost)) {
+            return false;
+        }
+        if (!Objects.equals(this.prescription_id, other.prescription_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.staff_id, other.staff_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.patient_id, other.patient_id)) {
+            return false;
+        }
+        if (!Objects.equals(this.treatment_id, other.treatment_id)) {
+            return false;
+        }
+        return Objects.equals(this.medicineList, other.medicineList);
+    }
+    
+    
 
 }

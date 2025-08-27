@@ -302,11 +302,6 @@ public class ChainBucket<K, V> implements MapInterface<K, V> {
         return searchKeyFormHeadTail(head, tail, value, actionNum) != null;
     }
 
-//    private K searchKeyFromHeadTail(Entry<K, V> currentLeft, Entry<K, V> currentRight, V value) {
-//        if(){
-//        
-//        }
-//    }
     @Override
     public int size() {
         return size;
