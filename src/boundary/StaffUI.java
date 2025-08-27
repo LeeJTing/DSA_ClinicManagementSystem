@@ -464,7 +464,7 @@ public class StaffUI {
     }
 
     public void printThresholdHeader(int count) {
-        System.out.printf("\t\t\t\t\t\t\tTotal %d doctors achived the KPIs\n", count);
+        System.out.printf("\n\n\t\t\t\t\t\tTotal %d doctors achived the KPIs\n", count);
     }
 
     public void printNoUndoAction() {

@@ -688,7 +688,7 @@ public class DoctorManagement implements CRUD {
 
     public void undo() {
         if (actionHistory.isEmpty()) {
-            staffmenu.printInvalidInput();
+            staffmenu.printNoUndoAction();
             return;
         }
 
