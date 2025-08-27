@@ -31,6 +31,7 @@ public class ConsultationManagement implements CRUD {
     private static MapInterface<Integer, String> doctorAMap = new ChainBucket<>();
     private static MapInterface<Integer, String> doctorBMap = new ChainBucket<>();
     private static MapInterface<String, String> timeSlotMap = new ChainBucket<>();
+    private static MapInterface<String, Ticket> ticketQueue = new ChainBucket<>();
 
     private static final ConsultationUI consultUI = new ConsultationUI();
     private static String currentPatientId = Master.getCurrentPatientId();
@@ -48,6 +49,7 @@ public class ConsultationManagement implements CRUD {
         doctorAMap = Master.getDoctorAMap();
         doctorBMap = Master.getDoctorBMap();
         timeSlotMap = Master.getTimeSlotMap();
+        ticketQueue = Master.getTicketQueue();
     }
 
     public void consultationMenu() {
@@ -339,9 +341,9 @@ public class ConsultationManagement implements CRUD {
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String num = Master.getCurrentTicket();
         MedicalTreatmentManagement mt = new MedicalTreatmentManagement();
-        Ticket t = new Ticket();
+        String num = Master.getCurrentTicket();
+        Ticket t = ticketQueue.getValue(num);
         Object[] staff = staffMap.getAllValues();
         boolean valid = false;
         String staffID = "";
