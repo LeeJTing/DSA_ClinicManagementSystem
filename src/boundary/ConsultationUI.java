@@ -209,7 +209,7 @@ public class ConsultationUI {
     }
 
     public void displayFilterConsultation(String type, String currentDate) {
-        System.out.println("\n\t\t\t\tConsultation for current" + type + " (" + currentDate + "):");
+        System.out.println("\n\t\t\t\tConsultation for current " + type + " (" + currentDate + "):");
     }
 
     public void displayTotalVolume(int count) {
@@ -318,6 +318,15 @@ public class ConsultationUI {
         System.out.println("\t\t\t\t" + border);
     }
 
+    public void staffSearchAppointmentUI2() {
+        int tableWidth = 51; // total width including borders
+        String border = "=".repeat(tableWidth);
+
+        System.out.println("\t\t\t\t" + border);
+        System.out.println("\t\t\t\t|                 Search Appoinment               |");
+        System.out.println("\t\t\t\t" + border);
+    }
+
     public void editAppoinmentUI() {
         System.out.println("\t\t\t\t=================================================");
         System.out.println("\t\t\t\t|              Edit Appoinment                  |");
@@ -374,13 +383,13 @@ public class ConsultationUI {
         System.out.println("\t\t\t\t" + border);
     }
 
-    public void consultationScheduleUI(MapInterface<String, String> timeSlotMap) {
+    public void consultationScheduleUI(Object[] timeSlotList) {
         int tableWidth = 178; // total width including borders
         String border = "-".repeat(tableWidth);
         System.out.println("\t\t\t\t" + border);
 
         System.out.printf("\t\t\t\t%-21s", "| Staff ID / Staff Name  |");
-        Object[] timeSlot = timeSlotMap.getAllKeys();
+        Object[] timeSlot = timeSlotList;
         for (Object slot : timeSlot) {
             System.out.printf("%6s %s", slot, "|");
         }

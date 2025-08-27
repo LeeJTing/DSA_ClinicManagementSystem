@@ -241,11 +241,13 @@ public class ConsultationManagement implements CRUD {
             switch (choice) {
                 case 1 -> {
                     String consultationId = consultUI.promptConsultationID();
-                    findConsultation1(consultationId, Consultation::getConsultation_Id);
+                    consultUI.staffSearchAppointmentUI2();
+                    findConsultation1(consultationId, Consultation::getConsultation_Id
+                    );
                 }
                 case 2 -> {
                     String patientId = consultUI.promptPatientID();
-                    consultUI.staffSearchAppointmentUI();
+                    consultUI.staffSearchAppointmentUI2();
                     findConsultation1(patientId, Consultation::getPatient_Id);
                 }
                 case 3 -> {
@@ -396,6 +398,7 @@ public class ConsultationManagement implements CRUD {
 
     //*
     public static void addFlwUpAppoinment() {
+        viewConsultationSchedule();
         Date currentDate = new Date();
         boolean valid = false;
         Date newConsultStartTime = null;
@@ -485,11 +488,10 @@ public class ConsultationManagement implements CRUD {
     public static void viewConsultationSchedule() {
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         consultationMap.sorting();
 
-        consultUI.consultationScheduleUI();
+        consultUI.consultationScheduleUI(timeSlotMap.getAllKeys());
 
         for (int i = 0; i < 3; i++) {
             int year = c.get(Calendar.YEAR);
@@ -500,7 +502,7 @@ public class ConsultationManagement implements CRUD {
             MapInterface<Integer, String> doctorMap = (day % 2 != 0) ? doctorAMap : doctorBMap;
 
             consultUI.displayConsultationSchedulefield(day, month, year, c);
-            consultUI.consultationScheduleUI(timeSlotMap);
+            consultUI.consultationScheduleUI(timeSlotMap.getAllKeys());
 
             Object[] keys = doctorMap.getAllKeys();
             for (Object key : keys) {
@@ -592,6 +594,9 @@ public class ConsultationManagement implements CRUD {
     }
 
     public void viewConsultationValumeReport() {
+        Consultation consult = new Consultation();
+        consult.setCompare("consultation_date");
+        consultationMap.sorting();
         Object[] consultations = consultationMap.getAllValues();
 
         boolean running = true;
@@ -634,14 +639,14 @@ public class ConsultationManagement implements CRUD {
                 consultUI.staffReportYearAppoinmentUI();
             }
             case "month" -> {
-                sdf = new SimpleDateFormat("yyyy-MM");
+                sdf = new SimpleDateFormat("MM-yyyy");
                 currentDate = sdf.format(new Date());
                 consult.setCompare("month");
                 consultUI.displayFilterConsultation(type, currentDate);
                 consultUI.staffReportMonthAppoinmentUI();
             }
             case "day" -> {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
+                sdf = new SimpleDateFormat("dd-MM-yyyy");
                 currentDate = sdf.format(new Date());
                 consult.setCompare("day");
                 consultUI.displayFilterConsultation(type, currentDate);
@@ -652,10 +657,16 @@ public class ConsultationManagement implements CRUD {
             }
         }
 
+        int counter = 1;
         for (Object obj : consultations) {
             Consultation c = (Consultation) obj;
-            String key = sdf.format(c.getConsultation_date());
-            consultationBucket.put(key, c);
+            if (c.getAppointmentStatus().equals("Completed")) {
+                String baseKey = sdf.format(c.getConsultation_date());
+                if (baseKey.equals(currentDate)) {
+                    String key = baseKey + "|" + counter++;
+                    consultationBucket.put(key, c);
+                }
+            }
         }
 
         MapInterface<String, Consultation> todayGroup = consultationBucket.groupBy(consult);
@@ -671,7 +682,6 @@ public class ConsultationManagement implements CRUD {
         } else {
             consultUI.displayNotFoundCurrentDate(currentDate);
         }
-
     }
 
     public static String generateNextConsultationId() {
