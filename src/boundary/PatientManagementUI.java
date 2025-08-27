@@ -7,7 +7,6 @@ package boundary;
 import entity.Patient;
 import entity.Visit;
 import utility.Input;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -226,11 +225,29 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|  2. Update My Information                         |");
         System.out.println("\t\t\t\t|  3. Delete My Account                             |");
         System.out.println("\t\t\t\t|  4. Average Queue Time Report                     |");
-        System.out.println("\t\t\t\t|  5. Patient Report                                |");
-        System.out.println("\t\t\t\t|  6. Undo Last Change                              |");
-        System.out.println("\t\t\t\t|  7. Return to Main Menu                           |");
+        System.out.println("\t\t\t\t|  5. Undo Last Change                              |");
+        System.out.println("\t\t\t\t|  6. Return to Main Menu                           |");
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
+    }
+
+    public void displayDoctorLoginSuccess() {
+        System.out.println("\n\t\t\t\t===================================================");
+        System.out.println("\t\t\t\t             Doctor Login Successful!");
+        System.out.println("\t\t\t\t   Access granted to patient reports.");
+        System.out.println("\t\t\t\t===================================================\n");
+    }
+
+    public void displayDoctorLoginFailed() {
+        System.out.println("\n\t\t\t\t===================================================");
+        System.out.println("\t\t\t\t             Doctor Login Failed!");
+        System.out.println("\t\t\t\t   Please try again with correct credentials.");
+        System.out.println("\t\t\t\t===================================================\n");
+    }
+
+    public boolean askViewReportsAgain() {
+        String s = Input.getStringInput("\t\t\t\tDo you want to view reports again? (Y/N): ");
+        return "Y".equalsIgnoreCase(s.trim());
     }
 
     public static int displayUserPageMenu() {
@@ -239,7 +256,8 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|  1. Register as New Patient                       |");
         System.out.println("\t\t\t\t|  2. Login with Patient ID                         |");
-        System.out.println("\t\t\t\t|  3. Return to Main Menu                           |");
+        System.out.println("\t\t\t\t|  3. Patient Report                                |");
+        System.out.println("\t\t\t\t|  4. Return to Main Menu                           |");
         System.out.println("\t\t\t\t=====================================================");
         return Input.getIntegerInput("\t\t\t\tSelect an option > ");
     }
@@ -474,6 +492,11 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t|        Visit record deleted successfully.         |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
+    }
+
+    public boolean confirmLoginStaff() {
+        String s = Input.getStringInput("\t\t\t\tAre you staff? (Y/N): ");
+        return "Y".equalsIgnoreCase(s.trim());
     }
 
     public boolean confirmDeletePatient() {
@@ -840,35 +863,36 @@ public class PatientManagementUI {
         System.out.println();
     }
 
-   public static void displayGenderGrid(String[] maleIds, int maleCount,
-                                     String[] femaleIds, int femaleCount) {
-    int total = maleCount + femaleCount;
-    final int labelW = 7;
-    final int colW = 12;
-    final int totalW = 6;
+    public static void displayGenderGrid(String[] maleIds, int maleCount,
+            String[] femaleIds, int femaleCount) {
+        int total = maleCount + femaleCount;
+        final int labelW = 7;
+        final int colW = 12;
+        final int totalW = 6;
 
-    System.out.println("\t\t\t\t=================================================================");
-    System.out.println("\t\t\t\t|                       Gender DemoGraphics                     |");
-    System.out.println("\t\t\t\t=================================================================");
-    System.out.printf("\t\t\t\t| %-"+labelW+"s |    %-"+colW+"s    |    %-"+colW+"s    |    %-"+totalW+"s |\n", "", "Male", "Female", "total");
-    System.out.println("\t\t\t\t-----------------------------------------------------------------");
-
-    int rows = Math.max(maleCount, femaleCount);
-    for (int i = 0; i < rows; i++) {
-        String m = (i < maleCount)   ? maleIds[i]   : "";
-        String f = (i < femaleCount) ? femaleIds[i] : "";
-        System.out.printf("\t\t\t\t| %-"+labelW+"s |    %-"+colW+"s    |    %-"+colW+"s    |    %-"+totalW+"s |\n",
-                "", m, f, "");
+        System.out.println("\t\t\t\t=================================================================");
+        System.out.println("\t\t\t\t|                       Gender DemoGraphics                     |");
+        System.out.println("\t\t\t\t=================================================================");
+        System.out.printf("\t\t\t\t| %-" + labelW + "s |    %-" + colW + "s    |    %-" + colW + "s    |    %-" + totalW + "s |\n", "", "Male", "Female", "total");
         System.out.println("\t\t\t\t-----------------------------------------------------------------");
+
+        int rows = Math.max(maleCount, femaleCount);
+        for (int i = 0; i < rows; i++) {
+            String m = (i < maleCount) ? maleIds[i] : "";
+            String f = (i < femaleCount) ? femaleIds[i] : "";
+            System.out.printf("\t\t\t\t| %-" + labelW + "s |    %-" + colW + "s    |    %-" + colW + "s    |    %-" + totalW + "s |\n",
+                    "", m, f, "");
+            System.out.println("\t\t\t\t-----------------------------------------------------------------");
+        }
+
+        double malePct = (total == 0) ? 0 : (maleCount * 100.0 / total);
+        double femalePct = (total == 0) ? 0 : (femaleCount * 100.0 / total);
+
+        System.out.printf("\t\t\t\t| %-" + labelW + "s |   %-" + colW + "s     |    %-" + colW + "s    |    %-" + totalW + "d |\n", "Count", maleCount + " (" + String.format("%.2f%%", malePct) + ")", femaleCount + " (" + String.format("%.2f%%", femalePct) + ")", total);
+        System.out.println("\t\t\t\t=================================================================");
     }
 
-    double malePct   = (total == 0) ? 0 : (maleCount   * 100.0 / total);
-    double femalePct = (total == 0) ? 0 : (femaleCount * 100.0 / total);
-
-    System.out.printf("\t\t\t\t| %-"+labelW+"s |   %-"+colW+"s     |    %-"+colW+"s    |    %-"+totalW+"d |\n","Count", maleCount   + " (" + String.format("%.2f%%", malePct)   + ")", femaleCount + " (" + String.format("%.2f%%", femalePct) + ")", total);
-    System.out.println("\t\t\t\t=================================================================");
-}
-public static void displayNoTicketsInQueueRow() {
-    System.out.println("\t\t\t\t|               No tickets in queue                      |");
-}
+    public static void displayNoTicketsInQueueRow() {
+        System.out.println("\t\t\t\t|               No tickets in queue                      |");
+    }
 }

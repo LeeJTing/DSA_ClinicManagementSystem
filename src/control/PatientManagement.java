@@ -8,19 +8,14 @@ import adt.MapInterface;
 import adt.ChainBucket;
 import boundary.PatientManagementUI;
 import dao.Master;
-import entity.Consultation;
-import entity.Medicine;
 import entity.Patient;
-import entity.Payment;
+import entity.Staff;
 import entity.Ticket;
-import entity.Treatment;
 import entity.Visit;
 import java.text.SimpleDateFormat;
 import utility.IDGenerator;
-
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 public class PatientManagement implements CRUD {
 
@@ -59,6 +54,24 @@ public class PatientManagement implements CRUD {
                 } else {
                     ui.patientNotFound();
                 }
+            case 3: // Doctor login required for patient report
+                ui.confirmLoginStaff(); // UI prompt before login
+
+                DoctorManagement doctorMgmt = new DoctorManagement();
+                boolean doctorLoggedIn = doctorMgmt.login(); // Attempt doctor login
+
+                if (doctorLoggedIn) {
+                    ui.displayDoctorLoginSuccess();
+                    boolean keepViewing = true;
+                    while (keepViewing) {
+                        patientReport(); // Show patient report
+                        keepViewing = ui.askViewReportsAgain(); 
+                    }
+                } else {
+                    ui.displayDoctorLoginFailed();
+                }
+                break;
+
             default:
                 return;
         }
@@ -91,20 +104,12 @@ public class PatientManagement implements CRUD {
                     waitTimeReportsModule();
                 }
                 case 5 -> {
-                    if (revertDelete()) {
-                        break;
-                    }
-                    patientReport();
+                    undo();
                 }
                 case 6 -> {
-                    undo();
-
-                }
-                case 7 -> {
                     Master.setCurrentPatientId("");
                     return;
                 }
-
                 default ->
                     ui.displayInvalidChoice();
             }
@@ -112,8 +117,8 @@ public class PatientManagement implements CRUD {
     }
 
     public void offlinePatientModule() {    // Offline patient module - let patient to get ticket
-    MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
-    displayPublicQueueForOffline(ticketQueue); 
+        MapInterface<String, Ticket> ticketQueue = Master.getTicketQueue();
+        displayPublicQueueForOffline(ticketQueue);
         int choice = ui.displayGetTicketMenu();
         switch (choice) {
             case 1:
@@ -122,7 +127,7 @@ public class PatientManagement implements CRUD {
             case 2:
                 return;
             default:
-                return;
+                ui.displayInvalidChoice();
         }
 
     }
@@ -885,6 +890,7 @@ public class PatientManagement implements CRUD {
         }
         return false;
     }
+
     private void displayPublicQueueForOffline(MapInterface<String, Ticket> ticketQueue) {
         if (ticketQueue == null) {
             return;
