@@ -53,9 +53,8 @@ public class PatientManagement implements CRUD {
                 } else {
                     ui.patientNotFound();
                 }
+                break;
             case 3: // Doctor login required for patient report
-                ui.confirmLoginStaff(); // UI prompt before login
-
                 DoctorManagement doctorMgmt = new DoctorManagement();
                 boolean doctorLoggedIn = doctorMgmt.login(); // Attempt doctor login
 

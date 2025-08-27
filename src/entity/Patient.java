@@ -17,6 +17,7 @@ public class Patient {
 
     private Date currentDate = new Date();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     private String patient_id;
     private String patient_name;
     private String patient_contact;
@@ -89,6 +90,14 @@ public class Patient {
 
     public void setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
+    }
+
+    public void setTimeFormat(SimpleDateFormat timeFormat) {
+        this.timeFormat = timeFormat;
+    }
+
+    public SimpleDateFormat getTimeFormat() {
+        return timeFormat;
     }
 
     public String getPatient_id() {

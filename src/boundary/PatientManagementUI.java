@@ -54,10 +54,11 @@ public class PatientManagementUI {
         System.out.printf("\t\t\t\t| Gender          : %-33s |\n", patient.getPatient_gender());
         System.out.printf("\t\t\t\t| Age             : %-33s |\n", patient.getAge() + " years old");
         SimpleDateFormat df = patient.getDateFormat();
+        SimpleDateFormat tf = patient.getTimeFormat();
         String reg = patient.getRegistration_date() == null ? "N/A" : df.format(patient.getRegistration_date());
         System.out.printf("\t\t\t\t| Registration    : %-33s |\n", reg);
-        String qs = (visit == null || visit.getQueueStart() == null) ? "N/A" : df.format(visit.getQueueStart());
-        String qe = (visit == null || visit.getQueueEnd() == null) ? "N/A" : df.format(visit.getQueueEnd());
+        String qs = (visit == null || visit.getQueueStart() == null) ? "N/A" : tf.format(visit.getQueueStart());
+        String qe = (visit == null || visit.getQueueEnd() == null) ? "N/A" : tf.format(visit.getQueueEnd());
         System.out.printf("\t\t\t\t| Queue Start     : %-33s |\n", qs);
         System.out.printf("\t\t\t\t| Queue End       : %-33s |\n", qe);
         System.out.println("\t\t\t\t========================================================");
