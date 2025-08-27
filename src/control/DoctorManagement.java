@@ -92,7 +92,9 @@ public class DoctorManagement implements CRUD {
     }
 
     public void updateDutyStatus() {
-        LocalDate today = LocalDate.now();
+        // LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2025, 9, 1);
+
         doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
 
         Iterator<Staff> iterator = staffMap.getIterator();
@@ -242,9 +244,11 @@ public class DoctorManagement implements CRUD {
 
     public void changeEducationLevel() {
         int educationalLevel = staffmenu.changeEducationalLevelMenu();
+        saveHistory(staffFound, "Update", null, null);
         if (educationalLevel >= 1 && educationalLevel <= 4) {
             staffFound.setEducationalLevel(educationalLevel);
             staffMap.put(staffFound.getStaffID(), staffFound);
+            Master.setStaffMap(staffMap);
             staffmenu.printUpdateSuccessMsg();
             displayProfile();
         } else {
@@ -329,21 +333,21 @@ public class DoctorManagement implements CRUD {
 
     @Override
     public void deleteInstance() {
-        Staff lastDeletedStaff;
         if (staffmenu.confirmDeleteAccountUI()) {
-            // Keep reference for possible undo
-            lastDeletedStaff = staffFound;
+            Staff lastDeletedStaff = staffFound;
 
             // Perform deletion
             staffMap.remove(staffFound.getStaffID());
             staffmenu.deleteSuccessMsg();
             staffFound = null;
             Master.setStaffMap(staffMap);
+
             // undo option
             if (staffmenu.confirmUndoUI()) {
                 undoDeletion(lastDeletedStaff);
+            } else {
+                staffmenu.logOutMsg(); 
             }
-            staffmenu.logOutMsg();
         }
     }
 
@@ -686,7 +690,7 @@ public class DoctorManagement implements CRUD {
                 Master.setStaffMap(staffMap);
                 displayProfile();
             } else {
-                staffmenu.printInvalidInput();
+                staffmenu.printNoUndoAction();
             }
         }
     }
@@ -697,7 +701,6 @@ public class DoctorManagement implements CRUD {
             staffFound = lastDeletedStaff;
 
             staffmenu.printUndoMsg("delete");
-            staffmenu.doctorManagementMenu(staffFound);
             staffMap.keyReverseSorting();
             Master.setStaffMap(staffMap);
             lastDeletedStaff = null;

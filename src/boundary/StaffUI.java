@@ -373,7 +373,7 @@ public class StaffUI {
                 System.out.println("\n\t\t\t\tYour profile edition undo successfully");
                 break;
             case "delete":
-                System.out.println("\n\t\t\t\t\tYour account deletion undo successfully");
+                System.out.println("\n\t\t\t\tYour account deletion undo successfully");
                 break;
             case "leave":
                 System.out.println("\n\t\t\t\tYour leave application undo successfully");
@@ -435,5 +435,9 @@ public class StaffUI {
 
     public void printThresholdHeader(int count) {
         System.out.printf("\t\t\t\t\t\t\tTotal %d doctors achived the KPIs\n", count);
+    }
+
+    public void printNoUndoAction() {
+        System.out.println("\t\t\t\tNo History action found");
     }
 }
