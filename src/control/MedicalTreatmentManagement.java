@@ -421,6 +421,7 @@ public class MedicalTreatmentManagement implements CRUD {
 
         saveHistory(treatmentBackup, prescriptionBackup, "Update");
         MapInterface<String, Medicine> tempList = prescription.getMedicineList();
+        tempList.sorting();
         UI.showUpdatedTreatment(treatment, prescription, treatmentId, treatmentId, tempList.getAllValues());
         boolean con = true;
         do {
@@ -562,6 +563,7 @@ public class MedicalTreatmentManagement implements CRUD {
                 String staffName = getStaffName(treatment.getStaff_id());
                 String patientName = getPatientName(treatment.getPatient_id());
                 MapInterface<String, Medicine> tempList = prescription.getMedicineList();
+                tempList.sorting();
                 UI.removedTreatment(treatment, prescription, staffName, patientName, tempList.getAllValues());
 
                 saveHistory(treatment, prescription, "Delete");
