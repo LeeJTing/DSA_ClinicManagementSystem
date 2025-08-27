@@ -4,7 +4,6 @@
  */
 package boundary;
 
-import adt.MapInterface;
 import entity.Patient;
 import entity.Visit;
 import utility.Input;
