@@ -242,8 +242,7 @@ public class ConsultationManagement implements CRUD {
                 case 1 -> {
                     String consultationId = consultUI.promptConsultationID();
                     consultUI.staffSearchAppointmentUI2();
-                    findConsultation1(consultationId, Consultation::getConsultation_Id
-                    );
+                    findConsultation1(consultationId, Consultation::getConsultation_Id);
                 }
                 case 2 -> {
                     String patientId = consultUI.promptPatientID();
