@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
 
 import adt.ChainBucket;
@@ -10,7 +6,7 @@ import java.time.LocalDate;
 
 /**
  *
- * @author ASUS
+ * @author Wong Wei Xin
  */
 public class DutySchedule {
 

@@ -2,7 +2,6 @@ package control;
 
 import dao.Master;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 
 import adt.ChainBucket;
 import adt.MapInterface;
