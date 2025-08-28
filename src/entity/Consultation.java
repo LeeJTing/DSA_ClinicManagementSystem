@@ -242,16 +242,6 @@ public class Consultation implements Comparable<Consultation> {
         } else {
             return status.length();
         }
-//        switch (status) {
-//            case "Completed":
-//                return 1;
-//            case "On-going":
-//                return 2;
-//            case "Pending":
-//                return 3;
-//            default:
-//                return 4;
-//        }
     }
 
 }
