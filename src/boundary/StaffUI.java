@@ -470,4 +470,8 @@ public class StaffUI {
     public void printNoUndoAction() {
         System.out.println("\t\t\t\tNo History action found");
     }
+
+    public void printNextLine() {
+        System.out.println();
+    }
 }

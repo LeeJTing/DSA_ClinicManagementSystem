@@ -384,7 +384,7 @@ public class DoctorManagement implements CRUD {
                         }
                     }
                 }
-                System.out.println();
+                staffmenu.printNextLine();
             }
 
             staffmenu.printSceduleFooter();
