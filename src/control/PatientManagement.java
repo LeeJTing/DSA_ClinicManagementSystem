@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package control;
 
 import adt.MapInterface;
@@ -407,9 +411,7 @@ public class PatientManagement implements CRUD {
         }
         ui.displayQueueHeader();
         if (queuedTickets.isEmpty()) {
-            System.out.println("\t\t\t\t|                                                         |");
-            System.out.println("\t\t\t\t|                                                         |");
-            System.out.println("\t\t\t\t|                                                         |");
+            ui.displayKosong();
             ui.displayQueueFooter();
             return;
         }
@@ -463,13 +465,13 @@ public class PatientManagement implements CRUD {
         if (patient == null) {
             patient = createNewOfflinePatient(patientId);
             if (patient == null) {
-                System.out.println("Failed to create patient record for: " + patientId);
+                ui.displayMessage("Failed to create patient record ");
                 return;
             }
         }
         patient.addVisit(ticket.getQueueStart(), ticket.getQueueEnd());
         patientMap.put(patientId, patient);
-        System.out.println("Visit recorded for patient: " + patientId);
+        ui.displayMessage("Visit recorded for patient: " + patientId);
     }
 
     private Patient createNewOfflinePatient(String patientId) {//create new patient for offline
@@ -485,7 +487,7 @@ public class PatientManagement implements CRUD {
 
             return patient;
         } catch (Exception e) {
-            System.out.println("Error creating offline patient: " + e.getMessage());
+            ui.displayMessage("Error creating offline patient: " + e.getMessage());
             return null;
         }
     }
