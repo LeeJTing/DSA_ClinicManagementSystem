@@ -44,14 +44,6 @@ public class Consultation implements Comparable<Consultation> {
 
     public Consultation(String consultation_Id, Date appointmentDate, Date consultationDate, Date consultationStartTime, Date consultationEndTime, String appointmentStatus, String type, String patient_Id, String staff_Id) {
         this.consultation_Id = consultation_Id;
-//        try {
-//            this.appointment_date = dateFormat.parse(appointmentDate);
-        ////            this.consultation_date = dateFormat.parse(consultationDate);
-////            this.consultation_start_time = timeFormat.parse(consultationStartTime);
-////            this.consultation_end_time = timeFormat.parse(consultationEndTime);
-//        } catch (ParseException e) {
-//            System.out.println("Error parsing date strings: " + e.getMessage());
-//        }
         this.appointment_date = appointmentDate;
         this.consultation_date = consultationDate;
         this.consultation_start_time = consultationStartTime;

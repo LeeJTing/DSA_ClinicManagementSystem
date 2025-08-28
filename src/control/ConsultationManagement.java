@@ -123,6 +123,7 @@ public class ConsultationManagement implements CRUD {
         } while (choice != 10);
     }
 
+    // seperate patient and staff add function
     @Override
     public void createNewInstance() {
         if (currentPatientId != null && !currentPatientId.isEmpty()) {
@@ -134,6 +135,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    // seperate patient and staff read function
     @Override
     public void readInstance() {
         Consultation consultations = new Consultation();
@@ -154,6 +156,7 @@ public class ConsultationManagement implements CRUD {
         updateAppoinment();
     }
 
+    // patient deleted function
     @Override
     public void deleteInstance() {
         boolean confirm;
@@ -178,7 +181,8 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    public void viewPatientAppoinment(Object[] consulations, String patientID) { // current Patient (today appoinment)
+    // current Patient (today appoinment)
+    public void viewPatientAppoinment(Object[] consulations, String patientID) {
         if (!consultationMap.isEmpty()) {
             Consultation consultations = new Consultation();
             consultations.setCompare("appointmentStatus");
@@ -195,7 +199,8 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    public void viewTodayAppoinment(Object[] consulations, String staffID) { // current staff (how many patient staff need to see)
+    // current staff (how many patient staff need to see)
+    public void viewTodayAppoinment(Object[] consulations, String staffID) {
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // format only date part
         String todayStr = sdf.format(currentDate);
@@ -216,8 +221,8 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    //*
-    public void viewTodayAppoinment(Object[] consulations) { // how many patient staff need to see
+    // how many patient staff need to see
+    public void viewTodayAppoinment(Object[] consulations) { 
         if (!consultationMap.isEmpty()) {
             Consultation consultations = new Consultation();
             consultations.setCompare("appointmentStatus");
@@ -232,6 +237,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    // To give staff search the consultation date, patient id and consultation id, easy staff to see specific record
     public void searchAppoinment() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         int choice = 0;
@@ -290,7 +296,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    //*
+    // To add patient online appoinment 
     public static void addOnlineAppoinment() {
         viewConsultationSchedule();
         Date currentDate = new Date();
@@ -337,6 +343,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    // To add patient walk in appoinment
     public void addWalkInAppoinment() {
         viewConsultationSchedule();
         Date currentDate = new Date();
@@ -395,7 +402,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    //*
+    // To give staff add follow up patient appoinment
     public static void addFlwUpAppoinment() {
         viewConsultationSchedule();
         Date currentDate = new Date();
@@ -436,6 +443,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    // To give patient update appoinment
     public static void updateAppoinment() {
         String consultationID = consultUI.promptConsultationID();
         int choice = 0;
@@ -484,6 +492,7 @@ public class ConsultationManagement implements CRUD {
         } while (choice != 5);
     }
 
+    // To give staff and patient to see next 3 day schedule
     public static void viewConsultationSchedule() {
 
         Calendar c = Calendar.getInstance();
@@ -550,7 +559,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
-    //*
+    // To give staff see the follow up report
     public static void viewConsultationFlwUpReport() {
         Object[] consultations = consultationMap.getAllValues();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -592,6 +601,7 @@ public class ConsultationManagement implements CRUD {
 
     }
 
+    // To give staff see the valume report by year, month and day
     public void viewConsultationValumeReport() {
         Consultation consult = new Consultation();
         consult.setCompare("consultation_date");
@@ -683,6 +693,7 @@ public class ConsultationManagement implements CRUD {
         }
     }
 
+    // To generate next consultation id
     public static String generateNextConsultationId() {
         String lastID = consultationMap.getLastKey();
 
@@ -701,6 +712,7 @@ public class ConsultationManagement implements CRUD {
         return nextID;
     }
 
+    // To give staff and patient undo create, add, and deleted function
     private void undo() {
         if (actionHistory.isEmpty()) {
             consultUI.displayFailedMsg("No history to undo");
