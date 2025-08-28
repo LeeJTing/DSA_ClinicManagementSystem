@@ -431,9 +431,9 @@ public class PharmacyUI {
 
     public void displayAlertHeader() {
         System.out.println("");
-        System.out.println("\t\t\t\t=================================================");
-        System.out.println("\t\t\t\t|               Alert Notification              |");
-        System.out.println("\t\t\t\t=================================================");
+        System.out.println("\t\t\t\t==================================================");
+        System.out.println("\t\t\t\t|                Alert Notification              |");
+        System.out.println("\t\t\t\t==================================================");
     }
 
     public void displayAlertMsg(int i, String msg) {
@@ -445,7 +445,7 @@ public class PharmacyUI {
     }
 
     public void displayAlertFooter() {
-        System.out.println("\t\t\t\t=================================================");
+        System.out.println("\t\t\t\t==================================================");
         System.out.println("");
     }
 

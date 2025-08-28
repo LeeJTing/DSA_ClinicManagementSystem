@@ -113,7 +113,7 @@ public class MedicalTreatmentUI {
     }
 
     public void diseaseRelationship(String disease, double percent) {
-        System.out.printf("\t\t\t\t| %-23s (%-6.2f)                                             |\n", disease, percent);
+        System.out.printf("\t\t\t\t| %-23s (%-5.2f%%)                                             |\n", disease, percent);
     }
 
     public int updateMenu(String id) {
