@@ -18,6 +18,13 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
+    public static void displayKosong() {
+        System.out.println("\t\t\t\t|                                                         |");
+        System.out.println("\t\t\t\t|                                                         |");
+        System.out.println("\t\t\t\t|                                                         |");
+
+    }
+
     public static void displayCreateSuccess(String id) {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                   SUCCESS                         |");
