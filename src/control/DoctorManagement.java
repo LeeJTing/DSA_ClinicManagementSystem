@@ -75,42 +75,46 @@ public class DoctorManagement implements CRUD {
     public void notifyDoctor() {
         LocalDate today = LocalDate.now();
         doctorsOnDuty = dutyScheduleMap.getValue(today);
-        String staffId = staffFound.getStaffID();
+        if (doctorsOnDuty != null) {
+            String staffId = staffFound.getStaffID();
 
-        // Check if this doctor is first or last on duty
-        String firstDoctorId = doctorsOnDuty.getFront();
-        String lastDoctorId = doctorsOnDuty.getLast();
+            // Check if this doctor is first or last on duty
+            String firstDoctorId = doctorsOnDuty.getFront();
+            String lastDoctorId = doctorsOnDuty.getLast();
 
-        if (staffId.equals(firstDoctorId)) {
-            staffmenu.displayNotificationMsg("first", staffFound);
-        } else if (staffId.equals(lastDoctorId)) {
-            staffmenu.displayNotificationMsg("last", staffFound);
-        } else {
-            staffmenu.displayNotificationMsg("middle", staffFound);
+            if (staffId.equals(firstDoctorId)) {
+                staffmenu.displayNotificationMsg("first", staffFound);
+            } else if (staffId.equals(lastDoctorId)) {
+                staffmenu.displayNotificationMsg("last", staffFound);
+            } else {
+                staffmenu.displayNotificationMsg("middle", staffFound);
+            }
         }
     }
 
     public void updateDutyStatus() {
         LocalDate today = LocalDate.now();
         doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
+        if (doctorsOnDuty != null) {
 
-        Iterator<Staff> iterator = staffMap.getIterator();
-        while (iterator.hasNext()) {
-            Staff staff = iterator.next();
+            Iterator<Staff> iterator = staffMap.getIterator();
+            while (iterator.hasNext()) {
+                Staff staff = iterator.next();
 
-            if ("Doctor".equalsIgnoreCase(staff.getStaffPosition())) {
-                boolean isWorking = false;
+                if ("Doctor".equalsIgnoreCase(staff.getStaffPosition())) {
+                    boolean isWorking = false;
 
-                //do compare if the staff does not exit in the record mean leave
-                if (doctorsOnDuty != null) {
-                    isWorking = doctorsOnDuty.containsValue(staff.getStaffID());
+                    //do compare if the staff does not exit in the record mean leave
+                    if (doctorsOnDuty != null) {
+                        isWorking = doctorsOnDuty.containsValue(staff.getStaffID());
+                    }
+
+                    staff.setDutyStatus(isWorking ? "Work" : "Leave");
+                    staffMap.put(staff.getStaffID(), staff);
                 }
-
-                staff.setDutyStatus(isWorking ? "Work" : "Leave");
-                staffMap.put(staff.getStaffID(), staff);
             }
+            Master.setStaffMap(staffMap);
         }
-        Master.setStaffMap(staffMap);
     }
 
     public boolean login() {
@@ -282,19 +286,21 @@ public class DoctorManagement implements CRUD {
             LocalDate leaveDate = today.plusDays(choice + 2);
 
             doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);
-            Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
+            if (doctorsOnDuty != null) {
+                Integer slotNumber = doctorsOnDuty.getKey(staffFound.getStaffID());
 
-            if (slotNumber != null) { // doctor found in schedule → can apply leave
-                saveHistory(staffFound, "Leave", slotNumber, leaveDate);
-                staffmenu.promptLeavSuccess(leaveDate);
-                updateLeaveDate(staffFound, leaveDate);
-            } else { // doctor already applied for that date
-                staffmenu.printAlreadyApplyMsg();
-                continue;
-            }
+                if (slotNumber != null) { // doctor found in schedule → can apply leave
+                    saveHistory(staffFound, "Leave", slotNumber, leaveDate);
+                    staffmenu.promptLeavSuccess(leaveDate);
+                    updateLeaveDate(staffFound, leaveDate);
+                } else { // doctor already applied for that date
+                    staffmenu.printAlreadyApplyMsg();
+                    continue;
+                }
 
-            if (exitConfirmation()) {
-                return;
+                if (exitConfirmation()) {
+                    return;
+                }
             }
         }
     }
