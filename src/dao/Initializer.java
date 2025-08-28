@@ -271,7 +271,7 @@ public class Initializer {
 
             Patient p12 = new Patient("P000012", "Monday Patient 2", "0111111112", "monday2@clinic.com", "Female", 35, sdf.parse("30-07-2025 09:00"));
             p12.addVisit(sdf.parse("04-08-2025 09:30"), sdf.parse("04-08-2025 10:30"));
-            
+
             Patient p13 = new Patient("P000013", "Kelvin Chia", "0123451122", "kelvin@gmail.com", "Male", 33, sdf.parse("30-07-2025 10:20"));
             p13.addVisit(sdf.parse("28-08-2025 10:15"), sdf.parse("28-08-2025 10:45"));
             p13.addVisit(sdf.parse("18-08-2025 09:40"), sdf.parse("18-08-2025 10:10"));
@@ -476,6 +476,7 @@ public class Initializer {
         ticketMap.put("TK012", new Ticket("TK012", "", null, null, ""));
         ticketMap.put("TK013", new Ticket("TK013", "", null, null, ""));
         ticketMap.put("TK014", new Ticket("TK014", "", null, null, ""));
+        ticketMap.put("TK015", new Ticket("TK015", "", null, null, ""));
         ticketMap.put("TK016", new Ticket("TK016", "", null, null, ""));
         ticketMap.put("TK017", new Ticket("TK017", "", null, null, ""));
         ticketMap.put("TK018", new Ticket("TK018", "", null, null, ""));

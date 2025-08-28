@@ -113,7 +113,7 @@ public class PatientManagementUI {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|     No available tickets for today's doctors     |");
+        System.out.println("\t\t\t\t|     No available tickets for today's patients     |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
@@ -514,7 +514,7 @@ public class PatientManagementUI {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|                no ticket will be issued.         |");
+        System.out.println("\t\t\t\t|                no ticket will be issued.          |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
@@ -555,7 +555,7 @@ public class PatientManagementUI {
         System.out.println("\n\t\t\t\t=====================================================");
         System.out.println("\t\t\t\t|                    NOTICE                         |");
         System.out.println("\t\t\t\t|                                                   |");
-        System.out.println("\t\t\t\t|            No undo history found.                |");
+        System.out.println("\t\t\t\t|            No undo history found.                 |");
         System.out.println("\t\t\t\t|                                                   |");
         System.out.println("\t\t\t\t=====================================================");
     }
@@ -639,16 +639,6 @@ public class PatientManagementUI {
         System.out.println("\t\t\t\t=====================================================");
     }
 
-    private static String truncateName(String name, int maxLength) {
-        if (name == null) {
-            return "";
-        }
-        if (name.length() <= maxLength) {
-            return name;
-        }
-        return name.substring(0, maxLength - 3) + "...";
-    }
-
     public static void displayQueueHeader() {
         System.out.println("\n\t\t\t\t=====================================================================");
         System.out.println("\t\t\t\t                          CURRENT TICKET QUEUE                 ");
@@ -719,7 +709,7 @@ public class PatientManagementUI {
         System.out.println("\n\t\t\t\t====================================================================================================================");
         System.out.println("\t\t\t\t                                             Patient Details                                                        ");
         System.out.println("\t\t\t\t====================================================================================================================");
-        System.out.println("\t\t\t\t| Patient ID |        Name        |   Contact   |         Email         | Gender | Age |     Registration     |");
+        System.out.println("\t\t\t\t| Patient ID |        Name        |   Contact   |         Email         | Gender | Age |     Registration          |");
         System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------------------");
 
         if (values == null || values.length == 0) {
@@ -746,7 +736,7 @@ public class PatientManagementUI {
             }
 
             System.out.printf(
-                    "\t\t\t\t| %-9s | %-18s | %-11s | %-22s | %-6s | %3d | %-19s |\n",
+                    "\t\t\t\t| %-9s | %-18s | %-11s | %-22s | %-6s | %3d | %-19s       |\n",
                     p.getPatient_id(),
                     p.getPatient_name(),
                     p.getPatient_contact(),
@@ -833,7 +823,6 @@ public class PatientManagementUI {
     }
 
     public void displayVisitFreqTableHeader() {
-        System.out.println("\t\t\t\t| " + padRight("", BOX_W - 4) + "|");
         String header
                 = padRight("Type", 8) + " | "
                 + padRight("PatientID", 10) + " | "
@@ -845,7 +834,7 @@ public class PatientManagementUI {
                 + repChar('-', 10) + "-+-"
                 + repChar('-', 26) + "-+-"
                 + repChar('-', 6) + "-+-"
-                + repChar('-', 20), BOX_W - 4) + "|");
+                + repChar('-', 31), BOX_W - 4) + "|");
     }
 
     public void displayVisitFreqTableRow(String type, String patientId, String name, int visits, String latest) {
@@ -894,6 +883,6 @@ public class PatientManagementUI {
     }
 
     public static void displayNoTicketsInQueueRow() {
-        System.out.println("\t\t\t\t|               No tickets in queue                      |");
+        System.out.println("\t\t\t\t|                         No tickets in queue                       |");
     }
 }
