@@ -73,8 +73,7 @@ public class DoctorManagement implements CRUD {
     }
 
     public void notifyDoctor() {
-//        LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.of(2025, 9, 1);
+        LocalDate today = LocalDate.now();
         doctorsOnDuty = dutyScheduleMap.getValue(today);
         String staffId = staffFound.getStaffID();
 
@@ -92,9 +91,7 @@ public class DoctorManagement implements CRUD {
     }
 
     public void updateDutyStatus() {
-        // LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.of(2025, 9, 1);
-
+        LocalDate today = LocalDate.now();
         doctorsOnDuty = dutyScheduleMap.getValue(today); //get today record in schedule map
 
         Iterator<Staff> iterator = staffMap.getIterator();
@@ -281,8 +278,7 @@ public class DoctorManagement implements CRUD {
                 return;
             }
 
-//            LocalDate today = LocalDate.now();
-            LocalDate today = LocalDate.of(2025, 9, 1);
+            LocalDate today = LocalDate.now();
             LocalDate leaveDate = today.plusDays(choice + 2);
 
             doctorsOnDuty = dutyScheduleMap.getValue(leaveDate);

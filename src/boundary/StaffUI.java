@@ -268,9 +268,9 @@ public class StaffUI {
     }
 
     public void printScheduleHeader() {
-        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
-        System.out.println("\t\t\t\t| Day              | Doctor on Duty                                                                     |");
-        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t---------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t| Day              | Doctor on Duty                                                         |");
+        System.out.println("\t\t\t\t---------------------------------------------------------------------------------------------");
     }
 
     public void printLine() {
@@ -288,7 +288,7 @@ public class StaffUI {
     }
 
     public void printSceduleFooter() {
-        System.out.println("\t\t\t\t--------------------------------------------------------------------------------------------------------");
+        System.out.println("\t\t\t\t---------------------------------------------------------------------------------------------");
     }
 
     public int displayPerformanceReportMenu() {
