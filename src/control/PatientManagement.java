@@ -16,6 +16,10 @@ import utility.IDGenerator;
 import java.util.Date;
 import java.util.Iterator;
 
+/**
+ *
+ * @author Elwin Koh Soon Yit
+ */
 public class PatientManagement implements CRUD {
 
     private MapInterface<String, Patient> patientMap = new ChainBucket<>();
