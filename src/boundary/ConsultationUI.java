@@ -544,4 +544,7 @@ public class ConsultationUI {
         return confirm;
     }
 
+    public void displayError(Exception e) {
+        System.out.println(e);
+    }
 }

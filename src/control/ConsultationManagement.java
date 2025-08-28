@@ -362,7 +362,7 @@ public class ConsultationManagement implements CRUD {
             newConsultationDate = dateFormat.parse(dateFormat.format(currentDate));
             newConsultStartTime = timeFormat.parse(timeFormat.format(currentDate));
         } catch (Exception e) {
-            System.out.println(e);
+            consultUI.displayError(e);
         }
         String currentPatientID = consultUI.promptPatientID();
         do {
