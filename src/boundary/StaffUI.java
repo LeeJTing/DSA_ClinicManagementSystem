@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author ASUS
+ * @author Wong Wei Xin
  */
 public class StaffUI {
 
