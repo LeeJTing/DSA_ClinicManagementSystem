@@ -437,7 +437,7 @@ public class PharmacyUI {
     }
 
     public void displayAlertMsg(int i, String msg) {
-        System.out.printf("\t\t\t\t|\t%d. %s\t |\n", i, msg);
+        System.out.printf("\t\t\t\t|\t%d. %s\t|\n", i, msg);
     }
 
     public void displayNoAlertMsg() {

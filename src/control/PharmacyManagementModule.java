@@ -627,7 +627,8 @@ public class PharmacyManagementModule implements CRUD {
     private void checkNearExpiryDate() {
         int alertIndex = alertMap.size() + 1;
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
+        Date today = cal.getTime();
+        cal.add(Calendar.MONTH, 2);
         Date expiryDateThreshold = cal.getTime();
 
         Iterator<Medicine> mIterator = medicineMap.getIterator();
@@ -635,7 +636,11 @@ public class PharmacyManagementModule implements CRUD {
             Medicine med = mIterator.next();
             String medId = med.getMedicineID();
             if (med.getMedicineExpiryDate().before(expiryDateThreshold)) {
-                alertMap.put(alertIndex++, medId + " is going to be expired!");
+                if (med.getMedicineExpiryDate().before(today)) {
+                    alertMap.put(alertIndex++, medId + " has expired!          ");
+                } else {
+                    alertMap.put(alertIndex++, medId + " is going to be expired!");
+                }
             }
         }
     }
