@@ -27,15 +27,6 @@ public class Payment {
         this.payment_time = null;
     }
 
-//    public Payment(String paymentID, String patientID, Prescription prescription, Date paymentTime, int duration) {
-//        this.payment_id = paymentID;
-//        this.patient_id = patientID;
-//        this.prescription = prescription;
-//        this.consultation_cost = calConsultationCost(duration);
-//        this.total_cost = calTotalCost();
-//        this.payment_time = paymentTime;
-//    }
-
     public Payment(String paymentID, String patientID, Prescription prescription, double consultationCost, double totalCost, Date paymentTime) {
         this.payment_id = paymentID;
         this.patient_id = patientID;
