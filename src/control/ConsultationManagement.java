@@ -218,7 +218,7 @@ public class ConsultationManagement implements CRUD {
     }
 
     // how many patient staff need to see
-    public void viewTodayAppoinment(Object[] consulations) { 
+    public void viewTodayAppoinment(Object[] consulations) {
         if (!consultationMap.isEmpty()) {
             Consultation consultations = new Consultation();
             consultations.setCompare("appointmentStatus");
@@ -244,6 +244,7 @@ public class ConsultationManagement implements CRUD {
                 case 1 -> {
                     String consultationId = consultUI.promptConsultationID();
                     consultUI.staffSearchAppointmentUI2();
+                    // reference / lambda
                     findConsultation1(consultationId, Consultation::getConsultation_Id);
                 }
                 case 2 -> {
@@ -496,7 +497,6 @@ public class ConsultationManagement implements CRUD {
         consultationMap.sorting();
 
 //        consultUI.consultationScheduleUI(timeSlotMap.getAllKeys());
-
         for (int i = 0; i < 3; i++) {
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH) + 1;
@@ -548,8 +548,8 @@ public class ConsultationManagement implements CRUD {
                     consultUI.displayConsultationScheduleX(booked);
                 }
                 consultUI.displayLine();
-                // move to the next day
             }
+            // move to the next day
             consultUI.displayspace();
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
