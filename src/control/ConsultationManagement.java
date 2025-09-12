@@ -254,7 +254,7 @@ public class ConsultationManagement implements CRUD {
                 case 3 -> {
                     Date consultationDate = consultUI.promptConsultationDate();
                     Consultation consultations = new Consultation();
-                    consultations.setCompare("consultation_date");
+                    consultations.setCompare("appointmentStatus");
                     consultationMap.sorting();
                     Object[] values = consultationMap.getAllValues();
                     consultUI.staffSearchAppointmentUI();
