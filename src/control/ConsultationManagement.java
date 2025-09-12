@@ -495,7 +495,7 @@ public class ConsultationManagement implements CRUD {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         consultationMap.sorting();
 
-        consultUI.consultationScheduleUI(timeSlotMap.getAllKeys());
+//        consultUI.consultationScheduleUI(timeSlotMap.getAllKeys());
 
         for (int i = 0; i < 3; i++) {
             int year = c.get(Calendar.YEAR);
